@@ -1,0 +1,105 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../behaviors.html" />
+<link rel="import" href="../../page-share-style.html" />
+<link rel="import" href="../../font-icons.html" />
+<link rel="import" href="../../components/bv-user-avatar/bv-user-avatar.html" />
+<link rel="import" href="../../../../bower_components/paper-ripple/paper-ripple.html" />
+<link rel="import" href="../../../../bower_components/paper-button/paper-button.html" />
+<link rel="import" href="../../../../bower_components/paper-toast/paper-toast.html" />
+<link rel="import" href="../../../../bower_components/paper-spinner/paper-spinner-lite.html" />
+<link rel="import" href="../../../recycler-view.html" />
+
+<dom-module id="bv-list-page">
+  <template>
+    <style include="page-share-style"></style>
+    <style include="font-icons">
+      :host {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        color: var(--light-text-primary-color);
+      }
+      .tips {
+        font-size: 13px;
+        color: var(--light-blue-fg);
+        background: var(--light-blue-bg);
+        padding: 10px 15px;
+        margin: 15px 15px 0;
+        border-radius: 4px;
+        display: none;
+        /* border-bottom: 1px dashed #ddd; */
+      }
+      .tips.show {
+        display: block;
+      }
+    </style>
+    <div class$="tips [[_addClass('show', tips)]]">[[tips]]</div>
+    <my-recycler-view id="recycler-view" reuse-items-size="50" on-click="_jumpToTopic" style="display: block;" items="[[posts]]" tag="bv-timeline-post" target-property="post" class-names="hide-thumbs-up align-center large-padding"></my-recycler-view>
+    <app-route
+      route="{{app.subRoute}}"
+      pattern="/:title"
+      data="{{pageData}}">
+    </app-route>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class ListPage extends Polymer.mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.PageBehavior], Polymer.Element) {
+      static get is() { return 'bv-list-page'; }
+      static get properties() {
+        return {
+          app: {
+            type: Object,
+            notify: true
+          },
+          posts: {
+            type: Array,
+            value: [],
+            observer: '_postsChange'
+          },
+          pageData: {
+            type: Object
+          }
+        };
+      }
+      _jumpToTopic(ev) {
+        let path = ev.composedPath();
+        let i = 0;
+        let target;
+        while (target = path[i++]) {
+          if (target.tagName === 'BV-TIMELINE-POST') {
+            return this.disappear()
+              .then(() => {
+                // v2ex.setLoadingPage(this.rootPath + 't/' + ev.model.item.t, new Promise(() => {}));
+                window.v2ex.goToPage(this.rootPath + 't/' + target.post.t);
+              });
+          }
+        }
+      }
+      _postsChange() {}
+      constructor() {
+        super();
+
+        this.addEventListener('page-select', () => {
+          this.app.toolbar.setRightMenu('notifications');
+          this.app.toolbar.setMode('normal');
+          
+          this.$['recycler-view'].enable();
+          if (history.state && history.state.posts) {
+            this.app.toolbar.set('app.pageName', this.pageData.title);
+            this.set('posts', history.state.posts);
+            this.set('tips', history.state.tips || '');
+          }
+        });
+
+        this.addEventListener('page-unselect', () => {
+          this.$['recycler-view'].disable();
+        });
+      }
+    }
+    window.customElements.define(ListPage.is, ListPage);
+  </script>
+</dom-module>

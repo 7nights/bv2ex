@@ -1,0 +1,44 @@
+{
+  "name": "s-html",
+  "version": "0.1.3",
+  "description": "Element wrapper of `.innerHTML` for data binding with HTML elements.",
+  "authors": [
+    "The StartPolymer Project Authors (https://github.com/StartPolymer/authors)"
+  ],
+  "keywords": [
+    "web-components",
+    "polymer",
+    "html",
+    "data-binding",
+    "unescape",
+    "innerHTML"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.0"
+  },
+  "license": "https://github.com/StartPolymer/license",
+  "main": "s-html.html",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/StartPolymer/s-html.git"
+  },
+  "devDependencies": {
+    "paper-styles": "PolymerElements/paper-styles#^1.0.4",
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "test-fixture": "polymerelements/test-fixture#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "ignore": [],
+  "homepage": "https://github.com/StartPolymer/s-html",
+  "_release": "0.1.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.1.3",
+    "commit": "6168b77bde116065259d129317eeb720f2a6bbcb"
+  },
+  "_source": "https://github.com/StartPolymer/s-html.git",
+  "_target": "^0.1.3",
+  "_originalSource": "StartPolymer/s-html",
+  "_direct": true
+}

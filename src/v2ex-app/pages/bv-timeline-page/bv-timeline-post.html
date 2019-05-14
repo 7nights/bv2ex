@@ -1,0 +1,218 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../behaviors.html" />
+<link rel="import" href="../../components/bv-user-avatar/bv-user-avatar.html" />
+<link rel="import" href="../../components/bv-time/bv-time.html" />
+<link rel="import" href="../../components/bv-light-button/bv-light-button.html" />
+<link rel="import" href="../../font-icons.html" />
+
+<dom-module id="bv-timeline-post">
+  <template>
+    <style include="font-icons">
+      :host {
+        display: flex;
+        padding: 15px 15px 15px 20px;
+      }
+      :host(:active) {
+        background-color: rgba(0, 0, 0, .15);
+      }
+      :host(.hide-thumbs-up) .up-count {
+        display: none;
+      }
+      :host(.align-center) {
+        align-items: center;
+      }
+      :host(.large-padding) {
+        padding: 22px 15px 22px 20px;
+      }
+      .title-and-node {
+        line-height: 2rem;
+      }
+      .title {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--light-text-primary-color);
+        vertical-align: middle;
+        font-family: Roboto, "Source Han Sans";
+        word-break: break-all;
+      }
+      .node-name, .author {
+        font-size: 11px;
+        vertical-align: middle;
+        margin-right: 6px;
+        color: var(--text-secondary-color);
+      }
+      .fa-caret-right {
+        /* margin-right: 2px; */
+        font-size: 11px;
+        color: var(--text-secondary-color);
+        margin-left: 2px;
+        vertical-align: middle;
+      }
+      .node-name {
+        margin-right: 2px;
+        background: #f1f1f1;
+        color: #828282;
+        border-radius: 2px;
+        padding: 1px 3px;
+      }
+      .left-column {
+        margin-right: 15px;
+      }
+      .right-column {
+        flex: 1;
+      }
+      .post-info {
+        line-height: 25px;
+        margin-top: 10px;
+        display: flex;
+      }
+      .post-info.hide {
+        display: none;
+      }
+      .post-info .left {
+        flex: 1;
+        color: var(--text-secondary-color);
+      }
+      .post-info .left b {
+        font-size: 11px;
+        font-weight: bold;
+        font-family: 'Noto Sans';
+      }
+      .post-info .material-icons {
+        font-size: 14px;
+        vertical-align: middle;
+        margin-right: 2px;
+        color: var(--light-text-disabled-color);
+      }
+      bv-time {
+        font-size: 11px;
+      }
+      .circle {
+        width: 4px;
+        height: 4px;
+        background-color: var(--text-secondary-color);
+        display: inline-block;
+        margin: 0 2px;
+        position: relative;
+        top: -2px;
+      }
+      .up-count {
+        margin-top: 8px;
+        font-size: 10px;
+        color: #c9c9c9;
+        text-align: center;
+      }
+      .up-count .fa {
+        font-size: 12px;
+        margin-right: 2px;
+      }
+      :host-context(.toolbar-deep) .pined {
+        animation-name: none;
+      }
+      .pined {
+        font-size: 18px;
+        vertical-align: middle;
+        margin-right: 5px;
+        position: relative;
+        top: -2px;
+        color: transparent;
+        /** make it bling-bling! */
+        background-image: linear-gradient(-75deg, #ecd330 0%, #ecd330 30%, rgba(236, 210, 49, 0.51) 30%, rgba(236, 210, 49, 0.51) 33%, #ecd330 50%);
+        -webkit-background-clip: text;
+        animation-name: background-x;
+        will-change: background-position;
+        animation-iteration-count: infinite;
+        animation-duration: 3s;
+        animation-timing-function: ease-out;
+        width: 18px;
+        height: 18px;
+        background-size: 24px 18px;
+        transform: translate3d(0, 0, 0);
+      }
+      @keyframes background-x {
+        0% {
+          background-position-x: 0px;
+        }
+        50% {
+          background-position-x: 24px;
+        }
+        100% {
+          background-position-x: 24px;
+        }
+      }
+    </style>
+    <div class="left-column">
+      <bv-user-avatar src="[[post.avatar]]" user="[[post.member]]"></bv-user-avatar>
+      <div class="up-count">
+        <i class="fa fa-chevron-up"></i>
+        <span>[[post.upCount]]</span>
+      </div>
+    </div>
+    <div class="right-column">
+      <div class="title-and-node">
+        <template is="dom-if" if="[[post.pined]]"><i class="material-icons pined">publish</i></template>
+        <b class="title">[[_processTitle(post.title)]]</b>
+        <div style="display: inline-block;">
+          <i class="fa fa-caret-right" aria-hidden="true"></i>
+          <template is="dom-if" if="[[post.nodeName]]">
+            <span class="node-name">[[post.nodeName]]</span>
+          </template>
+        </div>
+        <b class="author">[[post.member]]</b>
+        
+        
+      </div>
+      <div class$="post-info [[_hideReply(post.t)]]">
+
+        <div class="left">
+          <i class="material-icons">comment</i>
+          <bv-time time="[[post.lastReply.time]]"></bv-time>
+          <span class="circle"></span>
+          <b>[[post.lastReply.user]]</b>
+        </div>
+        <bv-light-button class$="[[_hasUnreadReply(post.unread)]]">[[_getReplyCount(post.t)]]</bv-light-button>
+
+      </div>
+    </div>
+    
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class TimelinePost extends Polymer.mixinBehaviors([BVBehaviors.UtilBehavior], Polymer.Element) {
+      static get is() { return 'bv-timeline-post'; }
+      static get properties() {
+        return {
+          post: {
+            type: Object,
+            notify: true
+          }
+        };
+      }
+      _hasUnreadReply(unread) {
+        return unread ? 'unread' : '';
+      }
+      _processTitle(t) {
+        const span = document.createElement('span');
+        span.innerHTML = t;
+        return span.innerText;
+      }
+      _getReplyCount(t) {
+        let index = t.indexOf('#reply');
+        if (~index) return t.substr(index + 6);
+        else return 0;
+      }
+      _hasReply(t) {
+        return +this._getReplyCount(t) > 0;
+      }
+      _hideReply(t) {
+        return +this._getReplyCount(t) > 0 ? '' : 'hide';
+      }
+    }
+
+    window.customElements.define(TimelinePost.is, TimelinePost);
+  </script>
+</dom-module>

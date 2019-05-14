@@ -1,0 +1,22 @@
+{
+  "name": "bv2ex",
+  "short_name": "bv2ex",
+  "description": "A V2EX redesign",
+  "start_url": "/",
+  "theme_color": "#FFFFFF",
+  "display": "standalone",
+  "gcm_sender_id": "103953800507",
+  "background_color": "#FFFFFF",
+  "prefer_related_applications": true,
+  "related_applications": [],
+  "icons": [{
+    "src": "/assets/logo-gradient.png",
+    "type": "image/png",
+    "sizes": "192x192"
+  },
+  {
+    "src": "/assets/logo-gradient.png",
+    "type": "image/png",
+    "sizes": "512x512"
+  }]
+}

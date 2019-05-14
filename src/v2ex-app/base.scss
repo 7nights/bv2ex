@@ -1,0 +1,6 @@
+@function px($input) {
+  @return ($input / 0.8737864077669902);
+}
+@function ipx($input) {
+  @return ceil($input / 0.8737864077669902);
+}

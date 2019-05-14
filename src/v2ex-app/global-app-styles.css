@@ -1,0 +1,7 @@
+html {
+  --blue: #358CFD;
+  --blue-bg: {
+    background-color: var(--blue);
+    color: #fff;
+  }
+}

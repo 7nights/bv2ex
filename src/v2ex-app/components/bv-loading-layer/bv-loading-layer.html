@@ -1,0 +1,63 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../bower_components/paper-spinner/paper-spinner-lite.html" />
+
+<dom-module id="bv-loading-layer">
+  <template>
+    <style>
+      :host {
+        height: 100vh;
+        width: 100vw;
+        left: 0;
+        top: var(--bv-toolbar-height);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        background: #fff;
+        z-index: 10;
+        opacity: 1;
+      }
+      paper-spinner-lite {
+        position: relative;
+        top: calc(0px - var(--bv-toolbar-height));
+      }
+      
+    </style>
+    <paper-spinner-lite active></paper-spinner-lite>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class LoadingLayer extends Polymer.Element {
+      static get is() { return 'bv-loading-layer'; }
+
+      hide(animation = true) {
+        if (animation) {
+          this.animate([{opacity: 1}, {opacity: 0}], {
+            duration: 300,
+            easing: 'ease-out'
+          }).onfinish = () => {
+            this.style.display = 'none';
+          };
+        } else {
+          this.style.display = 'none';
+        }
+      }
+
+      show(animation = true) {
+        this.style.display = 'flex';
+        if (animation) {
+          this.animate([{opacity: 0}, {opacity: 1}], {
+            duration: animation ? 300 : 0,
+            easing: 'ease-out'
+          });
+        }
+      }
+    }
+
+    window.customElements.define(LoadingLayer.is, LoadingLayer);
+  </script>
+</dom-module>

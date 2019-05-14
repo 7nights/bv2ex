@@ -1,0 +1,72 @@
+<!--
+@license
+Copyright (c) 2016 The StartPolymer Project Authors. All rights reserved.
+This code may only be used under the MIT License found at https://github.com/StartPolymer/license
+The complete set of authors may be found at https://github.com/StartPolymer/authors
+The complete set of contributors may be found at https://github.com/StartPolymer/contributors
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="s-html">
+<template>
+
+<style>
+
+:host {
+  display: inline-block;
+}
+
+</style>
+
+<content select="span"></content>
+
+</template>
+<script>
+
+Polymer({
+
+  is: 's-html',
+
+  properties: {
+    /**
+     * Text with HTML elements.
+     */
+    html: {
+      type: String,
+      observer: '_htmlChanged'
+    },
+
+    /**
+     * Set to true for unescape escaped HTML (e.g. "&lt;br&gt;"), we get ("<br>").
+     */
+    unescape: {
+      type: Boolean,
+      value: false
+    }
+  },
+
+  _htmlChanged: function(html) {
+    var child = Polymer.dom(this).queryDistributedElements('span')[0];
+
+    if (this.unescape) {
+      html = this._unescapeHtml(html);
+    }
+
+    if (child) {
+      Polymer.dom(child).innerHTML = html;
+    } else {
+      Polymer.dom(this.root).innerHTML = html;
+    }
+  },
+
+  _unescapeHtml: function(html) {
+    var textarea = document.createElement('textarea');
+    textarea.innerHTML = html;
+    return textarea.textContent;
+  }
+
+});
+
+</script>
+</dom-module>

@@ -1,0 +1,164 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../behaviors.html" />
+<link rel="import" href="../../page-share-style.html" />
+<link rel="import" href="../../font-icons.html" />
+<link rel="import" href="../../components/bv-user-avatar/bv-user-avatar.html" />
+<link rel="import" href="../../../../bower_components/paper-ripple/paper-ripple.html" />
+<link rel="import" href="../../../../bower_components/paper-button/paper-button.html" />
+<link rel="import" href="../../../../bower_components/paper-toast/paper-toast.html" />
+<link rel="import" href="../../../../bower_components/paper-spinner/paper-spinner-lite.html" />
+
+<dom-module id="bv-settings-page">
+  <template>
+    <style include="page-share-style"></style>
+    <style include="font-icons">
+      :host {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        margin-top: 0;
+        color: var(--light-text-primary-color);
+      }
+      :host(.page-selected) {
+        display: flex !important;
+      }
+      .banner {
+        position: relative;
+        padding: 0 15px 15px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, .12);
+      }
+      .banner h1 {
+        font-size: 20px;
+        font-family: Google Sans;
+        color: #333;
+      }
+      .banner .daily-sentence {
+        color: #95989A;
+        font-size: 12px;
+      }
+      .banner bv-user-avatar {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        --bv-user-avatar-size: 32px;
+        --bv-user-avatar-border-size: 0px;
+      }
+      .list {
+        flex: 1;
+        background-color: #fafafa;
+      }
+      .list .item {
+        display: flex;
+        flex-direction: row;
+        min-height: 75px;
+        align-items: center;
+        position: relative;
+        border-bottom: 1px solid #efefef;
+      }
+      .list .item i {
+        font-size: 28px;
+        margin: 0 25px 0 18px;
+      }
+      .list .item b {
+        font-size: 18px;
+      }
+      .list .item > div span {
+        color: var(--light-text-secondary-color);
+        font-size: 12px;
+      }
+      .list .item .title {
+        display: flex;
+        flex-direction: column;
+      }
+      .list .item .title b {
+        margin-bottom: 5px;
+      }
+    </style>
+    <div class="banner">
+      <h1>Hi, [[app.userInfo.username]]</h1>
+      <div class="daily-sentence">Yesterday I was clever, so I wanted to change the world. Today I am wise, so I am changing myself.</div>
+      <bv-user-avatar src$="[[app.userInfo.avatar]]"></bv-user-avatar>
+    </div>
+    <div class="list" id="list">
+      <div class="item" name="Profile">
+        <paper-ripple></paper-ripple>
+        <i class="material-icons">face</i>
+        <b>Profile</b>
+      </div>
+      <div class="item" name="History">
+        <paper-ripple></paper-ripple>
+        <i class="material-icons">timer</i>
+        <div class="title">
+          <b>History</b>
+          <span>50 topics you recently read</span>
+        </div>
+      </div>
+      <div class="item" name="Collected">
+        <paper-ripple></paper-ripple>
+        <i class="material-icons">bookmark_border</i>
+        <div class="title">
+          <b>Collected</b>
+          <span>Collected topics</span>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class SettingsPage extends Polymer.mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.PageBehavior], Polymer.Element) {
+      static get is() { return 'bv-settings-page'; }
+      static get properties() {
+        return {
+        };
+      }
+      constructor() {
+        super();
+
+        this.addEventListener('page-select', () => {
+          window.v2ex.children.toolbar.setMode('hidden');
+          console.log(this.app.userInfo.avatar);
+        });
+      }
+      connectedCallback() {
+        super.connectedCallback();
+
+        this.$.list.addEventListener('click', (ev) => {
+          let target = ev.target;
+          while (target) {
+            if (target.classList.contains('item')) {
+              break;
+            }
+            target = target.parentElement;
+          }
+          if (!target) return;
+          this['_menuClick' + target.getAttribute('name')]();
+        });
+      }
+      _menuClickProfile() {
+        const hasUsername = this.app.userInfo.username ? Promise.resolve() : window.BVQuerys.recent();
+        Promise.all([hasUsername, this.disappear()])
+          .then(() => {
+            v2ex.goToPage('/member/' + this.app.userInfo.username);
+          });
+      }
+      _menuClickHistory() {
+        v2ex.goToPage('/list/History', {
+          posts: BVUtils.userStorage.get('recentViews'),
+          name: 'History',
+          tips: 'Showing 50 topics you\'ve recently read on this device.'
+        });
+      }
+      _menuClickCollected() {
+        this.disappear()
+          .then(() => {
+            v2ex.goToPage('/collected');
+          });
+      }
+    }
+    window.customElements.define(SettingsPage.is, SettingsPage);
+  </script>
+</dom-module>

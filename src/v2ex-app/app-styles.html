@@ -1,0 +1,69 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<custom-style>
+  <style>
+    html {
+      /* --blue: #358CFD; */
+      --blue: #1a7dff;
+      /* --orange: #f3a864; */
+      --yellow: #f5c035;
+      --orange: #ffa14b;
+      --orange-bg: {
+        background-color: var(--orange);
+        color: #fff;
+      }
+
+      --light-blue-border: #7faef7;
+      --light-blue-bg: #ecf4ff;
+      --light-blue-fg: #3983f4;
+
+      --lighter-blue: rgb(0, 148, 255);
+      /* --blue: var(--paper-blue-a400); */
+      /* --blue: rgb(0, 122, 255); */
+      --blue-bg: {
+        background-color: var(--blue);
+        color: #fff;
+      }
+      --text-secondary-color: #95989A;
+      --light-bg-button: {
+        background-color: #F3F3F3;
+        color: var(--blue);
+      }
+      --bv-toolbar-height: 56px;
+      --bv-gradient-bg: {
+        background-image: linear-gradient(90deg, #2797FF, #0084FF);
+        color: #fff;
+      }
+
+      --input-background: #F5F5F5;
+
+      /** material design typography */
+      --light-text-primary-color: rgba(0, 0, 0, .87);
+      --light-text-secondary-color: rgba(0, 0, 0, .54);
+      --light-text-disabled-color: rgba(0, 0, 0, .38);
+
+      /** shadows */
+      --md-box-shadow-1dp: 0 0 2px 0 rgba(0, 0, 0, .14), 0 2px 2px 0 rgba(0, 0, 0, .12), 0 1px 3px 0 rgba(0, 0, 0, .2);
+      --md-box-shadow-2dp: 0 0 4px 0 rgba(0, 0, 0, .14), 0 3px 4px 0 rgba(0, 0, 0, .12), 0 1px 5px 0 rgba(0, 0, 0, .2);
+      --md-box-shadow-3dp: 0 3px 3px 0 rgba(0, 0, 0, .14), 0 3px 4px 0 rgba(0, 0, 0, .12), 0 1px 8px 0 rgba(0, 0, 0, .2);
+      --md-box-shadow-4dp: 0 2px 4px 0 rgba(0, 0, 0, .14), 0 4px 5px 0 rgba(0, 0, 0, .12), 0 1px 10px 0 rgba(0, 0, 0, .2);
+      --md-box-shadow-6dp: 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px 0 rgba(0, 0, 0, .2);
+      --md-box-shadow-8dp: 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 3px rgba(0, 0, 0, .12), 0 4px 15px 0 rgba(0, 0, 0, .2);
+      --md-box-shadow-9dp: 0 9px 12px 1px rgba(0, 0, 0, .14), 0 3px 16px 2px rgba(0, 0, 0, .12), 0 5px 6px 0 rgba(0, 0, 0, .2);
+      --md-box-shadow-12dp: 0 12px 17px 2px rgba(0, 0, 0, .14), 0 5px 22px 4px rgba(0, 0, 0, .12), 0 7px 8px 0 rgba(0, 0, 0, .2);
+      --md-box-shadow-16dp: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12), 0 8px 10px 0 rgba(0, 0, 0, .2);
+      --md-box-shadow-24dp: 0 24px 38px 3px rgba(0, 0, 0, .14), 0 9px 46px 8px rgba(0, 0, 0, .12), 0 11px 15px 0 rgba(0, 0, 0, .2);
+    }
+    body.smaller-toolbar bv-toolbar, body.smaller-toolbar {
+      --bv-toolbar-height: 50px;
+      padding-top: 3px;
+    }
+    * {
+      box-sizing: border-box;
+    }
+
+    #global-error-toast {
+      --paper-toast-background-color: red;
+      --paper-toast-color: white;
+    }
+  </style>
+</custom-style>

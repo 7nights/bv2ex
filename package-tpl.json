@@ -1,0 +1,10 @@
+{
+  "name": "bv2ex",
+  "description": "a V2EX redesign",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+  },
+  "version": "1.0.0"
+}
