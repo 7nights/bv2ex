@@ -67,7 +67,7 @@
       textarea::placeholder {
         color: var(--light-text-secondary-color);
       }
-      img {
+      img.avatar {
         margin: 11px 20px 0 15px;
         width: 32px;
         height: 32px;
@@ -120,18 +120,20 @@
       }
       .emoji-item {
         float: left;
+        padding: 5px;
         margin-right: 5px;
       }
       .emoji-item img {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         margin: 0;
+        border: none;
       }
       .emoji-selector {
         position: absolute;
         bottom: 0;
         left: 0;
-        height: 50px;
+        height: 54px;
         right: 0;
         background: #fff;
         align-items: center;
@@ -150,8 +152,8 @@
       }
     </style>
     <div class="textarea">
-      <img src="[[avatar]]" />
-      <textarea id="textarea" on-focus="_onTextareaFocus" on-blur="_onTextareaBlur" placeholder="Leave a comment" value="{{replyContent::input}}"></textarea>
+      <img class="avatar" src="[[avatar]]" />
+      <textarea id="textarea" on-focus="_onTextareaFocus" placeholder="Leave a comment" value="{{replyContent::input}}"></textarea>
     </div>
     <div class="buttons">
       <div class="words-count"><span>[[wordsCount]]</span> word(s)</div>
@@ -211,7 +213,9 @@
       }
       focusInput(doNotScroll = false) {
         !doNotScroll && window.scrollBy(0, 50);
-        this.$.textarea.focus();
+        setTimeout(() => {
+          this.$.textarea.focus();
+        }, 0);
       }
       emojiSelect(ev) {
         const emoji = ev.model.item;
@@ -224,6 +228,7 @@
       }
       showEmojiSelector() {
         this.ifShowEmojiSelector = true;
+        this.$.textarea.focus();
       }
       handleReplyContent(text) {
         // handle emojis
@@ -283,6 +288,8 @@
           return;
         }
         console.log(result);
+        this.$.textarea.blur();
+        this.classList.remove('editing');
         ended = true;
         this.$.progress.animate([{
           transform: 'scaleX(.8)'
@@ -319,20 +326,31 @@
       }
       _onTextareaFocus() {
         this.classList.add('editing');
-      }
-      _onTextareaBlur() {
-        setTimeout(() => {
-          this.classList.remove('editing');
-        }, 120);
+        if (this.listenerAdded) return;
+        this.listenerAdded = true;
+        const self = this;
+        document.addEventListener('click', function fn(ev) {
+          if (ev.target !== self) {
+            self.classList.remove('editing');
+            document.removeEventListener('click', fn);
+            self.listenerAdded = false;
+          } else {
+            self.$.textarea.focus();
+          }
+        });
       }
       constructor() {
         super();
 
         this._show = false;
         this.emojis = [{
-          image: 'https://ww4.sinaimg.cn/bmiddle/62e721e4gw1et02g5wksrj200k00k3y9.jpg',
+          image: 'https://ws3.sinaimg.cn/large/005BYqpggy1g32h3tqek5j3010010t8i.jpg',
           code: '',
           inputCode: ':doge:'
+        }, {
+          image: 'https://ws3.sinaimg.cn/large/005BYqpggy1g32gsezgbxj3010010t8j.jpg',
+          code: '',
+          inputCode: ':sour:'
         }];
       }
       connectedCallback() {
