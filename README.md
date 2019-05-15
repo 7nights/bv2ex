@@ -21,16 +21,17 @@ wget bv2ex.zip
 Move the zip file to the directory of get-v2ex and unzip it there.
 
 ```shell
-mv bv2ex.zip [path to your get-v2ex]
+mv bv2ex.zip [path to your get-v2ex] && cd [path to your get-v2ex]
+unzip bv2ex.zip
 ```
 
 ### Step 3
-Open `[path to your get-v2ex]/public/config.js`, then fill in all the properties. For example:
+Open `[path to your get-v2ex]/public/config.js`, then fill in all properties. For example:
 
 ```javascript
 module.exports = {
   serverAddress: 'https://example.com/api',
-  clientAddress: 'http://example.com/',
+  clientAddress: 'https://example.com',
   firebaseConfig: {},
   fcmPublicVapidKey: ''
 };
@@ -44,7 +45,7 @@ To get Firebase configuration:
     ```javascript
     module.exports = {
       serverAddress: 'https://example.com/api',
-      clientAddress: 'http://example.com/',
+      clientAddress: 'https://example.com',
       firebaseConfig: {
         apiKey: "AIzaSyAmn_CNq_-aun4d428kYKAbjfgsVrhLibc",
         authDomain: "bv2ex-35d15.firebaseapp.com",
@@ -68,4 +69,3 @@ Run build command.
 ```shell
 npm run build
 ```
-
