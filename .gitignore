@@ -1,8 +1,7 @@
 node_modules
 .DS_Store
-config.js
-index.html
-firebase-messaging-sw.js
-service-worker.js
+/config.js
+/firebase-messaging-sw.js
+/service-worker.js
 .sass-cache
 build

@@ -16,6 +16,21 @@
         background: #fff;
         z-index: 10;
         opacity: 1;
+
+        animation-name: page-appear;
+        animation-fill-mode: both;
+        animation-duration: .3s;
+        animation-timing-function: ease-out;
+        contain: layout;
+        transform: translate3d(0, 0, 0);
+      }
+      @keyframes page-appear {
+        0% {
+          transform: translate3d(0, 60px, 0);
+        }
+        100% {
+          transform: translate3d(0, 0, 0);
+        }
       }
       paper-spinner-lite {
         position: relative;

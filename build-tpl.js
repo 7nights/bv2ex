@@ -31,7 +31,7 @@ async function main() {
   const globalVariablesTpl = insertData(result[1]);
   const indexContent = result[3]
     .replace(/<!-- insert global variables here -->/, globalVariablesTpl)
-    .replace(/<!-- insert FCM here -->/, fcmTpl);
+    .replace(/<!-- insert fcm here -->/, fcmTpl);
 
   // firebase-messaging-sw.js
   const fcmContent = insertData(result[2]);

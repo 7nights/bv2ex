@@ -85,15 +85,20 @@
         position: absolute;
       }
       paper-button {
-        margin: 0 -5px 0 0;
-        min-height: 32px;
+        margin: 8px -5px 0 0;
+        min-height: 24px;
         min-width: 50px;
-        padding: 0 5px;
-        font-size: 14px;
+        padding: 0 10px;
+        font-size: 13px;
         font-weight: 600;
         color: var(--secondary-text-color);
+        background-color: #eee;
+        border-radius: 24px;
       }
       .info .action {}
+      .info .action.hide {
+        display: none;
+      }
       .info .company,
       .info .bio {
         font-size: 13px;
@@ -320,10 +325,10 @@
               <b>[[pageData.member]]</b>
               <i class$="online-dot [[_addClass('online', userInfo.isOnline)]]"></i>
             </div>
-            <template is="dom-if" if="[[userInfo.bio]]"><div class="bio"><img src="../../../../assets/icons/material/portrait-black.svg" />[[userInfo.bio]]</div></template>
-            <template is="dom-if" if="[[userInfo.company]]"><div class="company"><img src="../../../../assets/icons/material/work-black.svg" />[[userInfo.company]]</div></template>
+            <template is="dom-if" if="[[userInfo.bio]]"><div class="bio"><img src="../../../../assets/icons/material/outline-portrait-24px.svg" />[[userInfo.bio]]</div></template>
+            <template is="dom-if" if="[[userInfo.company]]"><div class="company"><img src="../../../../assets/icons/material/outline-business_center-24px.svg" />[[userInfo.company]]</div></template>
           </div>
-          <paper-button class="action" on-click="toggleBlock">[[_ternary(userInfo.isBlocked, 'UNBLOCK', 'BLOCK')]]</paper-button>
+          <paper-button class$="action [[_hideBlockButton(pageData.member, app.userInfo.username)]]" on-click="toggleBlock">[[_ternary(userInfo.isBlocked, 'UNBLOCK', 'BLOCK')]]</paper-button>
         </div>
         <div class$="introduction [[_getDisplay('introduction', userInfo.introduction)]]"><bv-html class="payload" html="[[userInfo.introduction]]"><div slot="content"></div></bv-html></div>
         <div class$="widgets [[_getDisplay('widgets', userInfo.widgets)]]">
@@ -359,6 +364,11 @@
           <span>Posts are hidden by [[pageData.member]].</span>
         </div>
       </template>
+      <template is="dom-if" if="[[_showNoPosts(userInfo.ifPostsHidden, posts, currentPostsType)]]">
+        <div class="posts-hidden">
+          <span><b>[[pageData.member]]</b> never posted anything.</span>
+        </div>
+      </template>
       <div class="posts">
         <template is="dom-repeat" items="[[posts]]">
           <div class="post" on-click="_onPostClick">
@@ -369,7 +379,7 @@
             </div>
             <template is="dom-if" if="[[item.lastReply]]">
               <div class="last-reply">
-                <i class="material-icons">comment</i>
+                <i class="material-icons">sms</i>
                 <span class="user">[[item.lastReply.user]]</span>
                 <span> last replied </span>
                 <span class="time">[[item.lastReply.time]]</span>
@@ -456,6 +466,9 @@
         }
         this.set('userInfo.isBlocked', !this.userInfo.isBlocked);
       }
+      _hideBlockButton(a, b) {
+        return a === b ? 'hide' : '';
+      }
       _getDisplay(type) {
 
         switch (type) {
@@ -472,6 +485,9 @@
       }
       _showPostsHidden(ifPostsHidden, postsType) {
         return ifPostsHidden && postsType === 'post';
+      }
+      _showNoPosts(ifPostsHidden, posts, postsType) {
+        return !ifPostsHidden && postsType === 'post' && (!posts || posts.length === 0);
       }
       _onPostClick(ev) {
         const id = ev.model.item.t;

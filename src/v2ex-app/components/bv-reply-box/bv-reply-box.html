@@ -78,8 +78,17 @@
       .words-count {
         font-size: 13px;
         font-weight: 500;
-        flex: 1;
         color: var(--light-text-disabled-color);
+      }
+      .emoji {
+        color: var(--light-text-secondary-color);
+        margin-left: 10px;
+      }
+      .emoji i {
+        vertical-align: top;
+      }
+      .blank {
+        flex: 1;
       }
       bv-light-button {
         height: 28px;
@@ -109,6 +118,36 @@
         background-color: rgba(54, 139, 254, 0.25);
         height: 100%;
       }
+      .emoji-item {
+        float: left;
+        margin-right: 5px;
+      }
+      .emoji-item img {
+        width: 20px;
+        height: 20px;
+        margin: 0;
+      }
+      .emoji-selector {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 50px;
+        right: 0;
+        background: #fff;
+        align-items: center;
+        padding: 0 15px;
+        box-sizing: border-box;
+        display: none;
+      }
+      .emoji-selector.show {
+        display: flex;
+      }
+      .cancel-emoji-input {
+        color: var(--light-text-secondary-color);
+      }
+      .emoji-container {
+        flex: 1;
+      }
     </style>
     <div class="textarea">
       <img src="[[avatar]]" />
@@ -116,8 +155,23 @@
     </div>
     <div class="buttons">
       <div class="words-count"><span>[[wordsCount]]</span> word(s)</div>
+      <div class="emoji" on-click="showEmojiSelector"><i class="material-icons">sentiment_very_satisfied</i></div>
+      <div class="blank"></div>
       <bv-light-button class="no-background secondary cancel-button" on-click="_clearReplyContent"><paper-ripple></paper-ripple>CLEAR</bv-light-button>
       <bv-light-button class="no-background submit-button" on-click="_submitReply"><paper-ripple></paper-ripple>POST</bv-light-button>
+    </div>
+    <div class$="emoji-selector [[_addClass('show', ifShowEmojiSelector)]]">
+      <div class="emoji-container">
+        <template is="dom-repeat" items="[[emojis]]">
+          <div class="emoji-item" on-click="emojiSelect">
+            <template is="dom-if" if="[[item.image]]">
+              <img src$="[[item.image]]" width="20" height="20" />
+            </template>
+            <span>[[item.code]]</span>
+          </div>
+        </template>
+      </div>
+      <bv-light-button class="cancel-emoji-input" on-click="hideEmojiSelector">Cancel</bv-light-button>
     </div>
     <div id="sending">
       <div id="progress"></div>
@@ -145,7 +199,7 @@
             type: Number,
             computed: '_getWordsCount(replyContent)'
           },
-          t: {
+          topic: {
             type: String,
             value: ''
           },
@@ -158,6 +212,39 @@
       focusInput(doNotScroll = false) {
         !doNotScroll && window.scrollBy(0, 50);
         this.$.textarea.focus();
+      }
+      emojiSelect(ev) {
+        const emoji = ev.model.item;
+        document.execCommand('insertText', false, emoji.inputCode);
+        this.ifShowEmojiSelector = false;
+      }
+      hideEmojiSelector() {
+        this.ifShowEmojiSelector = false;
+        this.$.textarea.focus();
+      }
+      showEmojiSelector() {
+        this.ifShowEmojiSelector = true;
+      }
+      handleReplyContent(text) {
+        // handle emojis
+        this.emojis.forEach((val) => {
+          text = text.replace(new RegExp(val.inputCode, 'g'), () => {
+            return val.image || val.code;
+          });
+        });
+        return text;
+      }
+      handleReplyContentForHtml(text) {
+        // handle emojis
+        this.emojis.forEach((val) => {
+          text = text.replace(new RegExp(val.inputCode, 'g'), () => {
+            if (val.image) {
+              return `<img src="${val.image}" width="20" height="20" />`
+            }
+            return val.code;
+          });
+        });
+        return text;
       }
       async _submitReply() {
         if (this.replyContent.trim().length === 0) {
@@ -185,13 +272,14 @@
 
         // TODO: send reply
         let result;
+        let realReplyContent = this.handleReplyContent(this.replyContent);
         try {
-          result = await window.BVQuerys.reply(this.t, this.replyContent, this.once);
+          result = await window.BVQuerys.reply(this.topic, realReplyContent, this.once);
           if (result.error) throw new Error(result.error.message);
         } catch (ex) {
           console.error(ex);
           this.$.sending.style.display = 'none';
-          this.dispatchEvent(new CustomEvent('reply-failed', {detail: {t: this.t, error: ex}}));
+          this.dispatchEvent(new CustomEvent('reply-failed', {detail: {t: this.topic, error: ex}}));
           return;
         }
         console.log(result);
@@ -205,10 +293,10 @@
           fill: 'both',
           easing: 'ease-out'
         }).onfinish = () => {
-          let c = this.replyContent;
+          let c = this.handleReplyContentForHtml(this.replyContent);
           this.replyContent = '';
           this.$.sending.style.display = 'none';
-          this.dispatchEvent(new CustomEvent('reply-sent', {detail: {t: this.t, content: c}}));
+          this.dispatchEvent(new CustomEvent('reply-sent', {detail: {t: this.topic, content: c}}));
         };
       }
       _clearReplyContent() {
@@ -241,6 +329,11 @@
         super();
 
         this._show = false;
+        this.emojis = [{
+          image: 'https://ww4.sinaimg.cn/bmiddle/62e721e4gw1et02g5wksrj200k00k3y9.jpg',
+          code: '',
+          inputCode: ':doge:'
+        }];
       }
       connectedCallback() {
         super.connectedCallback();

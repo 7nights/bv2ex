@@ -1,4 +1,4 @@
-<img width="48px" height="48px" align="right" alt="bv2ex Logo" src="https://i.imgur.com/ZcRXQaA.png" title="bv2ex"/>
+<img width="64px" height="64px" align="right" alt="bv2ex Logo" src="https://i.imgur.com/ZcRXQaA.png" title="bv2ex"/>
 
 # bv2ex
 
@@ -26,6 +26,8 @@ unzip bv2ex.zip
 ```
 
 ### Step 3
+Rename `[path to your get-v2ex]/public/config-tpl.js` to `config.js`.
+
 Open `[path to your get-v2ex]/public/config.js`, then fill in all properties. For example:
 
 ```javascript

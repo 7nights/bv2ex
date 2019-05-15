@@ -14,6 +14,7 @@
         border-radius: 4px;
         overflow: auto;
         overscroll-behavior-y: none;
+        --paper-font-title_-_font-size: 18px;
 
         animation-name: fade-in-scale;
         animation-duration: .2s;
@@ -42,9 +43,12 @@
       .hide {
         display: none;
       }
+      paper-dialog h2 {
+        margin-top: 22px !important;
+      }
       </style>
       <paper-dialog id="dialog" modal>
-        <h2 class$="[[_hideTitle()]]">[[title]]</h2>
+        <h2 class$="[[_hideTitle(title)]]">[[title]]</h2>
         <p>[[content]]</p>
         <div class="buttons">
           <paper-button dialog-dismiss on-click="_onNegativeClick">[[negativeText]]</paper-button>

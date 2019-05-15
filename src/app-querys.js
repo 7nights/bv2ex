@@ -1,5 +1,5 @@
 window.BVQuerys = (() => {
-  const SERVER_ADDRESS = window.SERVER_ADDRESS || 'http://127.0.0.1:3001';
+  const SERVER_ADDRESS = window.SERVER_ADDRESS || ('http://' + location.hostname + ':3001');
   const _oriFetch = window.fetch;
   const fetch = (url, options) => {
     return _oriFetch(url, {
@@ -16,6 +16,7 @@ window.BVQuerys = (() => {
         window.dispatchEvent(new CustomEvent('location-changed'));
       } else if (result.error.type === 'NEED_LOGIN') {
         window.history.pushState(null, null, '/login/needCipher');
+        debugger;
         window.dispatchEvent(new CustomEvent('location-changed'));
       }
       throw result.error;

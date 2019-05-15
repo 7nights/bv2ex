@@ -22,7 +22,7 @@ fs.copyFileSync('./global-variables-tpl.html', './build/default/global-variables
 fs.copyFileSync('./firebase-messaging-sw-tpl.js', './build/default/firebase-messaging-sw-tpl.js');
 fs.copyFileSync('./service-worker-tpl.js', './build/default/service-worker-tpl.js');
 fs.copyFileSync('./package-tpl.json', './build/default/package.json');
-fs.copyFileSync('./config-tpl.js', './build/default/config.js');
+fs.copyFileSync('./config-tpl.js', './build/default/config-tpl.js');
 fs.copyFileSync('./build-tpl.js', './build/default/build.js');
 fs.copyFileSync('./manifest.json', './build/default/manifest.json');
 

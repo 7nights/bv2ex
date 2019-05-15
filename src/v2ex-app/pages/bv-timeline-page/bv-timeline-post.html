@@ -83,6 +83,8 @@
         vertical-align: middle;
         margin-right: 2px;
         color: var(--light-text-disabled-color);
+        position: relative;
+        top: 1px;
       }
       bv-time {
         font-size: 11px;
@@ -90,6 +92,7 @@
       .circle {
         width: 4px;
         height: 4px;
+        border-radius: 4px;
         background-color: var(--text-secondary-color);
         display: inline-block;
         margin: 0 2px;
@@ -165,7 +168,7 @@
       <div class$="post-info [[_hideReply(post.t)]]">
 
         <div class="left">
-          <i class="material-icons">comment</i>
+          <i class="material-icons">sms</i>
           <bv-time time="[[post.lastReply.time]]"></bv-time>
           <span class="circle"></span>
           <b>[[post.lastReply.user]]</b>

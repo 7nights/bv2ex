@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>v2ex</title>
+    <meta name="description" content="V2EX redesign">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="V2EX+">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="referrer" content="same-origin">
+    <base href="/">
+    
+    <!-- insert global variables here -->
+    <script>
+      if (window.clientAddress) {
+        window.Polymer = {
+          rootPath: window.clientAddress + '/'
+        };
+      }
+      if (location.href.indexOf('debug') === -1) {
+        console.log = () => {};
+      }
+    </script>
+
+    <script>
+      let materialIconsFont = new FontFace('Material Icons', 'url(https://fonts.gstatic.com/s/materialicons/v38/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2)', {
+        style: 'normal',
+        weight: '400'
+      });
+      document.fonts.add(materialIconsFont);
+      materialIconsFont.load();
+      materialIconsFont.loaded
+        .then(() => {
+          setTimeout(() => {
+            document.body.classList.add('material-icons-loaded');
+          }, 500);
+        })
+        .catch((fontface) => {
+          setTimeout(() => {
+            document.body.classList.add('material-icons-loaded');
+          }, 500);
+        });
+    </script>
+    <link href="./font.css" rel="stylesheet" />
+
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="/src/bv-utils.js"></script>
+    <script src="/src/app-querys.js"></script>
+
+    <link rel="import" href="/bower_components/polymer/polymer.html" />
+
+    <link rel="import" href="/src/v2ex-app/app-styles.html" />
+    <link rel="import" href="/src/v2ex-app/v2ex-app.html" />
+    <link rel="import" href="/src/v2ex-app/pages/bv-timeline-page/bv-timeline-page.html" />
+    <link rel="import" href="/src/v2ex-app/pages/bv-topic-page/bv-topic-page.html" />
+    <link rel="import" href="/src/v2ex-app/pages/bv-login-page/bv-login-page.html" />
+    <link rel="import" href="/src/v2ex-app/pages/bv-settings-page/bv-settings-page.html" />
+    <link rel="import" href="/src/v2ex-app/pages/bv-list-page/bv-list-page.html" />
+    <link rel="import" href="/src/v2ex-app/pages/bv-notifications-page/bv-notifications-page.html" />
+    <link rel="import" href="/src/v2ex-app/pages/bv-member-page/bv-member-page.html" />
+    <link rel="import" href="/src/v2ex-app/pages/bv-nodes-page/bv-nodes-page.html" />
+    <link rel="import" href="/src/v2ex-app/pages/bv-writing-page/bv-writing-page.html" />
+    <link rel="import" href="/src/v2ex-app/components/bv-toolbar/bv-toolbar.html" />
+    <link rel="import" href="/src/v2ex-app/components/bv-bottom-navigation/bv-bottom-navigation.html" />
+    <link rel="import" href="/src/v2ex-app/components/bv-image-viewer/bv-image-viewer.html" />
+    <link rel="import" href="/src/v2ex-app/components/bv-scroller/bv-scroller.html" />
+    <link rel="import" href="/src/v2ex-app/components/bv-dialog/bv-dialog.html" />
+    <link rel="import" href="/src/v2ex-app/components/bv-loading-layer/bv-loading-layer.html" />
+    <link rel="import" href="/src/recycler-view.html" />
+    <link rel="import" href="/bower_components/app-route/app-route.html" />
+    <link rel="import" href="/bower_components/app-route/app-location.html" />
+    <link rel="import" href="/bower_components/paper-toast/paper-toast.html" />
+
+    <style>
+      html {
+        height: 100%;
+      }
+      body {
+        background-image: url(../../assets/bg-big-lighter.png);
+        background-size: cover;
+        background-attachment: fixed;
+        margin: 0;
+        font-family: Roboto, "Noto Sans", "Noto Sans CJK";
+        color: var(--light-text-primary-color);
+        /* font-size: 16px; */
+      }
+      * {
+        box-sizing: border-box;
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      iron-overlay-backdrop {
+        overflow: auto;
+        overscroll-behavior: none;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      (() => {
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+          if (resizeTimer) clearTimeout(resizeTimer);
+
+          resizeTimer = setTimeout(setRootFontSize, 200);
+        });
+        let initialFontSize = getComputedStyle(document.documentElement).fontSize;
+        document.body.style.fontSize = initialFontSize;
+        function setRootFontSize() {
+          document.documentElement.style.fontSize = document.documentElement.clientWidth / 36 + 'px';
+        }
+        setRootFontSize();
+      })();
+    </script>
+    <dom-bind id="t">
+      <template>
+        <template is="dom-if" if="{{inited}}">
+          <v2ex-app id="v2ex" app="{{app}}">
+            <bv-toolbar id="toolbar" app="{{app}}"></bv-toolbar>
+            <bv-bottom-navigation class="show" app="{{app}}"></bv-bottom-navigation>
+            
+            <bv-timeline-page app="{{app}}" name="home"></bv-timeline-page>
+            <bv-topic-page app="{{app}}" name="topic"></bv-topic-page>
+            <bv-member-page app="{{app}}" name="member"></bv-member-page>
+            <bv-login-page app="{{app}}" name="login"></bv-login-page>
+            <bv-settings-page app="{{app}}" name="others"></bv-settings-page>
+            <bv-list-page app="{{app}}" name="list"></bv-list-page>
+            <bv-nodes-page app="{{app}}" name="nodes"></bv-nodes-page>
+            <bv-notifications-page app="{{app}}" name="notifications"></bv-notifications-page>
+            <bv-writing-page app="{{app}}" name="create-topic"></bv-writing-page>
+          </v2ex-app>
+          <paper-toast id="global-error-toast"></paper-toast>
+          <bv-dialog app="{{app}}"></bv-dialog>
+          <bv-loading-layer id="loading"></bv-loading-layer>
+        </template>
+        <bv-image-viewer id="image-viewer"></bv-image-viewer>
+      </template>
+      <script>
+        // window.console.log = () => {};
+        window.console.warn = () => {};
+        document.addEventListener('contextmenu', (ev) => {
+          const nodeName = ev.target.nodeName;
+          nodeName !== 'TEXTAREA' && nodeName !== 'INPUT' && ev.target.getAttribute('allow-menu') !== 'allow' && ev.preventDefault();
+        });
+        window.addEventListener('userinfo-change', (ev) => {
+          t.set('app.userInfo', ev.detail);
+        });
+        t.app = {
+          name: 'bv2ex',
+          notificationCount: 0,
+          pageName: t.pageName || 'Timeline',
+          userInfo: {
+            avatar: './assets/avatar/avatar-1.png'
+          },
+          mockItems: (() => {
+            let arr = [];
+            for (let i = 0; i < 100; i++) {
+              arr.push({
+                innerHTML: 'test paragrash ' + i
+              });
+            }
+            return arr;
+          })()
+        };
+        window.t = t;
+        t.inited = true;
+      </script>
+    </dom-bind>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+        .then(function(reg) {
+          // registration worked
+          console.log('Registration succeeded. Scope is ' + reg.scope);
+        }).catch(function(error) {
+          // registration failed
+          console.log('Registration failed with ' + error);
+        });
+      }
+    </script>
+
+    <!-- insert fcm here -->
+  </body>
+</html>

@@ -151,8 +151,11 @@
       .guidelines .guideline .body {
         font-size: 13px;
       }
+      .posting .buttons {
+        filter: grayscale(1);
+      }
     </style>
-    <div class="container">
+    <div class$="container [[_addClass('posting', posting)]]">
       <div class="title-label">
         <b>Title</b>
         <span on-click="goNodes"><i class="material-icons">label</i>[[_or(pageData.name, pageData.node)]]</span>
@@ -163,7 +166,7 @@
       <div class="bottom-container">
         <div class="guidelines-button" on-click="toggleGuidelines">+ Community guidelines</div>
         <div class="buttons">
-          <div class="button-save">SAVE<paper-ripple></paper-ripple></div>
+          <div class="button-save" on-click="savePost">SAVE<paper-ripple></paper-ripple></div>
           <div class="button-create" on-click="createTopic">CREATE<paper-ripple></paper-ripple></div>
         </div>
       </div>
@@ -201,6 +204,7 @@
       constructor() {
         super();
 
+        this.posting = false;
         this.guidelines = [{
           title: '尊重原创',
           body: '请不要在 V2EX 发布任何盗版下载链接，包括软件、音乐、电影等等。V2EX 是创意工作者的社区，我们尊重原创。'
@@ -221,20 +225,34 @@
           this.$.guidelines.style.bottom = '-' + (this.$.guidelines.offsetHeight + 20) + 'px';
         }
       }
+      savePost() {
+        window.dialog.open({content: 'Unimplemented function', negativeText: ''});
+      }
       goNodes() {
         window.v2ex.goToPage(this.rootPath + 'nodes');
       }
       async createTopic() {
         // validate fields
-        if (!this.pageData.node) return;
+        if (!this.pageData.node || this.posting) return;
         const title = this.$.title.value;
         const content = this.$.content.value;
         if (!title) return;
         if (!content) return;
 
         console.log(this.pageData, title, content);
+        this.posting = true;
 
         const result = await window.BVQuerys.createTopic(this.pageData.node, title, content);
+        this.posting = false;
+
+        if (result.data && result.data.indexOf('/t') === 0) {
+          this.$.title.value = '';
+          this.$.content.value = '';
+          return window.v2ex.goToPage(result.data);
+        } else {
+          window['global-error-toast'].text = 'Failed to create topic. Please try again later';
+          window['global-error-toast'].open();
+        }
       }
     }
     window.customElements.define(WritingPage.is, WritingPage);

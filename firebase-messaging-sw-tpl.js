@@ -1,11 +1,31 @@
 self.addEventListener('notificationclick', function(event) {
   const notification = event.notification;
   const data = event.data || (notification.data && notification.data.FCM_MSG && notification.data.FCM_MSG.data || notification.data);
+  let url;
   if (data && data.url) {
-    self.clients.openWindow(data.url);
+    url = data.url;
   } else {
-    self.clients.openWindow(self.CLIENT_PORTAL_URL);
+    url = self.CLIENT_PORTAL_URL;
   }
+  return event.waitUntil(
+    clients.matchAll({
+      type: 'window'
+    })
+      .then((clientList) => {
+        if (clientList && clientList[0]) {
+          const client = clientList[0];
+          client.focus();
+          client.postMessage({
+            type: 'navigate',
+            data: {
+              url
+            }
+          });
+        } else if (clients.openWindow) {
+          return clients.openWindow(url);
+        }
+      })
+  );
 });
 
 importScripts('https://www.gstatic.com/firebasejs/5.11.1/firebase-app.js');
@@ -23,7 +43,7 @@ messaging.setBackgroundMessageHandler(function(payload) {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
   // Customize notification here
   var notificationOptions = {
-    body: payload.notification.body,
+    ...payload.notification,
     icon: self.CLIENT_PORTAL_URL + '/assets/logo-without-bg.png'
   };
 

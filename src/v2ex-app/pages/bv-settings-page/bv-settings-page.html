@@ -76,8 +76,8 @@
     </style>
     <div class="banner">
       <h1>Hi, [[app.userInfo.username]]</h1>
-      <div class="daily-sentence">Yesterday I was clever, so I wanted to change the world. Today I am wise, so I am changing myself.</div>
-      <bv-user-avatar src$="[[app.userInfo.avatar]]"></bv-user-avatar>
+      <div class="daily-sentence">[[getSentence()]]</div>
+      <bv-user-avatar src$="[[app.userInfo.avatar]]" user="[[app.userInfo.username]]"></bv-user-avatar>
     </div>
     <div class="list" id="list">
       <div class="item" name="Profile">
@@ -122,6 +122,16 @@
           window.v2ex.children.toolbar.setMode('hidden');
           console.log(this.app.userInfo.avatar);
         });
+      }
+      getSentence() {
+        const sentences = [
+          'Yesterday I was clever, so I wanted to change the world. Today I am wise, so I am changing myself.',
+          'If a thing is worth doing it is worth worth doing well.',
+          'Big mouthfuls ofter choke.',
+          'All things are difficult before they are easy.',
+          'The best preparation for tomorrow is doing your best today.'
+        ];
+        return sentences[Math.floor(Math.random() * sentences.length)];
       }
       connectedCallback() {
         super.connectedCallback();

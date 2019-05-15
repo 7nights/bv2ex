@@ -92,7 +92,7 @@
 
     <div class$="comment-area-header [[_addClass('hide', _hideCommentHeader)]]">
       <bv-light-button class="comment-count">
-        <i class="material-icons">comment</i>
+        <i class="material-icons">sms</i>
         [[post.replyCount]]
       </bv-light-button>
     </div>
@@ -103,7 +103,7 @@
       </bv-light-button>
     </div>
 
-    <bv-reply-box t="[[post.t]]" on-reply-failed="_replyFailed" on-reply-sent="_replySent" once="[[post.actions.once]]" reply-content="{{currentReplyValue}}" id="reply-box" append-to-body visibility$="[[_addClass('show-reply-box', visible)]]" avatar="[[app.userInfo.avatar]]"></bv-reply-box>
+    <bv-reply-box topic="[[getTopic(post)]]" on-reply-failed="_replyFailed" on-reply-sent="_replySent" once="[[post.actions.once]]" reply-content="{{currentReplyValue}}" id="reply-box" append-to-body visibility$="[[_addClass('show-reply-box', visible)]]" avatar="[[app.userInfo.avatar]]"></bv-reply-box>
 
     <template is="dom-repeat" items="[[repliesGroup]]" >
       <div class="replies-group" group-id$="[[index]]">
@@ -169,6 +169,9 @@
             value: ''
           }
         };
+      }
+      getTopic() {
+        return this.pageData.t;
       }
       async toggleFollow() {
         // window.BVQuerys
@@ -461,10 +464,12 @@
             throw result.error;
           }
         } catch (ex) {
-          history.back();
-          window['global-error-toast'].text = 'Could not fetch topic, please try again later.';
-          window['global-error-toast'].open();
-          throw ex;
+          if (this.app.currentPage === 'topic') {
+            history.back();
+            window['global-error-toast'].text = 'Could not fetch topic, please try again later.';
+            window['global-error-toast'].open();
+            throw ex;
+          }
         }
         
         let replies = result.replies;
@@ -579,7 +584,7 @@
           div.innerHTML = this.post.content;
           window.navigator.share({
             title: this.post.title,
-            text: div.innerText.substr(0, 255) + (div.innerText.length > 255 ? '...' : ''),
+            text: this.post.title + ' - ' + div.innerText.substr(0, 100) + (div.innerText.length > 100 ? '...' : ''),
             url: 'https://v2ex.com/t/' + this.post.t
           })
             .then(() => {
