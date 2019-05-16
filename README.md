@@ -11,10 +11,10 @@ Please install [get-v2ex](https://github.com/7nights/get-v2ex) first. And then f
 To install bv2ex:
 
 ### Step 1
-Click the Releases tab, find the latest release and download it on your server.
+Click the [Releases](https://github.com/7nights/bv2ex/releases) tab, find the latest release and download it on your server.
 
 ```shell
-wget bv2ex.zip
+wget [bv2ex.zip release path]
 ```
 
 ### Step 2
@@ -67,7 +67,7 @@ To get Firebase configuration:
 
 ### Step 4
 
-Run build command.
+Run build command under the `public` directory.
 ```shell
 npm run build
 ```
