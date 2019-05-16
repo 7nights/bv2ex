@@ -94,7 +94,7 @@
             return;
           }
           if (ev.data && ev.data.type === 'navigate') {
-            this.goToPage(ev.data.url, null);
+            this.goToPage(ev.data.data.url || '', null);
           }
         });
         

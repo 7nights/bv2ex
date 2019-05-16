@@ -156,11 +156,14 @@
           });
       }
       _menuClickHistory() {
-        v2ex.goToPage('/list/History', {
-          posts: BVUtils.userStorage.get('recentViews'),
-          name: 'History',
-          tips: 'Showing 50 topics you\'ve recently read on this device.'
-        });
+        this.disappear()
+          .then(() => {
+            v2ex.goToPage('/list/History', {
+              posts: BVUtils.userStorage.get('recentViews'),
+              name: 'History',
+              tips: 'Showing 50 topics you\'ve recently read on this device.'
+            });
+          });
       }
       _menuClickCollected() {
         this.disappear()

@@ -215,6 +215,7 @@ bv-reply-box[visibility=show-reply-box] {
   display: inline-block;
   margin-left: 20px;
   color: #777;
+  border-bottom-left-radius: 0;
 }
 .appended .topic-content {
   margin-top: 15px;
