@@ -9,7 +9,8 @@ self.addEventListener('notificationclick', function(event) {
   }
   return event.waitUntil(
     clients.matchAll({
-      type: 'window'
+      type: 'window',
+      includeUncontrolled: true
     })
       .then((clientList) => {
         if (clientList && clientList[0]) {
