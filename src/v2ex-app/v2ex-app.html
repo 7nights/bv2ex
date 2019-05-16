@@ -89,14 +89,16 @@
           console.log('page-select', ev.detail);
         });
 
-        window.addEventListener('message', (ev) => {
-          if (ev.origin !== window.origin) {
-            return;
-          }
-          if (ev.data && ev.data.type === 'navigate') {
-            this.goToPage(ev.data.data.url || '', null);
-          }
-        });
+        if (window.navigator.serviceWorker) {
+          window.navigator.serviceWorker.addEventListener('message', (ev) => {
+            if (ev.origin !== window.origin) {
+              return;
+            }
+            if (ev.data && ev.data.type === 'navigate') {
+              this.goToPage(ev.data.data.url || '', null);
+            }
+          });
+        }
         
         // bind pagescroll to recyclerview
         // window.scrollingElement = document.scrollingElement;
