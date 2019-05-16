@@ -16,6 +16,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   'use strict';
 
+  const walker = document.createTreeWalker(document, NodeFilter.SHOW_ALL,
+      null, false);
+
   // 1.x backwards-compatible auto-wrapper for template type extensions
   // This is a clear layering violation and gives favored-nation status to
   // dom-if and dom-repeat templates.  This is a conceit we're choosing to keep
@@ -50,7 +53,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     if (parent) {
       // note: marginally faster than indexing via childNodes
       // (http://jsperf.com/childnodes-lookup)
-      for (let n=parent.firstChild, i=0; n; n=n.nextSibling) {
+      walker.currentNode = parent;
+      for (let n=walker.firstChild(), i=0; n; n=walker.nextSibling()) {
         if (nodeInfo.parentIndex === i++) {
           return n;
         }
@@ -234,7 +238,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // For ShadyDom optimization, indicating there is an insertion point
           templateInfo.hasInsertionPoint = true;
         }
-        if (element.firstChild) {
+        walker.currentNode = element;
+        if (walker.firstChild()) {
           noted = this._parseTemplateChildNodes(element, templateInfo, nodeInfo) || noted;
         }
         if (element.hasAttributes && element.hasAttributes()) {
@@ -254,12 +259,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @param {Node} root Root node whose `childNodes` will be parsed
        * @param {!TemplateInfo} templateInfo Template metadata for current template
        * @param {!NodeInfo} nodeInfo Node metadata for current template.
+       * @return {void}
        */
       static _parseTemplateChildNodes(root, templateInfo, nodeInfo) {
         if (root.localName === 'script' || root.localName === 'style') {
           return;
         }
-        for (let node=root.firstChild, parentIndex=0, next; node; node=next) {
+        walker.currentNode = root;
+        for (let node=walker.firstChild(), parentIndex=0, next; node; node=next) {
           // Wrap templates
           if (node.localName == 'template') {
             node = wrapTemplateExtension(node);
@@ -268,12 +275,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // text nodes to be inexplicably split =(
           // note that root.normalize() should work but does not so we do this
           // manually.
-          next = node.nextSibling;
+          walker.currentNode = node;
+          next = walker.nextSibling();
           if (node.nodeType === Node.TEXT_NODE) {
             let /** Node */ n = next;
             while (n && (n.nodeType === Node.TEXT_NODE)) {
               node.textContent += n.textContent;
-              next = n.nextSibling;
+              next = walker.nextSibling();
               root.removeChild(n);
               n = next;
             }
@@ -288,7 +296,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             childInfo.infoIndex = templateInfo.nodeInfoList.push(/** @type {!NodeInfo} */(childInfo)) - 1;
           }
           // Increment if not removed
-          if (node.parentNode) {
+          walker.currentNode = node;
+          if (walker.parentNode()) {
             parentIndex++;
           }
         }
@@ -442,7 +451,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * This method generates a handler function that looks up the method
        * name at handling time.
        *
-       * @param {Node} node Node to add listener on
+       * @param {!Node} node Node to add listener on
        * @param {string} eventName Name of event
        * @param {string} methodName Name of method
        * @param {*=} context Context the method will be called on (defaults
@@ -459,9 +468,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       /**
        * Override point for adding custom or simulated event handling.
        *
-       * @param {Node} node Node to add event listener to
+       * @param {!Node} node Node to add event listener to
        * @param {string} eventName Name of event
-       * @param {Function} handler Listener function to add
+       * @param {function(!Event):void} handler Listener function to add
+       * @return {void}
        */
       _addEventListenerToNode(node, eventName, handler) {
         node.addEventListener(eventName, handler);
@@ -470,9 +480,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       /**
        * Override point for adding custom or simulated event handling.
        *
-       * @param {Node} node Node to remove event listener from
+       * @param {!Node} node Node to remove event listener from
        * @param {string} eventName Name of event
-       * @param {Function} handler Listener function to remove
+       * @param {function(!Event):void} handler Listener function to remove
+       * @return {void}
        */
       _removeEventListenerFromNode(node, eventName, handler) {
         node.removeEventListener(eventName, handler);

@@ -85,8 +85,8 @@
       enable() {
         if (!this._disabled) return;
         this._disabled = false;
-        this._scrollingElement.scrollTop === 0 && setTimeout(() => {
-          this._moveSafeArea();
+        setTimeout(() => {
+          this._scrollingElement.scrollTop === 0 && this._moveSafeArea();
         }, 140);
       }
 

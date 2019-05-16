@@ -344,7 +344,7 @@
             </div>
           </template>
         </div>
-        <div class$="empty-info [[_getDisplay('emptyInfo', userInfo.widgets, userInfo.introduction)]]">
+        <div class$="empty-info [[_getDisplay('emptyInfo', userInfo.widgets, userInfo.introduction, userInfo.bio, userInfo.company)]]">
           <img src="../../../../assets/icons/material/unknown-black.svg" />
           <span>[[pageData.member]] is a bit mysterious.</span>
         </div>
@@ -479,7 +479,7 @@
             if (!this.userInfo.introduction) return 'hidden';
             break;
           case 'emptyInfo':
-            if ((!this.userInfo.widgets || this.userInfo.widgets.length === 0) && !this.userInfo.introduction) return '';
+            if ((!this.userInfo.widgets || this.userInfo.widgets.length === 0) && !this.userInfo.introduction && !this.userInfo.bio && !this.userInfo.company) return '';
             else return 'hidden';
         }
       }

@@ -15,6 +15,8 @@ fs.renameSync('./build/default/index.html', './build/default/index-tpl.html');
 fs.copySync('./assets', './build/default/assets');
 // copy fonts
 fs.copySync('./fonts', './build/default/fonts');
+// copy favicon
+fs.copyFileSync('./assets/logo-without-bg.png', './build/default/favicon.ico');
 
 // copy templates
 fs.copyFileSync('./fcm-tpl.html', './build/default/fcm-tpl.html');

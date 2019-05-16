@@ -24,6 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @implements {Polymer_PropertyEffects}
      * @implements {Polymer_OptionalMutableData}
      * @implements {Polymer_GestureEventListeners}
+     * @private
      */
     const domBindBase =
       Polymer.GestureEventListeners(
@@ -56,21 +57,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       constructor() {
         super();
+        if (Polymer.strictTemplatePolicy) {
+          throw new Error(`strictTemplatePolicy: dom-bind not allowed`);
+        }
         this.root = null;
         this.$ = null;
         this.__children = null;
       }
 
-      // assumes only one observed attribute
+      /** @return {void} */
       attributeChangedCallback() {
+        // assumes only one observed attribute
         this.mutableData = true;
       }
 
+      /** @return {void} */
       connectedCallback() {
         this.style.display = 'none';
         this.render();
       }
 
+      /** @return {void} */
       disconnectedCallback() {
         this.__removeChildren();
       }
@@ -90,6 +97,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       /**
        * Forces the element to render its content. This is typically only
        * necessary to call if HTMLImports with the async attribute are used.
+       * @return {void}
        */
       render() {
         let template;
@@ -128,6 +136,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     customElements.define('dom-bind', DomBind);
 
+    /** @const */
     Polymer.DomBind = DomBind;
 
   })();

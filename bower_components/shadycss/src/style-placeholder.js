@@ -10,17 +10,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 'use strict';
 
-import {applyStylePlaceHolder} from './style-util.js'
-import {nativeShadow} from './style-settings.js'
+import {applyStylePlaceHolder} from './style-util.js';
+import {nativeShadow, disableRuntime} from './style-settings.js';
 
-/** @type {Object<string, !Node>} */
-let placeholderMap = {};
+/** @type {!Object<string, !Node>} */
+const placeholderMap = {};
+
+/**
+ * @param {string} elementName
+ * @return {Node}
+ */
+export function getStylePlaceholder(elementName) {
+  return placeholderMap[elementName] || null;
+}
+
+/**
+ * @param {string} elementName
+ */
+export function ensureStylePlaceholder(elementName) {
+  if (!placeholderMap[elementName]) {
+    placeholderMap[elementName] = applyStylePlaceHolder(elementName);
+  }
+}
 
 /**
  * @const {CustomElementRegistry}
  */
 const ce = window['customElements'];
-if (ce && !nativeShadow) {
+if (ce && !nativeShadow && !disableRuntime) {
   /**
    * @const {function(this:CustomElementRegistry, string,function(new:HTMLElement),{extends: string}=)}
    */
@@ -29,13 +46,10 @@ if (ce && !nativeShadow) {
    * @param {string} name
    * @param {function(new:HTMLElement)} clazz
    * @param {{extends: string}=} options
-   * @return {function(new:HTMLElement)}
    */
   const wrappedDefine = (name, clazz, options) => {
-    placeholderMap[name] = applyStylePlaceHolder(name);
-    return origDefine.call(/** @type {!CustomElementRegistry} */(ce), name, clazz, options);
-  }
+    ensureStylePlaceholder(name);
+    origDefine.call(/** @type {!CustomElementRegistry} */(ce), name, clazz, options);
+  };
   ce['define'] = wrappedDefine;
 }
-
-export default placeholderMap;

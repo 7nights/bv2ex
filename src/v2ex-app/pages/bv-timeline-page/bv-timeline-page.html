@@ -363,7 +363,7 @@
         this.addEventListener('page-unselect', () => {
           document.body.classList.remove('selected-page-timeline');
           this.$['recycler-view'].disable();
-          this._lastScrollTop = document.scrollingElement.scrollTop;
+          // this._lastScrollTop = document.scrollingElement.scrollTop;
           window.scrollTo(0, 0);
           this._show = false;
           this.$.loadmore.disable();

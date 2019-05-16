@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 'use strict';
 
-import {StyleNode} from './css-parse.js' // eslint-disable-line no-unused-vars
+import {StyleNode} from './css-parse.js'; // eslint-disable-line no-unused-vars
 
 /** @const {string} */
 const infoKey = '__styleInfo';
@@ -51,7 +51,7 @@ export default class StyleInfo {
     this.placeholder = placeholder || null;
     /** @type {!Array<string>} */
     this.ownStylePropertyNames = ownStylePropertyNames || [];
-    /** @type {Array<Object>} */
+    /** @type {Object} */
     this.overrideStyleProperties = null;
     /** @type {string} */
     this.elementName = elementName || '';
@@ -71,4 +71,5 @@ export default class StyleInfo {
   }
 }
 
+/* eslint-disable-next-line no-self-assign */
 StyleInfo.prototype['_getStyleRules'] = StyleInfo.prototype._getStyleRules;

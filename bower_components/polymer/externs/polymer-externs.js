@@ -1,5 +1,5 @@
 /**
- * @fileoverview Externs for Polymer
+ * @fileoverview Externs for Polymer Pass and external Polymer API
  * @externs
  *
  * @license
@@ -15,19 +15,19 @@
 
 /**
  * @typedef {{
- * type: !Function,
- * value: *,
- * readOnly: (boolean | undefined),
- * computed: (string | undefined),
- * reflectToAttribute: (boolean | undefined),
- * notify: (boolean | undefined),
- * observer: (string | undefined)
+ *   type: !Function,
+ *   value: (* | undefined),
+ *   readOnly: (boolean | undefined),
+ *   computed: (string | undefined),
+ *   reflectToAttribute: (boolean | undefined),
+ *   notify: (boolean | undefined),
+ *   observer: (string | function(this:?, ?, ?) | undefined)
  * }}
  */
 let PolymerElementPropertiesMeta;
 
 /**
- * @typedef {Object<string, !PolymerElementPropertiesMeta>}
+ * @typedef {Object<string, !Function|!PolymerElementPropertiesMeta>}
  */
 let PolymerElementProperties;
 
@@ -59,14 +59,15 @@ PolymerElementConstructor.observers;
 /** @type {(!HTMLTemplateElement | string | undefined)} */
 PolymerElementConstructor.template;
 
+let PropertiesMixinConstructor = function (){};
+/** @type {(!PolymerElementProperties | undefined)} */
+PropertiesMixinConstructor.properties;
+
 /**
  * @param {!PolymerInit} init
  * @return {!function(new:HTMLElement)}
  */
 function Polymer(init){}
-
-/** @type {PolymerElementProperties} */
-Polymer.ElementProperties;
 
 /**
  * @type {(function(*,string,string,Node):*)|undefined}
@@ -96,9 +97,24 @@ PolymerTelemetry.dumpRegistrations;;
 /** @type {PolymerTelemetry} */
 Polymer.telemetry;
 
+/** @type {string} */
+Polymer.version;
+
+// nb. This is explicitly 'var', as Closure Compiler checks that this is the case.
 /**
  * @constructor
  * @extends {HTMLElement}
  * @implements {Polymer_LegacyElementMixin}
  */
-var PolymerElement = Polymer.LegacyElementMixin();
+var PolymerElement = function() {};
+
+/** On create callback. */
+PolymerElement.prototype.created = function() {};
+/** On ready callback. */
+PolymerElement.prototype.ready = function() {};
+/** On registered callback. */
+PolymerElement.prototype.registered = function() {};
+/** On attached to the DOM callback. */
+PolymerElement.prototype.attached = function() {};
+/** On detached from the DOM callback. */
+PolymerElement.prototype.detached = function() {};

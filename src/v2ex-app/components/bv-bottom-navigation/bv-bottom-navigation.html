@@ -77,7 +77,7 @@
     </style>
 
     <a on-click="itemClicked" class$="item [[_selected('home', app.currentPage)]]" href="/">
-      <paper-ripple></paper-ripple>
+      <!-- <paper-ripple></paper-ripple> -->
       <div>
         <!-- <i class="material-icons">home</i> -->
         <img width="25" height="25" src="[[_getIcon('/assets/icons/material/home.svg', 'home', app.currentPage)]]" />
@@ -85,14 +85,14 @@
       </div>
     </a>
     <a on-click="itemClicked" class$="item [[_selected('nodes', app.currentPage)]]" href="/nodes">
-      <paper-ripple></paper-ripple>
+      <!-- <paper-ripple></paper-ripple> -->
       <div>
         <i class="material-icons">apps</i>
         <span>Nodes</span>
       </div>
     </a>
     <a on-click="itemClicked" class$="item [[_selected('others', app.currentPage)]]" href="/others">
-      <paper-ripple></paper-ripple>
+      <!-- <paper-ripple></paper-ripple> -->
       <div>
         <!-- <i class="material-icons">menu</i> -->
         <img width="25" height="25" src$="[[_getIcon('/assets/icons/material/perm_identity.svg', 'others', app.currentPage)]]" />
