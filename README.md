@@ -71,3 +71,17 @@ Run build command under the `public` directory.
 ```shell
 npm run build
 ```
+
+## Upgrade
+
+- Download lastest release on your server
+- Unzip it under get-v2ex directory
+- Run `npm run build` under `get-v2ex/public` directory
+
+```shell
+cd [get-v2ex path]
+wget [bv2ex.zip release path]
+unzip bv2ex.zip
+cd public
+npm run build
+```
