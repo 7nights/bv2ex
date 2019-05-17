@@ -18,6 +18,7 @@ self.addEventListener('notificationclick', function(event) {
           client.focus();
           client.postMessage({
             type: 'navigate',
+            notificationCount: data.notificationCount,
             data: {
               url
             }

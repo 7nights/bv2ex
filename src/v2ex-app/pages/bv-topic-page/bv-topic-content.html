@@ -137,7 +137,7 @@
               return `<div class="image-wrap"><bv-fadein-image data-index="${index++}" width="${this.imageWidth}" height="${this.imageHeight}" src="${src}"></bv-fadein-image></div>`;
             }) + '</div>';
           })
-          .replace(/(<br \/><img (.*?)>[\r\n ]*){2,}/g, ($) => {
+          .replace(/((<br \/>)*?<img ([^>]*?)>[\r\n ]*){2,}/g, ($) => {
             let index = 0;
             return '<div class="image-container">' + $.replace(/<img (.*?)src="(.*?)"(.*?)>/g, ($, $1, src) => {
               return `<div class="image-wrap"><bv-fadein-image data-index="${index++}" width="${this.imageWidth}" height="${this.imageHeight}" src="${src}"></bv-fadein-image></div>`;

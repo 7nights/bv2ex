@@ -52,8 +52,8 @@
       dispatchLoadmoreEvent() {
         let now = Date.now();
         let diff = now - this._lastDispatched;
-        if (diff <= this.limit) {
-          return setTimeout(this.dispatchLoadmoreEvent.bind(this), diff);
+        if (diff < this.limit) {
+          return setTimeout(this.dispatchLoadmoreEvent.bind(this), this.limit - diff + 16);
         }
         if (this.disabled) return;
         console.log('dispatch loadmore!!!');

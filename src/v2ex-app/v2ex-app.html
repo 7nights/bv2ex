@@ -94,6 +94,9 @@
             if (ev.origin !== window.origin) {
               return;
             }
+            if (ev.data && ev.data.notificationCount) {
+              this.set('app.notificationCount', ev.data.notificationCount);
+            }
             if (ev.data && ev.data.type === 'navigate') {
               this.goToPage(ev.data.data.url || '', null);
             }

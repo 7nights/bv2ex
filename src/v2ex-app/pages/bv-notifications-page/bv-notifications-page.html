@@ -70,6 +70,7 @@
         flex: 1;
         overflow: auto;
         color: var(--light-text-secondary-color);
+        position: relative;
       }
       .notifications-container b {
         color: var(--light-text-primary-color);
@@ -109,6 +110,29 @@
         color: #ccc;
         vertical-align: middle;
       }
+      .in-arrow.collected {
+        font-size: 16px;
+        position: relative;
+        top: -2px;
+        color: var(--orange);
+      }
+      .in-arrow.mentioned,
+      .in-arrow.reply {
+        font-size: 16px;
+        position: relative;
+        top: -2px;
+        color: var(--blue);
+      }
+      .in-arrow.reply {
+        transform: rotateY(180deg);
+      }
+      .in-arrow.thanked_reply,
+      .in-arrow.thanked_topic {
+        font-size: 16px;
+        position: relative;
+        top: -2px;
+        color: #f31212;
+      }
       .scroll-container {
         height: 100%;
         display: flex;
@@ -126,16 +150,16 @@
       bv-html {
         margin-top: 10px;
         color: var(--light-text-primary-color);
+        word-break: break-all;
       }
       bv-html a {
-        color: var(--blue);
-        background-color: var(--yellow);
+        background-color: #6b6966;
         color: #fff;
         border-radius: 4px;
         text-decoration: none;
       }
       .item.read bv-html a {
-        background-color: var(--orange);
+        background-color: #6b6966;
       }
       .unread-split-container {
         padding-top: 20px;
@@ -258,13 +282,13 @@
               Previous notifications
             </div></div>
           </template>
-          <div on-click="_onNotificationClick" class$="item [[_isUnread(index)]] [[_needUnreadSplit(app.notificationCount, index, 1)]]">
+          <div class$="item [[_isUnread(index)]] [[_needUnreadSplit(app.notificationCount, index, 1)]]">
             <div class="left-container">
-              <bv-user-avatar src="[[item.avatar]]"></bv-user-avatar>
+              <bv-user-avatar user="[[item.member]]" src="[[item.avatar]]"></bv-user-avatar>
               <bv-time time="[[item.time]]"></bv-time>
             </div>
-            <div class="right-container">
-              <b>[[item.member]]</b> [[_getActionName(item.type)]] <i class="in-arrow material-icons">arrow_right</i> <span class="title">[[item.title]]</span>
+            <div class="right-container" on-click="_onNotificationClick">
+              <b>[[item.member]]</b> [[_getActionName(item.type)]] <i class$="in-arrow material-icons [[item.type]]">[[_getActionIcon(item.type)]]</i> <span class="title">[[item.title]]</span>
               <bv-html class="payload" html="[[item.payload]]"><div slot="content"></div></bv-html>
             </div>
           </div>
@@ -324,10 +348,28 @@
             return 'mentioned you';
           case 'thanked_reply':
             return 'liked your comment';
+          case 'thanked_topic':
+            return 'liked your topic';
           case 'reply':
             return 'replied';
           default:
             return type;
+        }
+      }
+      _getActionIcon(type) {
+        switch (type) {
+          case 'mentioned':
+            return 'alternate_email';
+          case 'thanked_reply':
+            return 'favorite';
+          case 'thanked_topic':
+            return 'favorite';
+          case 'reply':
+            return 'reply';
+          case 'collected':
+            return 'bookmark';
+          default:
+            return 'arrow_right';
         }
       }
       _isFCMNotEnabled() {
@@ -426,6 +468,7 @@
         
         this.addEventListener('page-select', async () => {
           this.loading = true;
+          this.set('notifications', []);
           let result = await window.BVQuerys.notifications();
           this.loading = false;
           if (result && result.data) {
@@ -453,7 +496,7 @@
         super();
 
         this.page = 2;
-        this.loading = true;
+        this.loading = false;
 
         this.addEventListener('page-select', () => {
           this.app.toolbar.setRightMenu();

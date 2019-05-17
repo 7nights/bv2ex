@@ -46,7 +46,7 @@
         display: flex;
         align-items: flex-start;
       }
-      .info .avatar {
+      /* .info .avatar {
         width: 48px;
         height: 48px;
         border: none;
@@ -54,6 +54,9 @@
         border-radius: 4px;
         box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
         margin-right: 25px;
+      } */
+      .info .avatar {
+        margin: 0 25px 0 2px;
       }
       .info .detail {
         flex: 1;
@@ -79,7 +82,7 @@
         text-overflow: ellipsis;
         max-width: 90px;
         min-width: 48px;
-        left: 39px;
+        left: 40px;
         top: 55px;
         transform: translateX(-50%);
         position: absolute;
@@ -319,7 +322,7 @@
       <div class="card">
         <div class="info">
           <span class="user-number">No. [[userInfo.memberNo]]</span>
-          <img class="avatar" src="[[userInfo.avatar]]" />
+          <bv-user-avatar class="avatar" src="[[userInfo.avatar]]"></bv-user-avatar>
           <div class="detail">
             <div class="name">
               <b>[[pageData.member]]</b>

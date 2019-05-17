@@ -4,13 +4,13 @@ self.addEventListener('fetch', event => {
   event.respondWith(async function() {
     // Try to get the response from a cache.
     const cache = await caches.open('dynamic-v1');
-    const cachedResponse = await cache.match(event.request);
+    const [cachedResponse, needRefresh] = await getCachedResponse(cache, event.request);
     const useCacheWhenFailed = shouldUseCacheWhenFailed(event.request);
 
     if (cachedResponse && !useCacheWhenFailed) {
       // If we found a match in the cache, return it, but also
       // update the entry in the cache in the background.
-      event.waitUntil(cache.add(event.request));
+      needRefresh && event.waitUntil(cache.add(event.request));
       return cachedResponse;
     }
 
@@ -29,6 +29,26 @@ self.addEventListener('fetch', event => {
     return response;
   }());
 });
+
+function getCachedResponse(cache, request) {
+  const indexes = [
+    /\/t\/[0-9]*$/
+  ];
+  let needRefresh = true;
+  if (request.url) {
+    const url = new URL(request.url);
+    if (indexes.some((val) => {
+      return val.test(url.pathname);
+    })) {
+      needRefresh = false;
+      console.log(url, 'matched index');
+      return cache.match('/')
+        .then(ret => [ret, needRefresh]);
+    }
+  }
+  return cache.match(request)
+    .then(ret => [ret, needRefresh]);
+}
 
 self.addEventListener('install', event => {
   // add caches
