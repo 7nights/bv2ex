@@ -20,7 +20,7 @@
           rootPath: window.clientAddress + '/'
         };
       }
-      if (location.href.indexOf('debug') === -1) {
+      if (location.href.indexOf('debug') === -1 && location.hostname !== '127.0.0.1' ) {
         console.log = () => {};
       }
     </script>
@@ -146,8 +146,28 @@
         // window.console.log = () => {};
         window.console.warn = () => {};
         document.addEventListener('contextmenu', (ev) => {
-          const nodeName = ev.target.nodeName;
-          nodeName !== 'TEXTAREA' && nodeName !== 'INPUT' && ev.target.getAttribute('allow-menu') !== 'allow' && ev.preventDefault();
+          const composedPath = ev.composedPath();
+          
+          // disable default image and a link
+          let target = (composedPath && composedPath[0]) || ev.target;
+          let nodeName;
+          while (target) {
+            nodeName = target.nodeName;
+            if (nodeName === 'A' || nodeName === 'IMG') {
+              ev.preventDefault();
+              return false;
+            }
+            target = target.parentElement;
+          }
+
+          // disable timeline page
+          target = ev.target;
+          while (target) {
+            if (target.nodeName === 'BV-TIMELINE-PAGE') {
+              return ev.preventDefault();
+            }
+            target = target.parentElement;
+          }
         });
         window.addEventListener('userinfo-change', (ev) => {
           t.set('app.userInfo', ev.detail);

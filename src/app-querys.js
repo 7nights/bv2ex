@@ -1,11 +1,25 @@
 window.BVQuerys = (() => {
   const SERVER_ADDRESS = window.SERVER_ADDRESS || ('http://' + location.hostname + ':3001');
   const _oriFetch = window.fetch;
-  const fetch = (url, options) => {
+  const fetch = (url, options, noRetry) => {
     return _oriFetch(url, {
       credentials: 'include',
       ...options
-    });
+    })
+      .catch(ex => {
+        console.error('Failed to fetch', ex);
+        if (noRetry) {
+          window['global-error-toast'].text = 'Oops, network error!';
+          window['global-error-toast'].open();
+          throw ex;
+        }
+        else return new Promise((resolve) => {
+          console.log('fetch retry in 1500ms: ', url, options);
+          setTimeout(() => {
+            resolve(fetch(url, options, true));
+          }, 1500);
+        });
+      });
   };
 
   function handleAppValues(result, options = {}) {
@@ -16,7 +30,6 @@ window.BVQuerys = (() => {
         window.dispatchEvent(new CustomEvent('location-changed'));
       } else if (result.error.type === 'NEED_LOGIN') {
         window.history.pushState(null, null, '/login/needCipher');
-        debugger;
         window.dispatchEvent(new CustomEvent('location-changed'));
       }
       throw result.error;

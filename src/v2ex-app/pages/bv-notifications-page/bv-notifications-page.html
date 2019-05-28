@@ -289,7 +289,7 @@
             </div>
             <div class="right-container" on-click="_onNotificationClick">
               <b>[[item.member]]</b> [[_getActionName(item.type)]] <i class$="in-arrow material-icons [[item.type]]">[[_getActionIcon(item.type)]]</i> <span class="title">[[item.title]]</span>
-              <bv-html class="payload" html="[[item.payload]]"><div slot="content"></div></bv-html>
+              <bv-html class="payload" html="[[_filterUndefined(item.payload)]]"><div slot="content"></div></bv-html>
             </div>
           </div>
           <div class$="item-border [[_needUnreadSplit(app.notificationCount, index, 1)]]"></div>
@@ -466,8 +466,17 @@
       connectedCallback() {
         super.connectedCallback();
         
-        this.addEventListener('page-select', async () => {
+        this.addEventListener('page-select', async (ev) => {
+          // do not reload when back from topic page
+          if (ev.detail.oldPage && ev.detail.oldPage.tagName === 'BV-TOPIC-PAGE' && !window._fromNotification) {
+            this.$.loadmore.enable();
+            this.setTabBorderPosition();
+            return;
+          }
+
+          this.selected = 0;
           this.loading = true;
+          this.page = 2;
           this.set('notifications', []);
           let result = await window.BVQuerys.notifications();
           this.loading = false;

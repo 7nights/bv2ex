@@ -618,10 +618,10 @@
               reply.set('reply.likes', ev.detail.likes + 1);
             });
         });
-        this.addEventListener('page-select', (ev) => {
-          if (ev.detail.oldPage === ev.detail.newPage) {
-            document.scrollingElement.scrollTop = 0;
-          }
+        this.addEventListener('page-unselect', (ev) => {
+          // if (ev.detail.oldPage === ev.detail.newPage) {
+          //   document.scrollingElement.scrollTop = 0;
+          // }
           this._shown = false;
           this.visible = false;
           this.$.loadmore.disable();

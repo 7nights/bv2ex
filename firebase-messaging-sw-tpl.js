@@ -48,6 +48,10 @@ messaging.setBackgroundMessageHandler(function(payload) {
     ...payload.notification,
     icon: self.CLIENT_PORTAL_URL + '/assets/logo-without-bg.png'
   };
+  if (payload.data && payload.data.notificationCount) {
+    notificationOptions.tag = 'unread-notification';
+    notificationOptions.renotify = true;
+  }
 
   return self.registration.showNotification(payload.notification.title,
     notificationOptions);

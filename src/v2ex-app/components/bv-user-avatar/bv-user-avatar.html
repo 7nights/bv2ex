@@ -152,9 +152,12 @@
         }
         this.classList.remove('gravatar');
         this.style.backgroundColor = this.defaultBackgroundColor;
-        this.loadImage(src);
 
-        return src;
+        // replace to high resolution avatar
+        let hrSrc = src.replace(/_normal\./, '_large.');
+        this.loadImage(hrSrc);
+
+        return hrSrc;
       }
       _hash(str) {
         let hash = 0;

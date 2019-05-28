@@ -40,7 +40,7 @@
           if (this.disabled) return console.log('Loadmore event is prevented because it\'s disabled');
           if (this._dispatched) return console.log('Loadmore event is prevented because it has already dispatched');
           // disappear
-          if (entries[0].intersectionRatio === 0) return console.log('loadmore prevented: ', entries);
+          if (!entries[0].isIntersecting) return console.log('loadmore prevented: ', entries);
           console.log(entries);
 
           this.dispatchLoadmoreEvent();
@@ -76,12 +76,13 @@
       }
       performViewportCheck() {
         const rect = this.getBoundingClientRect();
-        if (rect.top - document.documentElement.clientHeight <= this.threshold) {
+        if (rect.top - 2 * document.documentElement.clientHeight <= this.threshold) {
           this.dispatchLoadmoreEvent();
         }
       }
       enable() {
         this.disabled = false;
+        this.reset();
       }
       disable() {
         this.disabled = true;
@@ -89,8 +90,10 @@
       reset() {
         this._dispatched = false;
         if (this.disabled) return;
-        Polymer.Async.animationFrame.run(() => {
-          this.performViewportCheck();
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            this.performViewportCheck();
+          });
         });
       }
     }

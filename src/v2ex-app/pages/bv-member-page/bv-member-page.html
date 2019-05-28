@@ -41,6 +41,7 @@
         background-image: url('../../../../assets/card-bg.png');
         background-size: cover;
         position: relative;
+        min-height: 70px;
       }
       .info {
         display: flex;
@@ -60,6 +61,7 @@
       }
       .info .detail {
         flex: 1;
+        margin-top: 3px;
       }
       .info .detail .name {
         display: flex;
@@ -83,7 +85,7 @@
         max-width: 90px;
         min-width: 48px;
         left: 40px;
-        top: 55px;
+        top: 65px;
         transform: translateX(-50%);
         position: absolute;
       }
@@ -117,7 +119,7 @@
         margin-right: 5px;
       }
       .card .introduction {
-        margin-top: 15px;
+        margin-top: 20px;
         font-size: 13px;
         color: var(--disabled-text-color);
       }
@@ -295,7 +297,7 @@
         display: none !important;
       }
       .empty-info {
-        margin: -13px 0 10px 63px;
+        margin: -13px 0 10px 73px;
         font-size: 13px;
         color: var(--light-text-secondary-color);
         display: flex;
@@ -316,6 +318,15 @@
         background-color: #38DF4D;
         box-shadow: 0 2px 6px rgba(0,0,0,.09);
         border-radius: 4px;
+      }
+      #loadmore {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+      }
+      #loadmore.hide {
+        visibility: hidden;
       }
     </style>
     <div class="scroll-container">
@@ -354,7 +365,7 @@
       </div>
 
       <div class="posts-container-shadow"></div>
-      <div class="posts-tab" on-click="togglePostsType">
+      <div class="posts-tab" on-click="switchPostsType">
         <div class="tab">
           <span>[[_getPostsType(currentPostsType)]]</span>
           <i class="material-icons">expand_more</i>
@@ -373,7 +384,7 @@
         </div>
       </template>
       <div class="posts">
-        <template is="dom-repeat" items="[[posts]]">
+        <template is="dom-repeat" items="[[_getPosts(currentPostsType, posts, replies)]]">
           <div class="post" on-click="_onPostClick">
             <div class="header">
               <span class="node">[[item.nodeName]]</span>
@@ -404,9 +415,12 @@
               </div>
             </template>
 
-            <paper-ripple></paper-ripple>
+            <paper-ripple style="pointer-events: none;"></paper-ripple>
           </div>
         </template>
+        <bv-load-more id="loadmore" class$="[[hideLoading]]">
+          <paper-spinner-lite active></paper-spinner-lite>
+        </bv-load-more>
       </div>
     </div>
     <app-route
@@ -438,6 +452,9 @@
         super();
 
         this.currentPostsType = 'post';
+        this.currentPostsPage = 1;
+        this.currentRepliesPage = 1;
+        this.hideLoading = '';
 
         this.addEventListener('page-select', async () => {
           // Redirect when params are invalid
@@ -456,10 +473,89 @@
           this.userInfo = result.data;
           this.currentPostsType = 'post';
           this.posts = result.data.posts;
+          this.replies = result.data.replies;
+          this.currentPostsPage = 1;
+          this.currentRepliesPage = 1;
+          this.currentPostsMaxPage = undefined;
+          this.currentRepliesMaxPage = undefined;
+
+          this.$.loadmore.enable();
         });
 
         this.addEventListener('page-unselect', () => {
+          this.$.loadmore.disable();
         });
+      }
+      _getPosts(type, a, b) {
+        if (type === 'post') return a;
+        return b;
+      }
+      connectedCallback() {
+        super.connectedCallback();
+
+        this.$.loadmore.addEventListener('loadmore', () => {
+          if (this.loading) return;
+          this.fetchData();
+        });
+      }
+      async fetchData() {
+        if (this.currentPostsType === 'post') {
+          if ((this.currentPostsMaxPage !== undefined &&
+          this.currentPostsPage > this.currentPostsMaxPage) ||
+            (!this.posts || this.posts.length === 0)) {
+              this.hideLoading = 'hide';
+              return;
+            }
+        } else {
+          if ((this.currentRepliesMaxPage !== undefined &&
+          this.currentRepliesPage > this.currentRepliesMaxPage) ||
+            (!this.replies || this.replies.length === 0)) {
+              this.hideLoading = 'hide';
+              return;
+            }
+        }
+
+        this.hideLoading = '';
+        this.loading = true;
+        const type = this.currentPostsType;
+        let result;
+        try {
+          const page = this.currentPostsType === 'post' ? this.currentPostsPage : this.currentRepliesPage;
+          result = await BVQuerys.member(this.pageData.member, this.currentPostsType === 'post' ? 'topics' : 'replies', page);
+
+          if (page === 1) {
+            if (type === 'post') {
+              result.data.posts = result.data.posts.slice(this.posts.length);
+            } else {
+              result.data.replies = result.data.replies.slice(this.replies.length);
+            }
+          }
+
+          if (!result.data.pageInfo) {
+            result.data.pageInfo = {
+              total: 1
+            };
+          }
+
+          if (type === 'post') {
+            this.currentPostsMaxPage = result.data.pageInfo.total;
+            this.currentPostsPage++;
+          } else {
+            this.currentRepliesMaxPage = result.data.pageInfo.total;
+            this.currentRepliesPage++;
+          }
+        } catch (ex) {
+          throw ex;
+        } finally {
+          this.loading = false;
+        }
+
+        if (type === 'post') {
+          this.posts = this.posts.concat(result.data.posts);
+        } else {
+          this.replies = this.replies.concat(result.data.replies);
+        }
+        this.$.loadmore.reset();
       }
       toggleBlock() {
         if (this.userInfo.isBlocked === false) {
@@ -494,19 +590,21 @@
       }
       _onPostClick(ev) {
         const id = ev.model.item.t;
+        // target.querySelector('paper-ripple').animateRipple();
         this.disappear()
           .then(() => {
             window.v2ex.goToPage(this.rootPath + 't/' + id);
           });
       }
-      togglePostsType() {
+      switchPostsType() {
+        document.scrollingElement.scrollTop = 0;
         if (this.currentPostsType === 'post') {
           this.currentPostsType = 'reply';
-          this.posts = this.userInfo.replies;
         } else {
           this.currentPostsType = 'post';
-          this.posts = this.userInfo.posts;
         }
+
+        this.$.loadmore.reset();
       }
       _getPostsType(type) {
         if (type === 'post') return 'POSTS';

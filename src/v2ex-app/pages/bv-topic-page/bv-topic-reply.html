@@ -60,6 +60,7 @@
         /* color: var(--light-text-primary-color); */
         color: rgb(70, 70, 70);
         word-break: break-all;
+        user-select: text;
       }
       #reply-content a {
         color: gray;
@@ -219,6 +220,18 @@
       .king-icon.show {
         display: inline-block;
       }
+      .op-icon {
+        display: none;
+        margin-left: 5px;
+        font-size: 10px;
+        padding: 0 2px;
+        color: #fff;
+        background-color: var(--blue);
+        border-radius: 4px;
+      }
+      .op-icon.show {
+        display: inline-block;
+      }
     </style>
     <bv-user-avatar class="avatar" src="[[reply.avatar]]" user="[[reply.member]]" default-background-color="#eee"></bv-user-avatar>
     <div class="content">
@@ -226,6 +239,7 @@
         <span class="floor-number">[[reply.floor]]</span>
         <b>[[reply.member]]</b>
         <img class$="king-icon [[_isKing(reply.member, king)]]" src="./assets/my-crown.24.png" height="12" />
+        <!-- <span class$="op-icon [[_isKing(reply.member, king)]]">OP</span> -->
         <span style="flex: 1;"></span>
         <bv-time time="[[reply.time]]"></bv-time>
       </div>

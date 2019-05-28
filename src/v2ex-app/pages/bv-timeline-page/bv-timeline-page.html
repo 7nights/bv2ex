@@ -352,12 +352,22 @@
         this.postLongtouchHandlers = new BVUtils.LongtouchHandlers();
         this._page = 1;
         this._postsMap = new Map();
+        this._lastFetchTime = 0;
 
         // extract recent views' reply count
         const items = BVUtils.userStorage.get('recentViews') || [];
         this._recentPostReplies = {};
         items.forEach(val => {
           this._recentPostReplies[val.t] = val.replyCount;
+        });
+
+        // show the refresh button if we haven't fetched new posts
+        // for 5 minutes.
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden &&
+            Date.now() - this._lastFetchTime >= 1000 * 60 * 5) {
+            this._haveNewPosts = true;
+          }
         });
 
         this.addEventListener('page-unselect', () => {
@@ -407,12 +417,13 @@
           this.app.toolbar.setRightMenu('notifications');
           this.app.toolbar.setMode('normal');
           this._show = true;
-          this.$.loadmore.enable();
+
           if (!this.posts || this.posts.length === 0) {
             let response;
             try {
               response = await (this.queryPosts());
             } catch (ex) {
+              this.$.loadmore.enable();
               // TODO: show error page
               throw new Error(ex);
             }
@@ -434,6 +445,9 @@
             if (this._currentCategory && this.app.currentPage !== 'collected') {
               this._currentCategoryName = (this.posts[0] && this.posts[0].nodeName) || this.pageData.category;
             }
+            this.$.loadmore.enable();
+          } else {
+            this.$.loadmore.enable();
           }
         });
       }
@@ -486,6 +500,8 @@
         if (this._currentCategory) {
           return window.BVQuerys.node(this._currentCategory, page);
         }
+
+        this._lastFetchTime = Date.now();
         return window.BVQuerys.recent(page);
       }
       createTopic() {
@@ -516,8 +532,9 @@
         //this.push('posts', ...posts);
         // this.notifyPath('posts');
         this.posts = this.posts.concat(posts);
+        this._disableLoadmore = false;
         this.$.loadmore.reset();
-        console.log('loadmore reseted');
+        console.log('loadmore reset');
       }
       connectedCallback() {
         super.connectedCallback();
@@ -533,7 +550,7 @@
           this.addPosts(posts.data);
           this.app.notificationCount = posts.notificationCount;
         });
-        this.$.loadmore.enable();
+        // this.$.loadmore.enable();
       }
       _postsChange() {
         if (this.posts && this.posts.length > 0) {
@@ -560,6 +577,7 @@
         }
         if (this._page >= this.maxPage && this.maxPage !== -1) {
           this._disableLoadmore = true;
+          this.$.loadmore.disable();
         }
         this.$.scroller && this.$.scroller.notifyGroupChange();
       }

@@ -31,6 +31,12 @@
       _notEqual: function (a, b) {
         return a != b;
       },
+      _filterUndefined(text) {
+        if (text === 'undefined') return '';
+        if (text === undefined) return '';
+
+        return text;
+      },
       _filterHTMLTag(html, preserveWrap = false) {
         const d = document.createElement('div');
         d.innerHTML = html;

@@ -95,10 +95,10 @@
               return;
             }
             if (ev.data && ev.data.notificationCount) {
-              this.set('app.notificationCount', ev.data.notificationCount);
+              this.set('app.notificationCount', + ev.data.notificationCount);
             }
             if (ev.data && ev.data.type === 'navigate') {
-              this.goToPage(ev.data.data.url || '', null);
+              this.goToPage(ev.data.data.url || '', null, true);
             }
           });
         }
@@ -113,7 +113,8 @@
         //   window.dispatchEvent(event);
         // });
       }
-      goToPage(path, data) {
+      goToPage(path, data, fromNotification = false) {
+        window._fromNotification = fromNotification;
         window.history.pushState(data, null, path);
         window.dispatchEvent(new CustomEvent('location-changed'));
       }
@@ -222,12 +223,13 @@
           this._selected.dispatchEvent(new CustomEvent('page-unselect', {detail: {oldPage: this.selectedPage, newPage}, bubbles: true}));
           this._selected.classList.remove('page-selected');
         }
+        const oldPage = this.selectedPage;
         if (name && (this._selected = newPage)) {
           this._selected.classList.add('page-selected');
           this._setSelectedPage(this._selected);
 
           Polymer.Async.microTask.run(() => {
-            this.selectedPage.dispatchEvent(new CustomEvent('page-select', {detail: this.selectedPage, bubbles: true}));
+            this.selectedPage.dispatchEvent(new CustomEvent('page-select', {detail: {newPage: this.selectedPage, oldPage}, bubbles: true}));
           });
         }
         return;
