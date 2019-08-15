@@ -8,18 +8,23 @@
         animation-duration: .3s;
         animation-timing-function: ease-out;
         opacity: 0;
-        contain: paint;
+        /* contain: paint; */
         transform: translate3d(0, 0, 0);
         position: relative;
         z-index: 1;
         min-height: 100vh;
         will-change: transform, opacity;
       }
+      :host::before {
+        content: '';
+        display: block;
+        height: 1px;
+      }
       @keyframes page-disappear {
         0% {
           transform: translate3d(0, 0, 0);
           opacity: 1;
-          overflow: hidden;
+          /* overflow: hidden; */
         }
         100% {
           transform: translate3d(0, 50px, 0);
@@ -48,6 +53,9 @@
         transform: scaleY(.5);
         background-color: #e6e6e6;
         height: 1px;
+      }
+      :host-context(.theme-dark) .opx-border {
+        background-color: var(--surface-4dp);
       }
     </style>
   </template>

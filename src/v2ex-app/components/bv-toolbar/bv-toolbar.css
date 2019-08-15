@@ -6,9 +6,9 @@
   top: 0;
   left: 0;
   z-index: 100;
-  background-color: #fff;
+  background-color: var(--surface);
   --bv-toolbar-height: 56px;
-  transition: box-shadow 0.3s ease-out, transform 0.3s ease-out;
+  transition: box-shadow 0.3s ease-out, transform 0.3s ease-out, background-color 0.3s ease-out;
 }
 
 :host(.shadow),
@@ -18,6 +18,11 @@
 :host(.shadow) .bottom-split-border,
 :host-context(.shadow-toolbar) .bottom-split-border {
   border-bottom-color: transparent;
+}
+
+:host-context(.theme-dark):host(.shadow),
+:host-context(.theme-dark.shadow-toolbar) {
+  background-color: var(--surface-1dp);
 }
 
 :host(.no-toolbar) {
@@ -35,6 +40,14 @@
 
 :host-context(.no-border-toolbar):host(.shadow) {
   box-shadow: none !important;
+}
+
+:host-context(.theme-dark) .notification-button {
+  background-color: var(--surface-4dp);
+  color: var(--light-text-primary-color);
+}
+:host-context(.theme-dark) .bottom-split-border {
+  border-bottom-color: transparent;
 }
 
 .container {
@@ -79,6 +92,7 @@ iron-selector > [name]:not(.iron-selected) {
 .menu-container {
   -webkit-tap-highlight-color: transparent;
   padding: 0;
+  --paper-menu-button-dropdown-background: var(--surface-24dp);
   --paper-menu-button-content: {
     box-shadow: var(--md-box-shadow-8dp);
   };
@@ -148,7 +162,8 @@ iron-selector > [name]:not(.iron-selected) {
   top: -1px;
 }
 .notification-button[data-read=unread] {
-  @apply --blue-bg;
+  background-color: var(--blue) !important;
+  color: #fff !important;
   padding: 0 10px;
 }
 .notification-button[data-read=unread] .material-icons.notifications {

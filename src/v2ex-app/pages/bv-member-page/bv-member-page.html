@@ -23,7 +23,14 @@
         color: var(--light-text-primary-color);
         min-height: calc(100vh - var(--bv-toolbar-height));
         background-color: #F7F7F7;
+        --light-bg: #eee;
+        --light-bg2: #f3f3f3;
         --read-item-background: rgba(0, 0, 0, .03);
+      }
+      :host-context(.theme-dark) {
+        background-color: var(--surface);
+        --light-bg: var(--surface-2dp);
+        --light-bg-2: var(--surface-2dp);
       }
 
       img[src=""],
@@ -31,8 +38,11 @@
         opacity: 0;
       }
 
+      :host-context(.theme-dark) .card {
+        background-image: url('../../../../assets/card-bg-dark.png');
+      }
       .card {
-        background-color: #fff;
+        background-color: var(--surface-8dp);
         margin: 20px 12px;
         border-radius: 4px;
         padding: 12px 15px;
@@ -74,7 +84,7 @@
       }
       .info .user-number {
         background-color: var(--yellow);
-        color: #fff;
+        color: var(--surface);
         font-size: 11px;
         text-align: center;
         border-radius: 2px;
@@ -97,7 +107,7 @@
         font-size: 13px;
         font-weight: 600;
         color: var(--secondary-text-color);
-        background-color: #eee;
+        background-color: var(--light-bg);
         border-radius: 24px;
       }
       .info .action {}
@@ -131,7 +141,7 @@
         padding-top: 15px;
       }
       .widget {
-        background-color: #f3f3f3;
+        background-color: var(--light-bg-2);
         border-radius: 20px;
         display: flex;
         align-items: center;
@@ -172,7 +182,7 @@
       .posts,
       .posts-tab,
       .posts-hidden {
-        background-color: #fff;
+        background-color: var(--surface);
         padding: 10px 20px;
       }
       .posts-container-shadow {
@@ -182,7 +192,7 @@
         position: relative;
         top: 5px;
         margin-top: 8px;
-        background: #fff;
+        background: var(--surface);
       }
       .posts-tab {
         color: var(--blue);
@@ -218,6 +228,9 @@
         padding: 12px 20px;
         position: relative;
       }
+      .post:active {
+        background-color: var(--surface-8dp);
+      }
       .post:first-child {
         padding-top: 10px;
       }
@@ -229,7 +242,7 @@
       }
       .post .node {
         color: var(--light-text-secondary-color);
-        background-color: #eee;
+        background-color: var(--light-bg);
         padding: 1px 5px;
         border-radius: 16px;
         line-height: 16px;
@@ -267,6 +280,9 @@
       .reply-to .info b {
         margin: 0 5px;
       }
+      :host-context(.theme-dark) .reply-content {
+        background-color: var(--surface-1dp);
+      }
       .reply-content {
         font-size: 13px;
         color: var(--light-text-primary-color);
@@ -283,7 +299,7 @@
       .reply-content bv-html a {
         background-color: rgba(53, 140, 254, 0.64);
         color: #ffffff;
-        background-color: #fff;
+        background-color: var(--surface);
         color: #666;
         padding: 0px 2px;
         text-decoration: none;
@@ -414,8 +430,6 @@
                 </div>
               </div>
             </template>
-
-            <paper-ripple style="pointer-events: none;"></paper-ripple>
           </div>
         </template>
         <bv-load-more id="loadmore" class$="[[hideLoading]]">

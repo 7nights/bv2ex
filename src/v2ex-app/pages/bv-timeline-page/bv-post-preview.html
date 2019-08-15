@@ -15,12 +15,13 @@
         z-index: 11;
         display: none;
         will-change: transform;
+        overscroll-behavior: contain;
       }
       scale-animation-container {
         --sac-height: 100%;
         --sac-width: 100%;
         box-sizing: border-box;
-        background-color: #fff;
+        background-color: var(--surface-8dp);
         --sac-animation-duration: .3s;
       }
       s-html {
@@ -42,7 +43,7 @@
         left: 0;
         height: 80px;
         width: 100%;
-        background-image: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+        background-image: linear-gradient(180deg, rgba(255, 255, 255, 0), var(--surface-8dp));
       }
       .read-more {
         @apply --bv-gradient-bg;

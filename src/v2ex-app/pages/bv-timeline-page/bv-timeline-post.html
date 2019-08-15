@@ -12,8 +12,33 @@
         display: flex;
         padding: 15px 15px 15px 20px;
       }
+      :host-context(.compact) bv-light-button {
+        height: 24px;
+        line-height: 24px;
+        min-width: 24px;
+        padding: 0 8px;
+        font-size: 13px;
+        /* border-bottom: 1px solid #f2f2f2;
+        padding: 15px 0;
+        margin: 0 15px 0 20px; */
+      }
+      :host-context(.compact)::after {
+        /* content: '';
+        display: block;
+        width: calc(100% - 60px);
+        height: 1px;
+        background-color: #f2f2f2;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        box-sizing: border-box;
+        margin-left: 60px; */
+      }
       :host(:active) {
         background-color: rgba(0, 0, 0, .15);
+      }
+      :host-context(.theme-dark):host(:active) {
+        background-color: var(--surface-6dp);
       }
       :host(.hide-thumbs-up) .up-count {
         display: none;
@@ -26,6 +51,9 @@
       }
       .title-and-node {
         line-height: 2rem;
+      }
+      :host-context(.compact) .title-and-node {
+        line-height: 1.2em;
       }
       .title {
         font-size: 14px;
@@ -52,11 +80,25 @@
         margin-right: 2px;
         background: #f1f1f1;
         color: #828282;
-        border-radius: 2px;
-        padding: 1px 3px;
+        /*#c7ad43*/
+
+        border-radius: 9px;
+        padding: 0 6px;
+        line-height: 18px;
+        display: inline-block;
+      }
+      :host-context(.theme-dark) .node-name {
+        background-color: rgba(255, 255, 255, .15);
       }
       .left-column {
         margin-right: 15px;
+      }
+      :host-context(.compact) .left-column bv-user-avatar {
+        --bv-user-avatar-size: 28px;
+        --bv-user-avatar-border-size: 0px;
+      }
+      :host-context(.compact) .up-count {
+        display: none;
       }
       .right-column {
         flex: 1;
@@ -65,6 +107,10 @@
         line-height: 25px;
         margin-top: 10px;
         display: flex;
+        align-items: center;
+      }
+      :host-context(.compact) .post-info {
+        margin-top: 5px;
       }
       .post-info.hide {
         display: none;

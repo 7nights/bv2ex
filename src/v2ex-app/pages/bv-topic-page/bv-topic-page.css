@@ -1,7 +1,18 @@
 :host {
   padding-bottom: 20px;
-  background: #fff;
+  background: var(--surface);
   min-height: 100vh;
+}
+
+:host-context(.theme-dark) .topic-card {
+  background-image: url(../../../../assets/card-bg-dark.png);
+  background-size: cover;
+}
+:host-context(.theme-dark) .topic-card .buttons-line .up-down .down {
+  background-color: var(--surface-16dp);
+}
+:host-context(.theme-dark) .comment-area-header {
+  background-color: var(--surface-1dp);
 }
 
 .topic-card {
@@ -11,6 +22,7 @@
   box-shadow: 0 13px 36px 1px rgba(0, 0, 0, 0.04), 0 3px 16px rgba(0, 0, 0, 0.08);
   background-image: url(../../../../assets/card-bg.png);
   background-size: contain;
+  background-color: var(--surface-4dp);
 }
 .topic-card.enter-animation {
   animation-name: scaleBounce3;
@@ -285,13 +297,13 @@ bv-reply-box[visibility=show-reply-box] {
   display: flex;
   left: 0;
   top: 0;
-  background-color: #fff;
+  background-color: var(--surface);
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100vh;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
 }
 .loading-layer paper-spinner-lite {
   position: relative;

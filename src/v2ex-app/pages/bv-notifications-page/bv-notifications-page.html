@@ -25,6 +25,13 @@
 
         --read-item-background: rgba(0, 0, 0, .03);
       }
+      :host::before {
+        height: 0 !important;
+      }
+      :host-context(.theme-dark) .tips {
+        border-bottom-color: var(--surface-4dp);
+        background-color: var(--surface-16dp);
+      }
       .tips {
         font-size: 13px;
         color: var(--light-text-secondary-color);
@@ -36,7 +43,7 @@
         display: flex;
         flex-direction: row;
         padding-left: 8px;
-        background: #fff;
+        background: var(--surface);
         position: sticky;
         top: var(--bv-toolbar-height);
         z-index: 1;
@@ -82,6 +89,9 @@
       }
       .notifications-container .item.read {
         background-color: var(--read-item-background);
+      }
+      :host-context(.theme-dark) .notifications-container .item-border {
+        background-color: var(--surface-8dp);
       }
       .notifications-container .item-border {
         transform: scaleY(.4);
@@ -178,10 +188,13 @@
         position: absolute;
         top: 0;
       }
+      :host-context(.theme-dark) .unread-split {
+        border-color: var(--surface-12dp);
+      }
       .unread-split {
         font-size: 13px;
         color: var(--light-text-secondary-color);
-        background-color: #fff;
+        background-color: var(--surface-1dp);
         border: 1px solid #ddd;
         display: flex;
         align-items: center;
@@ -206,6 +219,12 @@
       }
       .load-more-content paper-spinner-lite {
         margin-right: 10px;
+      }
+      :host-context(.theme-dark) .enable-fcm {
+        background-color: var(--surface-16dp);
+      }
+      :host-context(.theme-dark) .enable-fcm .learn-more {
+        background-color: #ad9455;
       }
       .enable-fcm {
         padding: 10px;

@@ -88,7 +88,11 @@
         margin: 0;
         font-family: Roboto, "Noto Sans", "Noto Sans CJK";
         color: var(--light-text-primary-color);
+        background-color: var(--surface);
         /* font-size: 16px; */
+      }
+      body.theme-dark {
+        background-image: url(../../assets/bg-big-lighter-dark.png);
       }
       * {
         box-sizing: border-box;
@@ -105,6 +109,13 @@
   <body>
     <script>
       (() => {
+        // settings
+        window.SETTINGS_FIELDS = {
+          compactMode: false,
+          themeColor: 'auto'
+        };
+
+        // rem
         let resizeTimer;
         window.addEventListener('resize', () => {
           if (resizeTimer) clearTimeout(resizeTimer);
@@ -117,6 +128,33 @@
           document.documentElement.style.fontSize = document.documentElement.clientWidth / 36 + 'px';
         }
         setRootFontSize();
+
+        // add theme
+        const themeColor = window.BVUtils.settings.getItem('user-settings', 'themeColor');
+        
+        try {
+          const list = window.DARK_COLOR_SCHEME_QUERY = window.matchMedia('(prefers-color-scheme: dark)');
+          const metaThemeColor = document.querySelector("meta[name=theme-color]");
+          if (list.matches && themeColor === 'auto') {
+            document.body.classList.add('theme-dark');
+            metaThemeColor.setAttribute('content', '#121212');
+          }
+          list.onchange = window.APPLY_SYSTEM_COLOR_SCHEME = () => {
+            const themeColor = window.BVUtils.settings.getItem('user-settings', 'themeColor');
+            if (themeColor !== 'auto') return;
+            if (list.matches) {
+              document.body.classList.add('theme-dark');
+              metaThemeColor.setAttribute('content', '#121212');
+            } else {
+              document.body.classList.remove('theme-dark');
+              metaThemeColor.setAttribute('content', '#ffffff');
+            }
+          };
+        } catch (ex) {}
+
+        if (themeColor === 'dark') {
+          document.body.classList.add('theme-dark');
+        }
       })();
     </script>
     <dom-bind id="t">

@@ -97,7 +97,7 @@
         /* background-image: url(../../assets/bg-big.png);
         background-size: cover;
         background-attachment: fixed; */
-        overflow: hidden;
+        /* overflow: hidden; */
         position: relative;
       }
       .search-box {
@@ -105,10 +105,10 @@
         color: var(--light-text-secondary-color);
         height: 35px;
         line-height: 35px;
-        border-radius: 4px;
+        border-radius: 14px;
         padding: 0 10px;
         box-sizing: border-box;
-        margin: 10px 20px 5px;
+        margin: 14px 20px 5px;
         font-size: 12px;
         display: flex;
         align-items: center;
@@ -125,6 +125,7 @@
         border: none;
         outline: none;
         font-family: 'Google Sans';
+        color: var(--light-text-secondary-color);
       }
       .search-box i {
         margin-right: 8px;
@@ -138,7 +139,7 @@
         justify-content: center;
         align-items: center;
         position: absolute;
-        background: #fff;
+        background: var(--surface);
         z-index: 10;
         opacity: 1;
       }
@@ -184,6 +185,16 @@
           transform: translate3d(0, 0, 0);
         }
       }
+      :host-context(.theme-dark) .search-box {
+        margin-top: 0;
+      }
+      :host-context(.theme-dark) #recycler-view {
+        background-image: url(../../../../assets/bg-big-lighter-dark.png);
+        background-size: 100vw auto;
+        background-attachment: fixed;
+        background-color: var(--surface-1dp);
+        margin-top: 24px;
+      }
 
       .node-banner {
         /* padding: 20px 10px; */
@@ -194,7 +205,7 @@
         flex-direction: row;
         overflow: hidden;
         position: relative;
-        border-bottom: 1px dashed #e6e6e6;
+        border-bottom: 1px dashed var(--border-color);
       }
       .node-banner .left {
         flex: 1;
@@ -205,6 +216,9 @@
         color: #BFBFBF;
         font-size: 10px;
         align-items: center;
+      }
+      :host-context(.theme-dark) .node-banner .left i {
+        color: var(--color-secondary-600);
       }
       .node-banner .left i {
         font-size: 14px;
@@ -224,11 +238,18 @@
         align-items: center;
         min-width: 70px;
       }
+      :host-context(.theme-dark) .node-banner .right-background {
+        filter: invert(.8);
+      }
       .node-banner .right-background {
         width: 70px;
         position: absolute;
         right: 120px;
         top: -4px;
+      }
+      :host-context(.theme-dark) .node-banner .remove-node-filter {
+        background-color: #2d2c28;
+        color: #c17545;
       }
       .node-banner .remove-node-filter {
         /* border: 2px solid #ED7C36; */
@@ -297,7 +318,7 @@
       </template>
     </bv-scroller> -->
 
-    <my-recycler-view id="recycler-view" on-click="_jumpToTopic2" style="display: block;" items="[[posts]]" tag="bv-timeline-post" target-property="post" on-longtouch="_postLongTouch"></my-recycler-view>
+    <my-recycler-view id="recycler-view" on-click="_jumpToTopic2" style="display: block;" reuse-items-size="[[resueItemsSize]]" items="[[posts]]" tag="bv-timeline-post" target-property="post" on-longtouch="_postLongTouch"></my-recycler-view>
 
     <!-- <template is="dom-repeat" items="[[posts]]" >
       <bv-timeline-post class="bv-scroller-item" on-click="_jumpToTopic" on-touchstart="_postTouchStart" on-touchend="_postTouchEnd" on-touchmove="_postTouchMove" on-longtouch="_postLongTouch" post="[[item]]" index="[[index]]"></bv-timeline-post>
@@ -353,6 +374,14 @@
         this._page = 1;
         this._postsMap = new Map();
         this._lastFetchTime = 0;
+        this.resueItemsSize = 35;
+        
+        // load compact mode
+        const settings = BVUtils.settings.load({}, 'user-settings', window.SETTINGS_FIELDS);
+        if (settings.compactMode) {
+          document.body.classList.add('compact');
+          this.resueItemsSize = 50;
+        }
 
         // extract recent views' reply count
         const items = BVUtils.userStorage.get('recentViews') || [];
@@ -542,6 +571,7 @@
         this.$['recycler-view'].addEventListener('touchstart', this._postTouchStart.bind(this));
         this.$['recycler-view'].addEventListener('touchend', this._postTouchEnd.bind(this), {passive: true});
         this.$['recycler-view'].addEventListener('touchmove', this._postTouchMove.bind(this));
+        this.$['preview'].addEventListener('touchend', this._postTouchEnd.bind(this), {passive: true});
         
         this.$.loadmore.addEventListener('loadmore', async () => {
           if (this._disableLoadmore) return console.log('disabled loadmore');

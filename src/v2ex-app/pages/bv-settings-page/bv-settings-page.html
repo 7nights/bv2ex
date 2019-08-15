@@ -5,6 +5,7 @@
 <link rel="import" href="../../components/bv-user-avatar/bv-user-avatar.html" />
 <link rel="import" href="../../../../bower_components/paper-ripple/paper-ripple.html" />
 <link rel="import" href="../../../../bower_components/paper-button/paper-button.html" />
+<link rel="import" href="../../../../bower_components/paper-toggle-button/paper-toggle-button.html" />
 <link rel="import" href="../../../../bower_components/paper-toast/paper-toast.html" />
 <link rel="import" href="../../../../bower_components/paper-spinner/paper-spinner-lite.html" />
 
@@ -30,7 +31,10 @@
       .banner h1 {
         font-size: 20px;
         font-family: Google Sans;
-        color: #333;
+        color: var(--light-text-primary-color);
+      }
+      :host-context(.theme-dark) .banner .daily-sentence {
+        color: var(--light-text-secondary-color);
       }
       .banner .daily-sentence {
         color: #95989A;
@@ -45,7 +49,7 @@
       }
       .list {
         flex: 1;
-        background-color: #fafafa;
+        background-color: var(--surface-secondary);
       }
       .list .item {
         display: flex;
@@ -53,7 +57,10 @@
         min-height: 75px;
         align-items: center;
         position: relative;
-        border-bottom: 1px solid #efefef;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .list .item.section {
+        border-bottom: none;
       }
       .list .item i {
         font-size: 28px;
@@ -72,6 +79,34 @@
       }
       .list .item .title b {
         margin-bottom: 5px;
+      }
+      .list .menu {
+        --paper-toggle-button-checked-bar-color:  var(--blue);
+        --paper-toggle-button-checked-button-color:  var(--blue);
+        --paper-toggle-button-checked-ink-color: var(--blue);
+
+        display: flex;
+        flex-direction: row;
+        padding-left: 70px;
+        padding-right: 15px;
+        margin-bottom: 30px;
+      }
+      .list .menu .menu-info {
+        flex: 1;
+        margin-right: 10px;
+      }
+      .list .menu .menu-title {
+        font-weight: 500;
+        font-size: 14px;
+        color: var(--light-text-primary-color);
+        margin-bottom: 5px;
+      }
+      .list .menu .menu-content {
+        font-size: 12px;
+        color: var(--light-text-secondary-color);
+      }
+      .menu-switcher {
+        display: flex;
       }
     </style>
     <div class="banner">
@@ -101,6 +136,27 @@
           <span>Collected topics</span>
         </div>
       </div>
+      <div class="item section" name="Settings">
+        <i class="material-icons">settings</i>
+        <div class="title">
+          <b>Settings</b>
+        </div>
+      </div>
+      <div class="menu" on-click="changeThemeColor">
+        <div class="menu-info">
+          <div class="menu-title">Theme color</div>
+          <div class="menu-content">{{colorSchemeText}}</div>
+        </div>
+      </div>
+      <div class="menu">
+        <div class="menu-info">
+          <div class="menu-title">Compact mode</div>
+          <div class="menu-content">Display more topics in one page. Restart needed to take effect.</div>
+        </div>
+        <div class="menu-switcher">
+          <paper-toggle-button checked="{{compactMode}}"></paper-toggle-button>
+        </div>
+      </div>
     </div>
   </template>
 
@@ -113,20 +169,63 @@
       static get is() { return 'bv-settings-page'; }
       static get properties() {
         return {
+          themeColor: {
+            type: String,
+            value: 'auto',
+            observer: '_settingsChange'
+          },
+          compactMode: {
+            type: Boolean,
+            value: false,
+            observer: '_settingsChange'
+          },
+          colorSchemeText: {
+            type: String,
+            computed: '_getColorScheme(themeColor)'
+          }
         };
       }
       constructor() {
         super();
+
+        // load settings
+        window.BVUtils.settings.load(this, 'user-settings', window.SETTINGS_FIELDS);
 
         this.addEventListener('page-select', () => {
           window.v2ex.children.toolbar.setMode('hidden');
           console.log(this.app.userInfo.avatar);
         });
       }
+      changeThemeColor() {
+        if (this.themeColor === 'auto') {
+          this.themeColor = 'dark';
+        } else if (this.themeColor === 'dark') {
+          this.themeColor = 'light';
+        } else {
+          this.themeColor = 'auto';
+        }
+      }
+      _getColorScheme(themeColor) {
+        if (themeColor === 'auto') return 'Use System Selection (Default)';
+        if (themeColor === 'light') return 'Light';
+        if (themeColor === 'dark') return 'Dark';
+      }
+      _settingsChange() {
+        window.BVUtils.settings.save(this, 'user-settings', window.SETTINGS_FIELDS);
+        const metaThemeColor = document.querySelector("meta[name=theme-color]");
+        if (this.themeColor === 'auto') window.APPLY_SYSTEM_COLOR_SCHEME();
+        else if (this.themeColor === 'light') {
+          document.body.classList.remove('theme-dark');
+          metaThemeColor.setAttribute('content', '#ffffff');
+        } else if (this.themeColor === 'dark') {
+          document.body.classList.add('theme-dark');
+          metaThemeColor.setAttribute('content', '#121212');
+        }
+      }
       getSentence() {
         const sentences = [
           'Yesterday I was clever, so I wanted to change the world. Today I am wise, so I am changing myself.',
-          'If a thing is worth doing it is worth worth doing well.',
+          'If a thing is worth doing it is worth doing well.',
           'Big mouthfuls ofter choke.',
           'All things are difficult before they are easy.',
           'The best preparation for tomorrow is doing your best today.'

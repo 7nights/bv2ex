@@ -103,6 +103,35 @@
     }
   };
 
+  global.settings = {
+    load(obj, namespace, initialValue) {
+      const settings = global.userStorage.get(namespace) || initialValue;
+      if (settings) {
+        for (let key in settings) {
+          if (Object.prototype.hasOwnProperty.call(settings, key)) {
+            obj[key] = settings[key];
+          }
+        }
+      }
+
+      return obj;
+    },
+    save(obj, namespace, initialValue) {
+      let toSave = {};
+      for (let key in initialValue) {
+        toSave[key] = key in obj ? obj[key] : initialValue[key];
+      }
+
+      global.userStorage.set(namespace, toSave);
+    },
+    getItem(namespace, path, initialValue) {
+      const settings = global.userStorage.get(namespace) || initialValue;
+      
+      if (path) return settings[path];
+      return settings;
+    }
+  };
+
   global.normalizeTopic = (t) => {
     let index = t.indexOf('#');
     if (~index) return t.substr(0, index);

@@ -8,6 +8,7 @@
       :host {
         overflow: auto;
         overscroll-behavior-y: none;
+        --paper-dialog-background-color: var(--surface-24dp);
       }
       paper-dialog {
         width: 80vw;
@@ -35,6 +36,12 @@
         font-family: 'Google Sans';
         color: var(--blue);
         font-weight: 500;
+      }
+      :host-context(.theme-dark) h2 {
+        color: var(--light-text-primary-color);
+      }
+      :host-context(.theme-dark) p {
+        color: var(--light-text-secondary-color);
       }
       p {
         color: #555;

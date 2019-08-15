@@ -13,7 +13,7 @@
                 <use xlink:href="#path-1"></use>
             </mask>
             <g id="Mask" fill-rule="nonzero"></g>
-            <g id="✱-/-Color-/-Icons-/-Selected-/-On-Surface-/-Inactive" mask="url(#mask-2)" fill="#000000" fill-opacity="0.54">
+            <g id="✱-/-Color-/-Icons-/-Selected-/-On-Surface-/-Inactive" mask="url(#mask-2)" fill="#757575" fill-opacity="1">
                 <rect id="Rectangle" x="0" y="0" width="101" height="101"></rect>
             </g>
         </g>
@@ -22,7 +22,7 @@
                 <use xlink:href="#path-3"></use>
             </mask>
             <g id="Mask" opacity="0.3" fill-rule="nonzero"></g>
-            <g id="✱-/-Color-/-Icons-/-White-/-Active" mask="url(#mask-4)" fill="#FFFFFF">
+            <g id="✱-/-Color-/-Icons-/-White-/-Active" mask="url(#mask-4)" fill="#FFFFFF" fill-opacity="0">
                 <rect id="Rectangle-13" x="0" y="0" width="101" height="101"></rect>
             </g>
         </g>

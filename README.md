@@ -4,6 +4,13 @@
 
 A Better Way to Experience is a redesigned V2EX web application. 
 
+
+## Release log
+
+Please visit https://github.com/7nights/bv2ex/releases for more information.
+
+**Recent update:** add dark mode.
+
 ## Installation
 
 Please install [get-v2ex](https://github.com/7nights/get-v2ex) first. And then follow the instruction below.
@@ -85,3 +92,21 @@ unzip bv2ex.zip
 cd public
 npm run build
 ```
+
+## Develop
+
+```shell
+npm run start
+npm run sass
+```
+
+You can config `serverAddress` in `config.js` to your local get-v2ex server.
+
+## Build
+
+```shell
+npm run build
+mv ./build/default/ ./build/public
+zip -r ./build/bv2ex.zip ./build/public
+```
+
