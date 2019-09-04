@@ -595,6 +595,19 @@
               this._shareToastMessage = 'Failed to share!';
               this.$['share-toast'].open();
             });
+        } else if (menu.id === 'CopyUrl') {
+          const t = location.href.match(/t\/([0-9]*)/);
+          if (t && t[1]) {
+            const url = `https://www.v2ex.com/t/${t[1]}`;
+            navigator.clipboard.writeText(url)
+              .then(() => {
+                this._shareToastMessage = 'Copied to clipboard';
+                this.$['share-toast'].open();
+              }, () => {
+                this._shareToastMessage = 'Failed to copy, please try to use the share function.';
+                this.$['share-toast'].open();
+              });
+          }
         }
       }
       connectedCallback() {
@@ -650,6 +663,10 @@
           }, {
             label: 'Share',
             id: 'Share',
+            onclick: this._onMenuClick
+          }, {
+            label: 'Copy Url',
+            id: 'CopyUrl',
             onclick: this._onMenuClick
           }]);
           setTimeout(() => {

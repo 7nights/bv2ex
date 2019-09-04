@@ -130,7 +130,7 @@
         setRootFontSize();
 
         // add theme
-        const themeColor = window.BVUtils.settings.getItem('user-settings', 'themeColor');
+        const themeColor = window.BVUtils.settings.getItem('user-settings', 'themeColor', window.SETTINGS_FIELDS);
         
         try {
           const list = window.DARK_COLOR_SCHEME_QUERY = window.matchMedia('(prefers-color-scheme: dark)');
@@ -140,7 +140,7 @@
             metaThemeColor.setAttribute('content', '#121212');
           }
           list.onchange = window.APPLY_SYSTEM_COLOR_SCHEME = () => {
-            const themeColor = window.BVUtils.settings.getItem('user-settings', 'themeColor');
+            const themeColor = window.BVUtils.settings.getItem('user-settings', 'themeColor', window.SETTINGS_FIELDS);
             if (themeColor !== 'auto') return;
             if (list.matches) {
               document.body.classList.add('theme-dark');

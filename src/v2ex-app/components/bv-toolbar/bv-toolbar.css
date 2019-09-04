@@ -94,7 +94,7 @@ iron-selector > [name]:not(.iron-selected) {
   padding: 0;
   --paper-menu-button-dropdown-background: var(--surface-24dp);
   --paper-menu-button-content: {
-    box-shadow: var(--md-box-shadow-8dp);
+    box-shadow: var(--md-box-shadow-4dp);
   };
 }
 .menu-container .menu-item {

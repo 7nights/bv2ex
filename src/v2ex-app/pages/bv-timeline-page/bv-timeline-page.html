@@ -193,6 +193,7 @@
         background-size: 100vw auto;
         background-attachment: fixed;
         background-color: var(--surface-1dp);
+        border-top: 1px solid var(--surface-4dp);
         margin-top: 24px;
       }
 
@@ -206,6 +207,10 @@
         overflow: hidden;
         position: relative;
         border-bottom: 1px dashed var(--border-color);
+      }
+      :host-context(.theme-dark) .node-banner {
+        margin-bottom: -20px;
+        border-bottom: none;
       }
       .node-banner .left {
         flex: 1;

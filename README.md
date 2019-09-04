@@ -106,7 +106,8 @@ You can config `serverAddress` in `config.js` to your local get-v2ex server.
 
 ```shell
 npm run build
-mv ./build/default/ ./build/public
-zip -r ./build/bv2ex.zip ./build/public
+cd build
+mv ./default/ ./public
+zip -r ./bv2ex.zip ./public
 ```
 
