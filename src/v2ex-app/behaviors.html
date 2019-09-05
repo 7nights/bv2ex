@@ -40,7 +40,8 @@
       _filterHTMLTag(html, preserveWrap = false) {
         const d = document.createElement('div');
         d.innerHTML = html;
-        return !preserveWrap ? d.innerText : d.innerText.replace(/\n/g, '<br />').replace(/(<br \/>){2,}/g, '<br />');
+        const innerText = d.innerText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return !preserveWrap ? innerText : innerText.replace(/\n/g, '<br />').replace(/(<br \/>){2,}/g, '<br />');
       },
       _normalizeTopic(t) {
         if (typeof t === 'object') {

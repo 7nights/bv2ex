@@ -105,7 +105,13 @@
         }
         this.shadowRoot.innerHTML = '<style>' + this._styleText + '</style>' + this.handleContent(this.content);
         [].forEach.call(this.shadowRoot.querySelectorAll('pre code'), (val) => {
-          window.hljs.highlightBlock(val);
+          if (!window.hljs) {
+            setTimeout(() => {
+              window.hljs.highlightBlock(val);
+            }, 1000);
+          } else {
+            window.hljs.highlightBlock(val);
+          }
         });
       }
       handleContent(c) {
