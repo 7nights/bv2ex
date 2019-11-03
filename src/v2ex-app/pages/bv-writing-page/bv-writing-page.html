@@ -18,6 +18,7 @@
         margin-top: var(--bv-toolbar-height);
         color: var(--light-text-primary-color);
         min-height: 0;
+        overflow: hidden;
       }
       .container {
         display: flex;
@@ -125,7 +126,7 @@
         position: fixed;
         bottom: -100%;
         left: 0;
-        background-color: #fff;
+        background-color: var(--surface);
         padding: 20px;
         box-shadow: 0 -2px 8px rgba(0, 0, 0, .1);
         transition: bottom .3s ease-out;
@@ -244,7 +245,16 @@
         console.log(this.pageData, title, content);
         this.posting = true;
 
-        const result = await window.BVQuerys.createTopic(this.pageData.node, title, content);
+        let result = {};
+        try {
+          result = await window.BVQuerys.createTopic(this.pageData.node, title, content);
+          if (result.error && result.data) {
+            let div = document.createElement('div');
+            div.innerHTML = result.data;
+            result.data = div.innerText;
+            div = null;
+          }
+        } catch (ex) {}
         this.posting = false;
 
         if (result.data && result.data.indexOf('/t') === 0) {
@@ -252,7 +262,7 @@
           this.$.content.value = '';
           return window.v2ex.goToPage(result.data);
         } else {
-          window['global-error-toast'].text = 'Failed to create topic. Please try again later';
+          window['global-error-toast'].text = 'Failed to create topic: ' + (result.data || 'Reason unknown.');
           window['global-error-toast'].open();
         }
       }
