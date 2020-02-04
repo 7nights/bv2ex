@@ -468,14 +468,7 @@
               this.maxPage = -1;
             }
             // timeline
-            this.posts = response.data.map(post => {
-              this._normalizeTopic(post);
-              let id = post.id;
-              if (id in this._recentPostReplies && +this._recentPostReplies[id] !== +post.replyCount) {
-                post.unread = true;
-              }
-              return post;
-            });
+            this.posts = this.handlePosts(response.data);
             if (this._currentCategory && this.app.currentPage !== 'collected') {
               this._currentCategoryName = (this.posts[0] && this.posts[0].nodeName) || this.pageData.category;
             }
@@ -540,6 +533,17 @@
       }
       createTopic() {
         window.v2ex.goToPage(this.rootPath + 'create-topic/' + this.pageData.category + '/' + this._currentCategoryName);
+      }
+      // add unread status etc...
+      handlePosts(posts) {
+        return posts.map(post => {
+          this._normalizeTopic(post);
+          let id = post.id;
+          if (id in this._recentPostReplies && +this._recentPostReplies[id] !== +post.replyCount) {
+            post.unread = true;
+          }
+          return post;
+        });
       }
       addPosts(posts) {
         posts = posts.filter((post) => {
@@ -633,7 +637,7 @@
         let response = await this.queryPosts();
         this.set('app.notificationCount', response.notificationCount || 0);
         // timeline
-        this.posts = response.data;
+        this.posts = this.handlePosts(response.data);
       }
       _getHideLoading(posts) {
         return posts && posts.length > 0;
@@ -727,6 +731,10 @@
         }
       }
       _jumpToTopic(ev) {
+        window.pendingPostQuery = {
+          t: ev.model.item.t,
+          request: window.BVQuerys.topic(ev.model.item.t)
+        };
         this.disappear()
           .then(() => {
             // v2ex.setLoadingPage(this.rootPath + 't/' + ev.model.item.t, new Promise(() => {}));

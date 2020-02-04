@@ -9,10 +9,12 @@
 <link rel="import" href="./bv-topic-content.html" />
 <link rel="import" href="./bv-topic-reply.html" />
 <link rel="import" href="../../components/bv-light-button/bv-light-button.html" />
+<link rel="import" href="../../components/bv-backdrop/bv-backdrop.html" />
 <link rel="import" href="../../components/bv-reply-box/bv-reply-box.html" />
 <link rel="import" href="../../components/bv-load-more/bv-load-more.html" />
 
 <link rel="import" href="../../mock-data.html" />
+
 
 <dom-module id="bv-topic-page">
   <link rel="import" type="css" href="bv-topic-page.css">
@@ -117,6 +119,23 @@
       <paper-spinner-lite active class$="[[_addClass('hide', _noMoreReplies)]]"></paper-spinner-lite>
     </bv-load-more>
 
+    <bv-backdrop append-to-body id="previous-comments">
+      <div class="previous-comments" slot="content">
+        <div class="user-header">
+          <bv-user-avatar class="avatar" src="[[previousComments.0.avatar]]" user="[[previousComments.0.member]]"></bv-user-avatar>
+          <b>[[previousComments.0.member]]</b>
+        </div>
+        <div class="comments-container">
+          <template is="dom-repeat" items="[[previousComments]]">
+            <div class="previous-comment">
+              <div class="floor-number">[[item.floor]]</div>
+              <bv-html html="[[item.content]]"><div class="reply-content" slot="content"></div></bv-html>
+            </div>
+          </template>
+        </div>
+      </div>
+    </bv-backdrop>
+
     <paper-toast id="share-toast" text="[[_shareToastMessage]]" append-to-body></paper-toast>
     <app-route
       route="{{app.subRoute}}"
@@ -155,6 +174,10 @@
           },
           pageData: {
             type: Object
+          },
+          previousComments: {
+            type: Array,
+            value: []
           },
           _hideLoading: {
             type: Boolean,
@@ -426,7 +449,17 @@
         let result;
         let sid = ++this._sid;
         try {
-          result = await window.BVQuerys.topic(t);
+          let request;
+          // if we already sent the request before entring the page (e.g. when
+          // a user clicks a post and the previous page is disappearing) we use
+          // it directly
+          if (window.pendingPostQuery && BVUtils.normalizeTopic(window.pendingPostQuery.t) === t) {
+            request = window.pendingPostQuery.request;
+            window.pendingPostQuery = null;
+          } else {
+            request = window.BVQuerys.topic(t);
+          }
+          result = await request;
           let historyViews = BVUtils.userStorage.get('recentViews');
           if (!historyViews || historyViews.constructor !== Array) {
             historyViews = [];
@@ -561,6 +594,63 @@
             }
           }
         }, 40), {passive: true});
+        
+        // create global styles
+        const style = document.createElement('style');
+        style.innerHTML = `
+          .previous-comments bv-user-avatar {
+            --bv-user-avatar-size: 42px;
+          }
+          .previous-comments .user-header {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+          }
+          .previous-comments .user-header b {
+            margin-left: 10px;
+          }
+          .previous-comments .reply-content {
+            font-size: 13px;
+            line-height: 18px;
+            color: var(--light-text-primary-color);
+            word-break: break-all;
+          }
+          .previous-comments .reply-content a {
+            color: var(--blue);
+            text-decoration: none;
+          }
+          .previous-comments .previous-comment:first-child {
+            background-color: transparent !important;
+          }
+          .previous-comments .previous-comment {
+            display: flex;
+            flex-direction: row;
+            padding: 15px;
+            border-bottom: 1px solid #e6e6e6;
+            background-color: #f5f5f5;
+          }
+          .theme-dark .previous-comments .previous-comment {
+            background-color: var(--surface-1dp);
+            border-bottom: 1px solid var(--border-color);
+          }
+          .previous-comments .previous-comment:last-of-type {
+            border-bottom: none;
+            padding-bottom: 20px;
+          }
+          .previous-comment .floor-number {
+            font-weight: 800;
+            font-size: 14px;
+            color: var(--light-text-secondary-color);
+            margin-right: 10px;
+          }
+          .previous-comments .comments-container {
+            max-height: calc(100vh - 140px - var(--bv-toolbar-height));
+            overflow: auto;
+          }
+        `;
+        document.head.appendChild(style);
       }
       _focusReplyBox() {
         this.$['reply-box'].focusInput();
@@ -630,6 +720,23 @@
               reply.set('reply.liked', true);
               reply.set('reply.likes', ev.detail.likes + 1);
             });
+        });
+        this.addEventListener('show-previous-comments', (ev) => {
+          console.log('s-p-c', ev.detail);
+          const floor = +ev.detail.reply.floor;
+          const by = ev.detail.by;
+
+          const replies = [];
+          for (let i = 0, len = floor; i < len; i++) {
+            if (this.post.replies[i].member === by) {
+              replies.push(this.post.replies[i]);
+            }
+          }
+          
+          if (replies.length > 0) {
+            this.previousComments = replies.reverse();
+            this.$['previous-comments'].show();
+          }
         });
         this.addEventListener('page-unselect', (ev) => {
           // if (ev.detail.oldPage === ev.detail.newPage) {

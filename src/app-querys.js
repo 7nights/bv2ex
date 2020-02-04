@@ -156,7 +156,7 @@ window.BVQuerys = (() => {
         method: 'POST'
       })).json();
     },
-    likeComment(t, action = window.csrfToken) {
+    likeComment(t, action = window.onceToken) {
       return fetch(SERVER_ADDRESS + '/likeComment?t=' + t + '&action=' + action, {
         method: 'POST'
       });

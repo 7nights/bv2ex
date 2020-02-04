@@ -79,6 +79,15 @@
         text-decoration: none;
         font-weight: 500;
         color: black;
+        /* color: var(--blue); */
+      }
+      #reply-content a[href^="/member"]::after {
+        content: 'sms';
+        font-family: 'Material Icons';
+        margin-left: 1px;
+        margin-right: 2px;
+        vertical-align: middle;
+        color: var(--light-text-primary-color);
       }
       :host-context(.theme-dark) #reply-content a[href^="/member"] {
         color: var(--light-text-primary-color);
@@ -265,7 +274,7 @@
           <!-- <div id="show-more-quote" on-click="showMoreQuote">Show more</div> -->
         </div>
       </div>
-      <div id="reply-content"></div>
+      <div id="reply-content" on-click="_onReplyContentClick"></div>
       <div class="buttons">
         <bv-light-button class$="like [[_getLiked(reply.liked)]]" on-click="_addLike">
           <i class="material-icons">favorite</i>
@@ -309,7 +318,21 @@
       }
       _handleReplyContent(content) {
         content = content.replace(/<a target="_blank" href="https:\/\/www.v2ex.com\/t\//g, '<a href="/t/');
+
+        // reply @ to make it prettier
+        content = content.replace(/@<a href="\/member\//g, '<a href="/member/');
+
         this.$['reply-content'].innerHTML = content;
+      }
+      _onReplyContentClick(ev) {
+        try {
+          if (ev.target.matches('a[href^="/member/"]')) {
+            ev.stopPropagation();
+            ev.preventDefault();
+
+            this.dispatchEvent(new CustomEvent('show-previous-comments', {detail: {reply: this.reply, by: ev.target.innerText}, bubbles: true, composed: true}));
+          }
+        } catch (ex) {}
       }
       _showLikesCount(count) {
         return count && count > 0 ? 'show' : '';

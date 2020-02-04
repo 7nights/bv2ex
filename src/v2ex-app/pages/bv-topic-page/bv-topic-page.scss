@@ -233,6 +233,13 @@
 .hide {
   display: none !important;
 }
+.previous-comments {
+  --bv-user-avatar-size: 42px;
+}
+.user-header {
+  font-size: 12px;
+  color: red;
+}
 bv-reply-box {
   visibility: hidden;
 }

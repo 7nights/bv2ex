@@ -18,9 +18,18 @@
         height: var(--bv-user-avatar-size);
         border-radius: var(--bv-user-avatar-size);
       }
-      img {
+      a {
         width: calc(var(--bv-user-avatar-size) - 2 * var(--bv-user-avatar-border-size));
         height: calc(var(--bv-user-avatar-size) - 2 * var(--bv-user-avatar-border-size));
+        position: relative;
+        box-sizing: border-box;
+        border: 2px solid var(--surface);
+        border-radius: var(--bv-user-avatar-size);
+        overflow: hidden;
+      }
+      img {
+        width: 100%;
+        height: 100%;
         visibility: hidden;
       }
       i.material-icons {
@@ -41,7 +50,7 @@
         /* display: inline-block; */
       }
     </style>
-    <a href$="/member/[[user]]">
+    <a id="container" href$="/member/[[user]]">
       <img id="image" src="[[getAvatar(src)]]" />
       <i id="icon" class="material-icons">
         account_circle
@@ -139,7 +148,7 @@
           let hash = this._hash(gravatar[1]);
           hash = hash + Math.pow(2, 31);
           const color = UserAvatar.COLORS[hash % UserAvatar.COLORS.length];
-          this.style.backgroundColor = color.dark;
+          this.$.container.style.backgroundColor = color.dark;
           this.$.icon.style.color = color.light;
           this.$.image.style.visibility = 'visible';
           // TODO:
@@ -151,7 +160,7 @@
           return this.rootPath + 'assets/avatar/avatar-' + (hash % AVATAR_SIZE + 1) + '.png';
         }
         this.classList.remove('gravatar');
-        this.style.backgroundColor = this.defaultBackgroundColor;
+        this.$.container.style.backgroundColor = this.defaultBackgroundColor;
 
         // replace to high resolution avatar
         let hrSrc = src.replace(/_normal\./, '_large.');
