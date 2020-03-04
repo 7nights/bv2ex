@@ -50,29 +50,29 @@
     <link rel="manifest" href="/manifest.json" />
 
     <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
-    <script src="/src/bv-utils.js"></script>
-    <script src="/src/app-querys.js"></script>
+    <script src="./bv-utils.js"></script>
+    <script src="./app-querys.js"></script>
 
     <link rel="import" href="/bower_components/polymer/polymer.html" />
 
-    <link rel="import" href="/src/v2ex-app/app-styles.html" />
-    <link rel="import" href="/src/v2ex-app/v2ex-app.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-timeline-page/bv-timeline-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-topic-page/bv-topic-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-login-page/bv-login-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-settings-page/bv-settings-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-list-page/bv-list-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-notifications-page/bv-notifications-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-member-page/bv-member-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-nodes-page/bv-nodes-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-writing-page/bv-writing-page.html" />
-    <link rel="import" href="/src/v2ex-app/components/bv-toolbar/bv-toolbar.html" />
-    <link rel="import" href="/src/v2ex-app/components/bv-bottom-navigation/bv-bottom-navigation.html" />
-    <link rel="import" href="/src/v2ex-app/components/bv-image-viewer/bv-image-viewer.html" />
-    <link rel="import" href="/src/v2ex-app/components/bv-scroller/bv-scroller.html" />
-    <link rel="import" href="/src/v2ex-app/components/bv-dialog/bv-dialog.html" />
-    <link rel="import" href="/src/v2ex-app/components/bv-loading-layer/bv-loading-layer.html" />
-    <link rel="import" href="/src/recycler-view.html" />
+    <link rel="import" href="./v2ex-app/app-styles.html" />
+    <link rel="import" href="./v2ex-app/v2ex-app.html" />
+    <link rel="import" href="./v2ex-app/pages/bv-timeline-page/bv-timeline-page.html" />
+    <link rel="import" href="./v2ex-app/pages/bv-topic-page/bv-topic-page.html" />
+    <link rel="import" href="./v2ex-app/pages/bv-login-page/bv-login-page.html" />
+    <link rel="import" href="./v2ex-app/pages/bv-settings-page/bv-settings-page.html" />
+    <link rel="import" href="./v2ex-app/pages/bv-list-page/bv-list-page.html" />
+    <link rel="import" href="./v2ex-app/pages/bv-notifications-page/bv-notifications-page.html" />
+    <link rel="import" href="./v2ex-app/pages/bv-member-page/bv-member-page.html" />
+    <link rel="import" href="./v2ex-app/pages/bv-nodes-page/bv-nodes-page.html" />
+    <link rel="import" href="./v2ex-app/pages/bv-writing-page/bv-writing-page.html" />
+    <link rel="import" href="./v2ex-app/components/bv-toolbar/bv-toolbar.html" />
+    <link rel="import" href="./v2ex-app/components/bv-bottom-navigation/bv-bottom-navigation.html" />
+    <link rel="import" href="./v2ex-app/components/bv-image-viewer/bv-image-viewer.html" />
+    <link rel="import" href="./v2ex-app/components/bv-scroller/bv-scroller.html" />
+    <link rel="import" href="./v2ex-app/components/bv-dialog/bv-dialog.html" />
+    <link rel="import" href="./v2ex-app/components/bv-loading-layer/bv-loading-layer.html" />
+    <link rel="import" href="./recycler-view.html" />
     <link rel="import" href="/bower_components/app-route/app-route.html" />
     <link rel="import" href="/bower_components/app-route/app-location.html" />
     <link rel="import" href="/bower_components/paper-toast/paper-toast.html" />
@@ -107,6 +107,56 @@
     </style>
   </head>
   <body>
+    <script>
+      (() => {
+        // settings
+        window.SETTINGS_FIELDS = {
+          compactMode: false,
+          themeColor: 'auto'
+        };
+
+        // rem
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+          if (resizeTimer) clearTimeout(resizeTimer);
+
+          resizeTimer = setTimeout(setRootFontSize, 200);
+        });
+        let initialFontSize = getComputedStyle(document.documentElement).fontSize;
+        document.body.style.fontSize = initialFontSize;
+        function setRootFontSize() {
+          document.documentElement.style.fontSize = document.documentElement.clientWidth / 36 + 'px';
+        }
+        setRootFontSize();
+
+        // add theme
+        const themeColor = window.BVUtils.settings.getItem('user-settings', 'themeColor', window.SETTINGS_FIELDS);
+        
+        try {
+          const list = window.DARK_COLOR_SCHEME_QUERY = window.matchMedia('(prefers-color-scheme: dark)');
+          const metaThemeColor = document.querySelector("meta[name=theme-color]");
+          if (list.matches && themeColor === 'auto') {
+            document.body.classList.add('theme-dark');
+            metaThemeColor.setAttribute('content', '#121212');
+          }
+          list.onchange = window.APPLY_SYSTEM_COLOR_SCHEME = () => {
+            const themeColor = window.BVUtils.settings.getItem('user-settings', 'themeColor', window.SETTINGS_FIELDS);
+            if (themeColor !== 'auto') return;
+            if (list.matches) {
+              document.body.classList.add('theme-dark');
+              metaThemeColor.setAttribute('content', '#121212');
+            } else {
+              document.body.classList.remove('theme-dark');
+              metaThemeColor.setAttribute('content', '#ffffff');
+            }
+          };
+        } catch (ex) {}
+
+        if (themeColor === 'dark') {
+          document.body.classList.add('theme-dark');
+        }
+      })();
+    </script>
     <dom-bind id="t">
       <template>
         <template is="dom-if" if="{{inited}}">
@@ -181,6 +231,21 @@
         t.inited = true;
       </script>
     </dom-bind>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+        .then(function(reg) {
+          // registration worked
+          console.log('Registration succeeded. Scope is ' + reg.scope);
+        }).catch(function(error) {
+          // registration failed
+          console.log('Registration failed with ' + error);
+        });
+      }
+    </script>
+
     <!-- insert fcm here -->
   </body>
 </html>

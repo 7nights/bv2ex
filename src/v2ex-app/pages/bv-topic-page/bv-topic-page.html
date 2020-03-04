@@ -797,7 +797,8 @@
               return console.warn('No more new replies.');
             }
   
-            this.push('post.replies', ...post.replies);
+            // this.push('post.replies', ...post.replies);
+            this.push.apply(this, ['post.replies'].concat(post.replies));
             this.notifyPath('post.replies');
             // this.set('post.replies', this.post.replies.concat(post.replies));
             console.timeEnd('replies');

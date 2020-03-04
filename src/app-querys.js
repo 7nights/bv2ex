@@ -2,10 +2,9 @@ window.BVQuerys = (() => {
   const SERVER_ADDRESS = window.SERVER_ADDRESS || ('http://' + location.hostname + ':3001');
   const _oriFetch = window.fetch;
   const fetch = (url, options, noRetry) => {
-    return _oriFetch(url, {
-      credentials: 'include',
-      ...options
-    })
+    return _oriFetch(url, Object.assign({
+      credentials: 'include'
+    }, ...options))
       .catch(ex => {
         console.error('Failed to fetch', ex);
         if (noRetry) {
