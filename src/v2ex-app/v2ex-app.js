@@ -1,0 +1,262 @@
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-spinner/paper-spinner-lite.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { microTask } from '@polymer/polymer/lib/utils/async.js';
+import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
+/** Behavior example */
+const MyBehaviors = {
+  properties: {
+    appRoot: {
+      type: Object,
+      value: () => {
+        return window.t;
+      }
+    }
+  }
+};
+/**
+ * @customElement
+ * @polymer
+ */
+class V2exApp extends mixinBehaviors([MyBehaviors], PolymerElement) {
+  static get template() {
+    return html`
+    <style>
+      :host {
+        display: block;
+      }
+      ::slotted([name]) {
+        display: none;
+      }
+      ::slotted(.page-selected[name]) {
+        display: block;
+      }
+    </style>
+    <slot></slot>
+    <app-location route="{{routeInfo.route}}"></app-location>
+    <app-route route="{{routeInfo.route}}" pattern="/:page" data="{{routeInfo.pageData}}" tail="{{routeInfo.tail}}">
+    </app-route>
+`;
+  }
+
+  static get is() { return 'v2ex-app'; }
+  static get properties() {
+    return {
+      prop1: {
+        type: String,
+        value: 'v2ex-app'
+      },
+      app: {
+        type: Object,
+        notify: true
+      },
+      routeInfo: {
+        type: Object,
+        value: {}
+      },
+      selected: {
+        type: String,
+        observer: '_selectedChanged'
+      },
+      /**
+       * The selected page as a DOM node.
+       * @type {HTMLElement}
+       */
+      selectedPage: {
+        readOnly: true
+      }
+    };
+  }
+  static get observers() {
+    return [
+      '_pageChanged(routeInfo.pageData)'
+    ];
+  }
+  _preventDefault(ev) {
+    ev.preventDefault();
+  }
+  constructor() {
+    super();
+    // new Polymer.FlattenedNodesObserver(this, (info) => {
+    //   this._nodesChanged(info);
+    // });
+
+    this._ifMap = {};
+
+    this.addEventListener('page-select', (ev) => {
+      console.log('page-select', ev.detail);
+    });
+
+    if (window.navigator.serviceWorker) {
+      window.navigator.serviceWorker.addEventListener('message', (ev) => {
+        if (ev.origin !== window.origin) {
+          return;
+        }
+        if (ev.data && ev.data.notificationCount) {
+          this.set('app.notificationCount', + ev.data.notificationCount);
+        }
+        if (ev.data && ev.data.type === 'navigate') {
+          this.goToPage(ev.data.data.url || '', null, true);
+        }
+      });
+    }
+    
+    // bind pagescroll to recyclerview
+    // window.scrollingElement = document.scrollingElement;
+    // window.addEventListener('scroll', (ev) => {
+    //   window.scrollingElement = ev.detail.originalEvent.target;
+    //   const event = new CustomEvent('scrollrecyclerview', {
+    //     detail: window.scrollingElement
+    //   });
+    //   window.dispatchEvent(event);
+    // });
+  }
+  goToPage(path, data, fromNotification = false) {
+    window._fromNotification = fromNotification;
+    window.history.pushState(data, null, path);
+    window.dispatchEvent(new CustomEvent('location-changed'));
+  }
+  static get PAGE_NAMES() {
+    return {
+      home: 'Timeline',
+      topic: 'Topic',
+      notifications: 'Notifications',
+      member: 'Member',
+      nodes: 'Nodes',
+      'create-topic': 'New Topic'
+    };
+  }
+  _pageChanged(newValue, oldValue) {
+    if (newValue === undefined) return;
+
+    this.appRoot.app.subRoute = this.routeInfo.tail;
+    this.appRoot.notifyPath('app.subRoute');
+
+    console.log('page changed:', newValue, oldValue);
+    let newSelected = 'home';
+    /**
+     * Page names:
+     * - Topic
+     * - Timeline
+     */
+    switch (newValue.page) {
+      case '':
+      case 'go':
+      case 'home':
+      case 'collected':
+        this._setPageName(V2exApp.PAGE_NAMES.home);
+        if (this.selected !== 'home') newSelected = 'home';
+        break;
+      case 't':
+      case 'topic':
+        this._setPageName(V2exApp.PAGE_NAMES.topic);
+        newSelected = 'topic';
+        break;
+      case 'login':
+        newSelected = 'login';
+        break;
+      case 'settings':
+        newSelected = 'settings';
+        break;
+      case 'list':
+        newSelected = 'list';
+        break;
+      case 'notifications':
+        this._setPageName(V2exApp.PAGE_NAMES.notifications);
+        newSelected = 'notifications';
+        break;
+      case 'member':
+        this._setPageName(V2exApp.PAGE_NAMES.member);
+        newSelected = 'member';
+        break;
+      case 'nodes':
+        this._setPageName(V2exApp.PAGE_NAMES.nodes);
+        newSelected = 'nodes';
+        break;
+      case 'create-topic':
+        this._setPageName(V2exApp.PAGE_NAMES['create-topic']);
+        newSelected = 'create-topic';
+        break;
+      case 'others':
+        newSelected = 'others';
+        break;
+    }
+
+    if (this.selected === newSelected) {
+      this._selectedChanged(this.selected);
+    }
+    this.selected = newSelected;
+    this.appRoot.set('app.currentPage', newValue.page);
+  }
+  _setPageName(name) {
+    if (!this.app) {
+      return this.appRoot.pageName = name;
+    }
+    this.set('app.pageName', name);
+  }
+  _templatesFilter(node) {
+    return node.is == 'dom-if' || node.tagName === 'DOM-IF';
+  }
+  _nodesChanged(info) {
+    let added = info.addedNodes.filter(this._templatesFilter);
+    for (let i = 0, node; node = added[i]; i++) {
+      let name = node.getAttribute('name');
+      this._ifMap[name] = node;
+      if (this.selected == name) {
+        this._selectedChanged(name);
+      }
+    }
+    let removed = info.removedNodes.filter(this._templatesFilter);
+    for (let i = 0, node; node = removed[i]; i++) {
+      let name = node.getAttribute('name');
+      this._ifMap[name] = null;
+      if (this.selected == name) {
+        this._selectedChanged(null);
+      }
+    }
+  }
+  _selectedChanged(name) {
+    const newPage = this.querySelector('[name="' + name + '"]');
+    if (this._selected) {
+      this._selected.dispatchEvent(new CustomEvent('page-unselect', {detail: {oldPage: this.selectedPage, newPage}, bubbles: true}));
+      this._selected.classList.remove('page-selected');
+    }
+    const oldPage = this.selectedPage;
+    if (name && (this._selected = newPage)) {
+      this._selected.classList.add('page-selected');
+      this._setSelectedPage(this._selected);
+
+      microTask.run(() => {
+        this.selectedPage.dispatchEvent(new CustomEvent('page-select', {detail: {newPage: this.selectedPage, oldPage}, bubbles: true}));
+      });
+    }
+    return;
+
+    /** legacy ↓ */
+
+    // De-select previous page.
+    if (this._selected) {
+      this._selected.if = false;
+    }
+    if (name && (this._selected = this._ifMap[name])) {
+      this._selected.if = true;
+
+      // Wait 1 tick for template to stamp.
+      microTask.run(() => {
+        this._setSelectedPage(
+            [].filter.call(this.children, (node, i) => {
+              return node.tagName !== 'DOM-IF' && this.children[i + 1] && this.children[i + 1]['if'] === true;
+            })[0]);
+        
+        this.selectedPage.dispatchEvent(new CustomEvent('page-select', {detail: this.selectedPage, bubbles: true}));
+        // this.dispatchEvent(new CustomEvent('page-select', {detail: this.selectedPage}));
+      });
+    }
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    console.log('connected v2ex', this.app);
+  }
+}
+
+window.customElements.define(V2exApp.is, V2exApp);

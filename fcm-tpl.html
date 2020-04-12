@@ -1,0 +1,47 @@
+<script src="https://www.gstatic.com/firebasejs/5.11.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.11.1/firebase-messaging.js"></script>
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {{firebaseConfig}};
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // Prepare to receive messages
+  const messaging = firebase.messaging();
+  messaging.usePublicVapidKey("{{fcmPublicVapidKey}}");
+  messaging.requestPermission().then(function() {
+    console.log('Notification permission granted.');
+    // TODO(developer): Retrieve an Instance ID token for use with FCM.
+    // ...
+    messaging.getToken().then(function(token) {
+      if (token) {
+        console.log('Token got', token);
+        sendToServer(token);
+      } else {
+        console.log('No Instance ID token available. Request permission to generate one.');
+      }
+    }).catch(function(err) {
+      console.log('An error occurred while retrieving token. ', err);
+    });
+
+    messaging.onMessage(function (payload) {
+      // no time to complete this function
+      console.log(payload);
+    });
+
+  }).catch(function(err) {
+    console.log('Unable to get permission to notify.', err);
+  });
+
+  messaging.onTokenRefresh(function() {
+    messaging.getToken().then((token) => {
+      sendToServer(token);
+    });
+  });
+
+  function sendToServer(token) {
+    window.fetch(SERVER_ADDRESS + '/addToken?token=' + token, {
+      credentials: 'include'
+    });
+  };
+</script>

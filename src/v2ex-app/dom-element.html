@@ -1,4 +1,4 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<script type="module" src="../../../../@polymer/polymer/polymer-element.js"></script>
 
 <dom-module id="dom-element">
 
@@ -10,18 +10,19 @@
     <slot></slot>
   </template>
 
-  <script>
-    class DomElement extends Polymer.Element {
-      static get is() { return "dom-element"; }
-      static get properties() {
-        return {
-          app: {
-            type: Object
-          }
-        }
+  <script type="module">
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+class DomElement extends PolymerElement {
+  static get is() { return "dom-element"; }
+  static get properties() {
+    return {
+      app: {
+        type: Object
       }
     }
-    customElements.define(DomElement.is, DomElement);
-  </script>
+  }
+}
+customElements.define(DomElement.is, DomElement);
+</script>
 
 </dom-module>

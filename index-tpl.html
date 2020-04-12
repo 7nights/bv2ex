@@ -12,6 +12,7 @@
     <meta name="theme-color" content="#ffffff">
     <meta name="referrer" content="same-origin">
     <base href="/">
+    
     <!-- See https://goo.gl/OOhYW5 -->
     <link rel="manifest" href="/manifest.json" />
 
@@ -27,7 +28,7 @@
       }
     </script>
 
-    <script>
+    <script type="module">
 
       let materialIconsFont = new FontFace('Material Icons', 'url(https://fonts.gstatic.com/s/materialicons/v38/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2)', {
         style: 'normal',
@@ -54,7 +55,29 @@
     <script src="/src/bv-utils.js"></script>
     <script src="/src/app-querys.js"></script>
 
-    <script type="module" src="./index.js"></script>
+    <script type="module" src="/node_modules/@polymer/polymer/polymer-legacy.js"></script>
+
+    <script type="module" src="/src/v2ex-app/app-styles.js"></script>
+    <script type="module" src="/src/v2ex-app/v2ex-app.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-timeline-page/bv-timeline-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-topic-page/bv-topic-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-login-page/bv-login-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-settings-page/bv-settings-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-list-page/bv-list-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-notifications-page/bv-notifications-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-member-page/bv-member-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-nodes-page/bv-nodes-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-writing-page/bv-writing-page.js"></script>
+    <script type="module" src="/src/v2ex-app/components/bv-toolbar/bv-toolbar.js"></script>
+    <script type="module" src="/src/v2ex-app/components/bv-bottom-navigation/bv-bottom-navigation.js"></script>
+    <script type="module" src="/src/v2ex-app/components/bv-image-viewer/bv-image-viewer.js"></script>
+    <script type="module" src="/src/v2ex-app/components/bv-scroller/bv-scroller.js"></script>
+    <script type="module" src="/src/v2ex-app/components/bv-dialog/bv-dialog.js"></script>
+    <script type="module" src="/src/v2ex-app/components/bv-loading-layer/bv-loading-layer.js"></script>
+    <script type="module" src="/src/recycler-view.js"></script>
+    <script type="module" src="/node_modules/@polymer/app-route/app-route.js"></script>
+    <script type="module" src="/node_modules/@polymer/app-route/app-location.js"></script>
+    <script type="module" src="/node_modules/@polymer/paper-toast/paper-toast.js"></script>
 
     <style>
       html {

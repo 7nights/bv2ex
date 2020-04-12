@@ -29,5 +29,4 @@ fs.copyFileSync('./build-tpl.js', './build/default/build.js');
 fs.copyFileSync('./manifest.json', './build/default/manifest.json');
 
 // remove useless files
-fs.removeSync('./build/default/src');
-fs.removeSync('./build/default/bower_components');
+// fs.removeSync('./build/default/src');

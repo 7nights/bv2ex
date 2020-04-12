@@ -25,57 +25,79 @@
       }
     </script>
 
-    <script>
-      let materialIconsFont = new FontFace('Material Icons', 'url(https://fonts.gstatic.com/s/materialicons/v38/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2)', {
-        style: 'normal',
-        weight: '400'
-      });
-      document.fonts.add(materialIconsFont);
-      materialIconsFont.load();
-      materialIconsFont.loaded
-        .then(() => {
-          setTimeout(() => {
-            document.body.classList.add('material-icons-loaded');
-          }, 500);
-        })
-        .catch((fontface) => {
-          setTimeout(() => {
-            document.body.classList.add('material-icons-loaded');
-          }, 500);
-        });
-    </script>
+    <script type="module">
+import '/node_modules/@polymer/polymer/polymer-legacy.js';
+import '/src/v2ex-app/app-styles.js';
+import '/src/v2ex-app/v2ex-app.js';
+import '/src/v2ex-app/pages/bv-timeline-page/bv-timeline-page.js';
+import '/src/v2ex-app/pages/bv-topic-page/bv-topic-page.js';
+import '/src/v2ex-app/pages/bv-login-page/bv-login-page.js';
+import '/src/v2ex-app/pages/bv-settings-page/bv-settings-page.js';
+import '/src/v2ex-app/pages/bv-list-page/bv-list-page.js';
+import '/src/v2ex-app/pages/bv-notifications-page/bv-notifications-page.js';
+import '/src/v2ex-app/pages/bv-member-page/bv-member-page.js';
+import '/src/v2ex-app/pages/bv-nodes-page/bv-nodes-page.js';
+import '/src/v2ex-app/pages/bv-writing-page/bv-writing-page.js';
+import '/src/v2ex-app/components/bv-toolbar/bv-toolbar.js';
+import '/src/v2ex-app/components/bv-bottom-navigation/bv-bottom-navigation.js';
+import '/src/v2ex-app/components/bv-image-viewer/bv-image-viewer.js';
+import '/src/v2ex-app/components/bv-scroller/bv-scroller.js';
+import '/src/v2ex-app/components/bv-dialog/bv-dialog.js';
+import '/src/v2ex-app/components/bv-loading-layer/bv-loading-layer.js';
+import '/src/recycler-view.js';
+import '/node_modules/@polymer/app-route/app-route.js';
+import '/node_modules/@polymer/app-route/app-location.js';
+import '/node_modules/@polymer/paper-toast/paper-toast.js';
+let materialIconsFont = new FontFace('Material Icons', 'url(https://fonts.gstatic.com/s/materialicons/v38/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2)', {
+  style: 'normal',
+  weight: '400'
+});
+document.fonts.add(materialIconsFont);
+materialIconsFont.load();
+materialIconsFont.loaded
+  .then(() => {
+    setTimeout(() => {
+      document.body.classList.add('material-icons-loaded');
+    }, 500);
+  })
+  .catch((fontface) => {
+    setTimeout(() => {
+      document.body.classList.add('material-icons-loaded');
+    }, 500);
+  });
+</script>
     <link href="./font.css" rel="stylesheet" />
 
     <!-- See https://goo.gl/OOhYW5 -->
     <link rel="manifest" href="/manifest.json" />
 
-    <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="/src/bv-utils.js"></script>
     <script src="/src/app-querys.js"></script>
 
-    <link rel="import" href="/bower_components/polymer/polymer.html" />
+    <script type="module" src="/node_modules/@polymer/polymer/polymer-legacy.js"></script>
 
-    <link rel="import" href="/src/v2ex-app/app-styles.html" />
-    <link rel="import" href="/src/v2ex-app/v2ex-app.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-timeline-page/bv-timeline-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-topic-page/bv-topic-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-login-page/bv-login-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-settings-page/bv-settings-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-list-page/bv-list-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-notifications-page/bv-notifications-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-member-page/bv-member-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-nodes-page/bv-nodes-page.html" />
-    <link rel="import" href="/src/v2ex-app/pages/bv-writing-page/bv-writing-page.html" />
-    <link rel="import" href="/src/v2ex-app/components/bv-toolbar/bv-toolbar.html" />
-    <link rel="import" href="/src/v2ex-app/components/bv-bottom-navigation/bv-bottom-navigation.html" />
-    <link rel="import" href="/src/v2ex-app/components/bv-image-viewer/bv-image-viewer.html" />
-    <link rel="import" href="/src/v2ex-app/components/bv-scroller/bv-scroller.html" />
-    <link rel="import" href="/src/v2ex-app/components/bv-dialog/bv-dialog.html" />
-    <link rel="import" href="/src/v2ex-app/components/bv-loading-layer/bv-loading-layer.html" />
-    <link rel="import" href="/src/recycler-view.html" />
-    <link rel="import" href="/bower_components/app-route/app-route.html" />
-    <link rel="import" href="/bower_components/app-route/app-location.html" />
-    <link rel="import" href="/bower_components/paper-toast/paper-toast.html" />
+    <script type="module" src="/src/v2ex-app/app-styles.js"></script>
+    <script type="module" src="/src/v2ex-app/v2ex-app.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-timeline-page/bv-timeline-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-topic-page/bv-topic-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-login-page/bv-login-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-settings-page/bv-settings-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-list-page/bv-list-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-notifications-page/bv-notifications-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-member-page/bv-member-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-nodes-page/bv-nodes-page.js"></script>
+    <script type="module" src="/src/v2ex-app/pages/bv-writing-page/bv-writing-page.js"></script>
+    <script type="module" src="/src/v2ex-app/components/bv-toolbar/bv-toolbar.js"></script>
+    <script type="module" src="/src/v2ex-app/components/bv-bottom-navigation/bv-bottom-navigation.js"></script>
+    <script type="module" src="/src/v2ex-app/components/bv-image-viewer/bv-image-viewer.js"></script>
+    <script type="module" src="/src/v2ex-app/components/bv-scroller/bv-scroller.js"></script>
+    <script type="module" src="/src/v2ex-app/components/bv-dialog/bv-dialog.js"></script>
+    <script type="module" src="/src/v2ex-app/components/bv-loading-layer/bv-loading-layer.js"></script>
+    <script type="module" src="/src/recycler-view.js"></script>
+    <script type="module" src="/node_modules/@polymer/app-route/app-route.js"></script>
+    <script type="module" src="/node_modules/@polymer/app-route/app-location.js"></script>
+    <script type="module" src="/node_modules/@polymer/paper-toast/paper-toast.js"></script>
 
     <style>
       html {
@@ -107,56 +129,76 @@
     </style>
   </head>
   <body>
-    <script>
-      (() => {
-        // settings
-        window.SETTINGS_FIELDS = {
-          compactMode: false,
-          themeColor: 'auto'
-        };
+    <script type="module">
+import '/node_modules/@polymer/polymer/polymer-legacy.js';
+import '/src/v2ex-app/app-styles.js';
+import '/src/v2ex-app/v2ex-app.js';
+import '/src/v2ex-app/pages/bv-timeline-page/bv-timeline-page.js';
+import '/src/v2ex-app/pages/bv-topic-page/bv-topic-page.js';
+import '/src/v2ex-app/pages/bv-login-page/bv-login-page.js';
+import '/src/v2ex-app/pages/bv-settings-page/bv-settings-page.js';
+import '/src/v2ex-app/pages/bv-list-page/bv-list-page.js';
+import '/src/v2ex-app/pages/bv-notifications-page/bv-notifications-page.js';
+import '/src/v2ex-app/pages/bv-member-page/bv-member-page.js';
+import '/src/v2ex-app/pages/bv-nodes-page/bv-nodes-page.js';
+import '/src/v2ex-app/pages/bv-writing-page/bv-writing-page.js';
+import '/src/v2ex-app/components/bv-toolbar/bv-toolbar.js';
+import '/src/v2ex-app/components/bv-bottom-navigation/bv-bottom-navigation.js';
+import '/src/v2ex-app/components/bv-image-viewer/bv-image-viewer.js';
+import '/src/v2ex-app/components/bv-scroller/bv-scroller.js';
+import '/src/v2ex-app/components/bv-dialog/bv-dialog.js';
+import '/src/v2ex-app/components/bv-loading-layer/bv-loading-layer.js';
+import '/src/recycler-view.js';
+import '/node_modules/@polymer/app-route/app-route.js';
+import '/node_modules/@polymer/app-route/app-location.js';
+import '/node_modules/@polymer/paper-toast/paper-toast.js';
+// settings
+window.SETTINGS_FIELDS = {
+  compactMode: false,
+  themeColor: 'auto'
+};
 
-        // rem
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-          if (resizeTimer) clearTimeout(resizeTimer);
+// rem
+let resizeTimer;
+window.addEventListener('resize', () => {
+  if (resizeTimer) clearTimeout(resizeTimer);
 
-          resizeTimer = setTimeout(setRootFontSize, 200);
-        });
-        let initialFontSize = getComputedStyle(document.documentElement).fontSize;
-        document.body.style.fontSize = initialFontSize;
-        function setRootFontSize() {
-          document.documentElement.style.fontSize = document.documentElement.clientWidth / 36 + 'px';
-        }
-        setRootFontSize();
+  resizeTimer = setTimeout(setRootFontSize, 200);
+});
+let initialFontSize = getComputedStyle(document.documentElement).fontSize;
+document.body.style.fontSize = initialFontSize;
+function setRootFontSize() {
+  document.documentElement.style.fontSize = document.documentElement.clientWidth / 36 + 'px';
+}
+setRootFontSize();
 
-        // add theme
-        const themeColor = window.BVUtils.settings.getItem('user-settings', 'themeColor', window.SETTINGS_FIELDS);
-        
-        try {
-          const list = window.DARK_COLOR_SCHEME_QUERY = window.matchMedia('(prefers-color-scheme: dark)');
-          const metaThemeColor = document.querySelector("meta[name=theme-color]");
-          if (list.matches && themeColor === 'auto') {
-            document.body.classList.add('theme-dark');
-            metaThemeColor.setAttribute('content', '#121212');
-          }
-          list.onchange = window.APPLY_SYSTEM_COLOR_SCHEME = () => {
-            const themeColor = window.BVUtils.settings.getItem('user-settings', 'themeColor', window.SETTINGS_FIELDS);
-            if (themeColor !== 'auto') return;
-            if (list.matches) {
-              document.body.classList.add('theme-dark');
-              metaThemeColor.setAttribute('content', '#121212');
-            } else {
-              document.body.classList.remove('theme-dark');
-              metaThemeColor.setAttribute('content', '#ffffff');
-            }
-          };
-        } catch (ex) {}
+// add theme
+const themeColor = window.BVUtils.settings.getItem('user-settings', 'themeColor', window.SETTINGS_FIELDS);
 
-        if (themeColor === 'dark') {
-          document.body.classList.add('theme-dark');
-        }
-      })();
-    </script>
+try {
+  const list = window.DARK_COLOR_SCHEME_QUERY = window.matchMedia('(prefers-color-scheme: dark)');
+  const metaThemeColor = document.querySelector("meta[name=theme-color]");
+  if (list.matches && themeColor === 'auto') {
+    document.body.classList.add('theme-dark');
+    metaThemeColor.setAttribute('content', '#121212');
+  }
+  list.onchange = window.APPLY_SYSTEM_COLOR_SCHEME = () => {
+    const themeColor = window.BVUtils.settings.getItem('user-settings', 'themeColor', window.SETTINGS_FIELDS);
+    if (themeColor !== 'auto') return;
+    if (list.matches) {
+      document.body.classList.add('theme-dark');
+      metaThemeColor.setAttribute('content', '#121212');
+    } else {
+      document.body.classList.remove('theme-dark');
+      metaThemeColor.setAttribute('content', '#ffffff');
+    }
+  };
+} catch (ex) {}
+
+if (themeColor === 'dark') {
+  document.body.classList.add('theme-dark');
+}
+</script>
     <dom-bind id="t">
       <template>
         <template is="dom-if" if="{{inited}}">
@@ -180,71 +222,115 @@
         </template>
         <bv-image-viewer id="image-viewer"></bv-image-viewer>
       </template>
-      <script>
-        // window.console.log = () => {};
-        window.console.warn = () => {};
-        document.addEventListener('contextmenu', (ev) => {
-          const composedPath = ev.composedPath();
-          
-          // disable default image and a link
-          let target = (composedPath && composedPath[0]) || ev.target;
-          let nodeName;
-          while (target) {
-            nodeName = target.nodeName;
-            if (nodeName === 'A' || nodeName === 'IMG') {
-              ev.preventDefault();
-              return false;
-            }
-            target = target.parentElement;
-          }
+      <script type="module">
+import '/node_modules/@polymer/polymer/polymer-legacy.js';
+import '/src/v2ex-app/app-styles.js';
+import '/src/v2ex-app/v2ex-app.js';
+import '/src/v2ex-app/pages/bv-timeline-page/bv-timeline-page.js';
+import '/src/v2ex-app/pages/bv-topic-page/bv-topic-page.js';
+import '/src/v2ex-app/pages/bv-login-page/bv-login-page.js';
+import '/src/v2ex-app/pages/bv-settings-page/bv-settings-page.js';
+import '/src/v2ex-app/pages/bv-list-page/bv-list-page.js';
+import '/src/v2ex-app/pages/bv-notifications-page/bv-notifications-page.js';
+import '/src/v2ex-app/pages/bv-member-page/bv-member-page.js';
+import '/src/v2ex-app/pages/bv-nodes-page/bv-nodes-page.js';
+import '/src/v2ex-app/pages/bv-writing-page/bv-writing-page.js';
+import '/src/v2ex-app/components/bv-toolbar/bv-toolbar.js';
+import '/src/v2ex-app/components/bv-bottom-navigation/bv-bottom-navigation.js';
+import '/src/v2ex-app/components/bv-image-viewer/bv-image-viewer.js';
+import '/src/v2ex-app/components/bv-scroller/bv-scroller.js';
+import '/src/v2ex-app/components/bv-dialog/bv-dialog.js';
+import '/src/v2ex-app/components/bv-loading-layer/bv-loading-layer.js';
+import '/src/recycler-view.js';
+import '/node_modules/@polymer/app-route/app-route.js';
+import '/node_modules/@polymer/app-route/app-location.js';
+import '/node_modules/@polymer/paper-toast/paper-toast.js';
+// window.console.log = () => {};
+window.console.warn = () => {};
+document.addEventListener('contextmenu', (ev) => {
+  const composedPath = ev.composedPath();
+  
+  // disable default image and a link
+  let target = (composedPath && composedPath[0]) || ev.target;
+  let nodeName;
+  while (target) {
+    nodeName = target.nodeName;
+    if (nodeName === 'A' || nodeName === 'IMG') {
+      ev.preventDefault();
+      return false;
+    }
+    target = target.parentElement;
+  }
 
-          // disable timeline page
-          target = ev.target;
-          while (target) {
-            if (target.nodeName === 'BV-TIMELINE-PAGE') {
-              return ev.preventDefault();
-            }
-            target = target.parentElement;
-          }
-        });
-        window.addEventListener('userinfo-change', (ev) => {
-          t.set('app.userInfo', ev.detail);
-        });
-        t.app = {
-          name: 'bv2ex',
-          notificationCount: 0,
-          pageName: t.pageName || 'Timeline',
-          userInfo: {
-            avatar: './assets/avatar/avatar-1.png'
-          },
-          mockItems: (() => {
-            let arr = [];
-            for (let i = 0; i < 100; i++) {
-              arr.push({
-                innerHTML: 'test paragrash ' + i
-              });
-            }
-            return arr;
-          })()
-        };
-        window.t = t;
-        t.inited = true;
-      </script>
+  // disable timeline page
+  target = ev.target;
+  while (target) {
+    if (target.nodeName === 'BV-TIMELINE-PAGE') {
+      return ev.preventDefault();
+    }
+    target = target.parentElement;
+  }
+});
+window.addEventListener('userinfo-change', (ev) => {
+  t.set('app.userInfo', ev.detail);
+});
+t.app = {
+  name: 'bv2ex',
+  notificationCount: 0,
+  pageName: t.pageName || 'Timeline',
+  userInfo: {
+    avatar: './assets/avatar/avatar-1.png'
+  },
+  mockItems: (() => {
+    let arr = [];
+    for (let i = 0; i < 100; i++) {
+      arr.push({
+        innerHTML: 'test paragrash ' + i
+      });
+    }
+    return arr;
+  })()
+};
+window.t = t;
+t.inited = true;
+</script>
     </dom-bind>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js')
-        .then(function(reg) {
-          // registration worked
-          console.log('Registration succeeded. Scope is ' + reg.scope);
-        }).catch(function(error) {
-          // registration failed
-          console.log('Registration failed with ' + error);
-        });
-      }
-    </script>
+    <script type="module">
+import '/node_modules/@polymer/polymer/polymer-legacy.js';
+import '/src/v2ex-app/app-styles.js';
+import '/src/v2ex-app/v2ex-app.js';
+import '/src/v2ex-app/pages/bv-timeline-page/bv-timeline-page.js';
+import '/src/v2ex-app/pages/bv-topic-page/bv-topic-page.js';
+import '/src/v2ex-app/pages/bv-login-page/bv-login-page.js';
+import '/src/v2ex-app/pages/bv-settings-page/bv-settings-page.js';
+import '/src/v2ex-app/pages/bv-list-page/bv-list-page.js';
+import '/src/v2ex-app/pages/bv-notifications-page/bv-notifications-page.js';
+import '/src/v2ex-app/pages/bv-member-page/bv-member-page.js';
+import '/src/v2ex-app/pages/bv-nodes-page/bv-nodes-page.js';
+import '/src/v2ex-app/pages/bv-writing-page/bv-writing-page.js';
+import '/src/v2ex-app/components/bv-toolbar/bv-toolbar.js';
+import '/src/v2ex-app/components/bv-bottom-navigation/bv-bottom-navigation.js';
+import '/src/v2ex-app/components/bv-image-viewer/bv-image-viewer.js';
+import '/src/v2ex-app/components/bv-scroller/bv-scroller.js';
+import '/src/v2ex-app/components/bv-dialog/bv-dialog.js';
+import '/src/v2ex-app/components/bv-loading-layer/bv-loading-layer.js';
+import '/src/recycler-view.js';
+import '/node_modules/@polymer/app-route/app-route.js';
+import '/node_modules/@polymer/app-route/app-location.js';
+import '/node_modules/@polymer/paper-toast/paper-toast.js';
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+  .then(function(reg) {
+    // registration worked
+    console.log('Registration succeeded. Scope is ' + reg.scope);
+  }).catch(function(error) {
+    // registration failed
+    console.log('Registration failed with ' + error);
+  });
+}
+</script>
 
     <!-- insert fcm here -->
   </body>
