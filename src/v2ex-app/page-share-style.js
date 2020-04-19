@@ -8,6 +8,7 @@ $_documentContainer.innerHTML = `<dom-module id="page-share-style">
         animation-name: page-appear;
         animation-fill-mode: both;
         animation-duration: .3s;
+        animation-delay: .1s;
         animation-timing-function: ease-out;
         opacity: 0;
         /* contain: paint; */
@@ -37,10 +38,6 @@ $_documentContainer.innerHTML = `<dom-module id="page-share-style">
         0% {
           transform: translate3d(0, 50px, 0);
           opacity: 0;
-        }
-        99% {
-          transform: translate3d(0, 0, 0);
-          opacity: 1;
         }
         /** transform will influence the render of 'fixed' child elements,
          *  so we need to remove transform property at the end of the animation.

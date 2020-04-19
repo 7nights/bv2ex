@@ -222,6 +222,7 @@ class V2exApp extends mixinBehaviors([MyBehaviors], PolymerElement) {
       this._selected.classList.remove('page-selected');
     }
     const oldPage = this.selectedPage;
+
     if (name && (this._selected = newPage)) {
       this._selected.classList.add('page-selected');
       this._setSelectedPage(this._selected);

@@ -26,9 +26,7 @@
         console.log = () => {};
       }
     </script>
-
     <script>
-
       let materialIconsFont = new FontFace('Material Icons', 'url(https://fonts.gstatic.com/s/materialicons/v38/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2)', {
         style: 'normal',
         weight: '400'
@@ -36,8 +34,9 @@
       document.fonts.add(materialIconsFont);
       materialIconsFont.load();
       materialIconsFont.loaded
-        .then(() => {
+        .then(function fn() {
           setTimeout(() => {
+            if (!document.body) fn();
             document.body.classList.add('material-icons-loaded');
           }, 500);
         })
@@ -47,6 +46,7 @@
           }, 500);
         });
     </script>
+    <style>.material-icons {font-family: 'Material Icons';}</style>
     <link href="./font.css" rel="stylesheet" />
 
     <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>

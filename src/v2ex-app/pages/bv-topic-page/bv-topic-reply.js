@@ -84,6 +84,8 @@ class TopicReply extends PolymerElement {
       #reply-content a[href^="/member"] {
         text-decoration: none;
         font-weight: 500;
+        /* fix for OnePlus */
+        font-family: 'Roboto';
         color: black;
         /* color: var(--blue); */
       }
