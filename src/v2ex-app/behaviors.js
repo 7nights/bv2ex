@@ -115,9 +115,7 @@ BVBehaviors.PageBehavior = {
         opacity: 0
       }], {
         duration: 300,
-        easing: 'ease-out',
-        // fill: 'backwards'
-        fill: 'both'
+        easing: 'ease-out'
       });
       ani.onfinish = resolve;
       ani.oncancel = reject;

@@ -335,6 +335,11 @@ class LoginPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         font-size: 14px;
         color: var(--blue);
       }
+      paper-spinner-lite {
+        width: 20px;
+        height: 20px;
+        --paper-spinner-color: #ddd;
+      }
     </style>
     <div class="center"><img id="logo" src="./assets/logo-without-bg.png"></div> 
     <div class="center name-box">
@@ -367,7 +372,14 @@ class LoginPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         <input value="{{captchaValue::input}}" id="captcha-input" name="captcha" class\$="[[_addClass('highlight', _highlightCaptcha)]]">
       </div>
       <div class="right button-container">
-        <paper-button raised="" on-click="signIn">SIGN IN</paper-button>
+        <paper-button raised="" on-click="signIn">
+          <template is="dom-if" if="{{isSigning}}">
+            <paper-spinner-lite active></paper-spinner-lite>
+          </template>
+          <template is="dom-if" if="{{_not(isSigning)}}">
+            Sign In
+          </template>
+        </paper-button>
       </div>
       <div class="footer">
         <span class="bg"><span class="app-name">A Better Way to Experience</span> from <b>Sean</b> with <span class="love">❤</span></span>
@@ -395,6 +407,10 @@ class LoginPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
       },
       app: {
         type: Object
+      },
+      isSigning: {
+        type: Boolean,
+        value: false
       }
     };
   }
@@ -438,6 +454,7 @@ class LoginPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
       return;
     }
     console.log('Try to sign in...');
+    this.isSigning = true;
     let result = await window.BVQuerys.signIn(this.captchaValue.trim());
     if (!result) {
       // TODO: failed to sign in
