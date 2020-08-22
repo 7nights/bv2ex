@@ -20,6 +20,7 @@ $_documentContainer.innerHTML = `<custom-style>
       --border-color: var(--surface-8dp);
 
       /** material design dark typography */
+      --dark-text-primary-color: rgba(0, 0, 0, .87);
       --light-text-primary-color: rgba(255, 255, 255, .87);
       --light-text-secondary-color: rgba(255, 255, 255, .60);
       --light-text-disabled-color: rgba(255, 255, 255, .38);
@@ -39,6 +40,8 @@ $_documentContainer.innerHTML = `<custom-style>
         background-color: var(--orange);
         color: #fff;
       }
+
+      --page-height: calc(100vh - var(--bv-toolbar-height));
 
       --border-color: #efefef;
 
@@ -65,6 +68,7 @@ $_documentContainer.innerHTML = `<custom-style>
       --color-secondary-50: #fff3e1;
 
       --surface-secondary: #fafafa;
+      --surface_rgb: 255, 255, 255;
       --surface: #ffffff;
       --surface-8dp: #ffffff;
       --surface-1dp: #ffffff;
@@ -105,6 +109,8 @@ $_documentContainer.innerHTML = `<custom-style>
       --light-text-primary-color: rgba(0, 0, 0, .87);
       --light-text-secondary-color: rgba(0, 0, 0, .54);
       --light-text-disabled-color: rgba(0, 0, 0, .38);
+
+      --dark-text-primary-color: rgba(255, 255, 255, .87);
 
       /** shadows */
       --md-box-shadow-1dp: 0 0 2px 0 rgba(0, 0, 0, .14), 0 2px 2px 0 rgba(0, 0, 0, .12), 0 1px 3px 0 rgba(0, 0, 0, .2);

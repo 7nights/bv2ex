@@ -15,7 +15,7 @@ class UserAvatar extends PolymerElement {
         --bv-user-avatar-border-size: 2px;
 
         display: flex;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, .12);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
         overflow: hidden;
         border: var(--bv-user-avatar-border-size) solid #fff;
         box-sizing: border-box;

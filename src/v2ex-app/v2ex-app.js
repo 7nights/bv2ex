@@ -123,7 +123,8 @@ class V2exApp extends mixinBehaviors([MyBehaviors], PolymerElement) {
       notifications: 'Notifications',
       member: 'Member',
       nodes: 'Nodes',
-      'create-topic': 'New Topic'
+      'create-topic': 'New Topic',
+      'today': 'Today'
     };
   }
   _pageChanged(newValue, oldValue) {
@@ -176,6 +177,10 @@ class V2exApp extends mixinBehaviors([MyBehaviors], PolymerElement) {
       case 'create-topic':
         this._setPageName(V2exApp.PAGE_NAMES['create-topic']);
         newSelected = 'create-topic';
+        break;
+      case 'today':
+        this._setPageName(V2exApp.PAGE_NAMES.today);
+        newSelected = 'today';
         break;
       case 'others':
         newSelected = 'others';

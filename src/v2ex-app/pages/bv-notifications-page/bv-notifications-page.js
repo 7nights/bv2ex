@@ -117,6 +117,7 @@ class NotificationsPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBeha
       }
       .notifications-container .right-container {
         font-size: 14px;
+        overflow: hidden;
       }
       .notifications-container .right-container .payload {
         display: block;
@@ -176,6 +177,9 @@ class NotificationsPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBeha
       }
       .item.read bv-html a {
         background-color: #6b6966;
+      }
+      .item.read bv-html a img {
+        max-width: 100%;
       }
       .unread-split-container {
         padding-top: 20px;
@@ -369,6 +373,8 @@ class NotificationsPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBeha
         return 'liked your topic';
       case 'reply':
         return 'replied';
+      case 'recharge':
+        return 'completed your recharge';
       default:
         return type;
     }
@@ -469,13 +475,21 @@ class NotificationsPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBeha
   _notificationsChange() {
     console.log('changed!!!', this.notifications);
   }
-  _postsChange() {}
+  _substr(str = '', len) {
+    if (str.length > len) return str.substr(0, len) + '...';
+    return str;
+  }
+  _handleNotifications(notifications) {
+    return notifications.map((val) => {
+      return {...val, payload: val.type === 'thanked_reply' ? this._substr(val.payload, 140) : val.payload};
+    });
+  }
   async fetch() {
     this.loading = true;
     let result = await window.BVQuerys.notifications(null, this.page++);
     this.loading = false;
     if (result && result.data) {
-      result = result.data.notifications;
+      result = this._handleNotifications(result.data.notifications);
     }
     this.notifications = this.notifications.concat(result);
     this.$.loadmore.reset();
@@ -498,7 +512,7 @@ class NotificationsPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBeha
       let result = await window.BVQuerys.notifications();
       this.loading = false;
       if (result && result.data) {
-        result = result.data.notifications;
+        result = this._handleNotifications(result.data.notifications);
       }
       this.set('notifications', result || []);
       this.$.loadmore.enable();

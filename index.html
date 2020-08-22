@@ -23,7 +23,7 @@
         };
       }
       if (location.href.indexOf('debug') === -1 && location.hostname !== '127.0.0.1' ) {
-        console.log = () => {};
+        // console.log = () => {};
       }
     </script>
     <script>
@@ -150,6 +150,7 @@
             <bv-nodes-page app="{{app}}" name="nodes"></bv-nodes-page>
             <bv-notifications-page app="{{app}}" name="notifications"></bv-notifications-page>
             <bv-writing-page app="{{app}}" name="create-topic"></bv-writing-page>
+            <bv-today-page app="{{app}}" name="today"></bv-today-page>
           </v2ex-app>
           <paper-toast id="global-error-toast"></paper-toast>
           <bv-dialog app="{{app}}"></bv-dialog>

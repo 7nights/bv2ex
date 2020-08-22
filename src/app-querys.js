@@ -97,6 +97,9 @@ window.BVQuerys = (() => {
       });
       return result;
     },
+    async today() {
+      return await (await fetch(SERVER_ADDRESS + '/today')).json();
+    },
     alterFollowing(status, topic, title) {
       return fetch(SERVER_ADDRESS + `/alterFollowing?following=${status}&topic=${topic}&title=${title}`, {
         method: 'POST'
@@ -118,7 +121,7 @@ window.BVQuerys = (() => {
       return fetch(`${SERVER_ADDRESS}/unblock?member=${memberId}&memberName=${memberName}&action=${actionToken}`)
         .then(ret => ret.json());  
     },
-    async reply(t, content, once) {
+    async reply(t, content, once = window.onceToken) {
       const form = new FormData();
       form.append('content', content);
       form.append('once', once);

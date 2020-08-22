@@ -28,7 +28,7 @@
     "web-animations-js": "^2.3.2"
   },
   "name": "@polymer/v2ex",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "resolutions": {
     "inherits": "2.0.3",
     "samsam": "1.1.3",

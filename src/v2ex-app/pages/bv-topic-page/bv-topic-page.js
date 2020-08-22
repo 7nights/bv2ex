@@ -173,6 +173,9 @@ class TopicPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
           display: flex;
           flex-direction: row;
         }
+        .topic-card .buttons-line .likes-collects.disabled {
+          opacity: .5;
+        }
         .topic-card .buttons-line .likes-collects .material-icons {
           font-size: 18px;
         }
@@ -444,7 +447,7 @@ class TopicPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
             <div class="up"><i class="material-icons">keyboard_arrow_up</i><span>[[post.upCount]]</span></div>
             <div class="down"><i class="material-icons">keyboard_arrow_down</i></div>
           </div>
-          <div class="likes-collects">
+          <div class\$="likes-collects [[_addClass('disabled', post.isSelf)]]">
             <div class\$="like [[_addClass('liked', post.liked)]]" on-click="_sendThanks">
               <paper-ripple></paper-ripple>
               <div class="icon">
@@ -576,7 +579,7 @@ class TopicPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
     this.set('post.isFollowing', !following);
   }
   async _sendThanks() {
-    if (this.post.liked) return;
+    if (this.post.liked || this.post.isSelf) return;
 
     try {
       await this.app.dialog.open({
@@ -594,6 +597,7 @@ class TopicPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
     await window.BVQuerys.like(this.post.t, this.post.actions.likeAction);
   }
   async _collectPost() {
+    if (this.post.isSelf) return;
     let result;
     if (this.post.collected) {
       try {
@@ -833,6 +837,10 @@ class TopicPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         request = window.BVQuerys.topic(t);
       }
       result = await request;
+      if (result.author === this.app.userInfo.username) {
+        result.isSelf = true;
+        result.liked = false;
+      }
       let historyViews = BVUtils.userStorage.get('recentViews');
       if (!historyViews || historyViews.constructor !== Array) {
         historyViews = [];
@@ -1021,6 +1029,7 @@ class TopicPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
       .previous-comments .comments-container {
         max-height: calc(100vh - 140px - var(--bv-toolbar-height));
         overflow: auto;
+        overscroll-behavior: contain;
       }
     `;
     document.head.appendChild(style);

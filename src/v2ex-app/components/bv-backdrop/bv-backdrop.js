@@ -63,6 +63,14 @@ class BVBackdrop extends PolymerElement {
 
       this.hide();
     });
+
+    this.addEventListener('scroll', this.preventScrollPropagation);
+    this.addEventListener('wheel', this.preventScrollPropagation);
+    this.addEventListener('touchmove', this.preventScrollPropagation);
+  }
+  preventScrollPropagation(ev) {
+    if (ev.target !== this) return;
+    ev.preventDefault();
   }
   show() {
     if (this.hiding) return;

@@ -16,7 +16,10 @@ class TimelinePost extends mixinBehaviors([BVBehaviors.UtilBehavior], PolymerEle
     <style include="font-icons">
       :host {
         display: flex;
-        padding: 15px 15px 15px 20px;
+        padding: 15px 15px 10px 20px;
+      }
+      :host-context(.compact) :host {
+        padding: 10px 15px 10px 20px;
       }
       :host-context(.compact) bv-light-button {
         height: 24px;
@@ -109,6 +112,8 @@ class TimelinePost extends mixinBehaviors([BVBehaviors.UtilBehavior], PolymerEle
       :host-context(.compact) .left-column bv-user-avatar {
         --bv-user-avatar-size: 28px;
         --bv-user-avatar-border-size: 0px;
+        box-shadow: none;
+        border: 1px solid var(--border-color);
       }
       :host-context(.compact) .up-count {
         display: none;

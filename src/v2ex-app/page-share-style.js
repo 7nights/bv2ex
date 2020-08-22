@@ -15,7 +15,7 @@ $_documentContainer.innerHTML = `<dom-module id="page-share-style">
         transform: translate3d(0, 0, 0);
         position: relative;
         z-index: 1;
-        min-height: 100vh;
+        min-height: var(--page-height);
         will-change: transform, opacity;
       }
       :host::before {

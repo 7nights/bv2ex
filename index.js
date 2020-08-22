@@ -10,6 +10,7 @@ import '/src/v2ex-app/pages/bv-notifications-page/bv-notifications-page.js';
 import '/src/v2ex-app/pages/bv-member-page/bv-member-page.js';
 import '/src/v2ex-app/pages/bv-nodes-page/bv-nodes-page.js';
 import '/src/v2ex-app/pages/bv-writing-page/bv-writing-page.js';
+import '/src/v2ex-app/pages/bv-today-page/bv-today-page.js';
 import '/src/v2ex-app/components/bv-toolbar/bv-toolbar.js';
 import '/src/v2ex-app/components/bv-bottom-navigation/bv-bottom-navigation.js';
 import '/src/v2ex-app/components/bv-image-viewer/bv-image-viewer.js';

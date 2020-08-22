@@ -90,6 +90,13 @@ class BottomNavigation extends mixinBehaviors([BVBehaviors.UtilBehavior], Polyme
         <span>Timeline</span>
       </div>
     </a>
+    <a on-click="itemClicked" class\$="item [[_selected('today', app.currentPage)]]" href="/today" data-key="today">
+      <!-- <paper-ripple></paper-ripple> -->
+      <div>
+        <i class="material-icons">whatshot</i>
+        <span>Today</span>
+      </div>
+    </a>
     <a on-click="itemClicked" class\$="item [[_selected('nodes', app.currentPage)]]" href="/nodes">
       <!-- <paper-ripple></paper-ripple> -->
       <div>
@@ -134,6 +141,9 @@ class BottomNavigation extends mixinBehaviors([BVBehaviors.UtilBehavior], Polyme
     if ((page === '' || page === 'home') && i === 'home') {
       return 'active';
     }
+    if (page === 'today' && i === 'today') {
+      return 'active';
+    }
     if (page === 'nodes' && i === 'nodes') {
       return 'active';
     }
@@ -145,6 +155,12 @@ class BottomNavigation extends mixinBehaviors([BVBehaviors.UtilBehavior], Polyme
     if (ev.currentTarget.classList.contains('active')) {
       document.scrollingElement.scrollTop = 0;
     }
+    // if (ev.currentTarget.dataset.key === 'today') {
+    //   v2ex.goToPage('/list/Today', {
+    //     posts: BVUtils.userStorage.get('recentViews'),
+    //     name: 'Today'
+    //   });
+    // }
   }
   constructor() {
     super();

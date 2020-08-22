@@ -105,7 +105,8 @@ class TopicContent extends PolymerElement {
     if (!this._styleText) {
       this._styleText = this.shadowRoot.children[0].textContent;
     }
-    this.shadowRoot.innerHTML = '<style>' + this._styleText + '</style>' + this.handleContent(this.content);
+    this.shadowRoot.innerHTML = '<style>' + this._styleText + '</style>' + `<link rel="stylesheet"
+    href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">` + this.handleContent(this.content);
     [].forEach.call(this.shadowRoot.querySelectorAll('pre code'), (val) => {
       if (!window.hljs) {
         setTimeout(() => {
@@ -155,7 +156,7 @@ class TopicContent extends PolymerElement {
   }
   connectedCallback() {
     super.connectedCallback();
-
+    
     this.addEventListener('click', (ev) => {
       let target = ev.composedPath()[0];
       let index = target.dataset.index;

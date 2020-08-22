@@ -49,18 +49,23 @@ class BVToolbar extends mixinBehaviors([BVBehaviors.UtilBehavior], PolymerElemen
       top: 0;
       left: 0;
       z-index: 100;
-      background-color: var(--surface);
+      background-color: transparent;
       --bv-toolbar-height: 56px;
-      transition: box-shadow 0.3s ease-out, transform 0.3s ease-out, background-color 0.3s ease-out;
+      transition: box-shadow 0.3s ease-out, transform 0.3s ease-out, background-color 0.2s cubic-bezier(0, 0, 0.1, 1);
     }
     
     :host(.shadow),
     :host-context(.shadow-toolbar) {
+      background-color: rgba(var(--surface_rgb), .95);
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
     }
     :host(.shadow) .bottom-split-border,
     :host-context(.shadow-toolbar) .bottom-split-border {
       border-bottom-color: transparent;
+    }
+
+    :host-context(.no-border-toolbar) {
+      background-color: var(--surface);
     }
     
     :host-context(.theme-dark):host(.shadow),
@@ -74,6 +79,10 @@ class BVToolbar extends mixinBehaviors([BVBehaviors.UtilBehavior], PolymerElemen
     
     :host(.no-border-toolbar) .bottom-split-border {
       border-bottom-color: transparent !important;
+    }
+
+    :host-context(.smaller-toolbar):host {
+      background-color: var(--surface);
     }
     
     :host-context(.smaller-toolbar):host(.shadow) {
@@ -181,7 +190,7 @@ class BVToolbar extends mixinBehaviors([BVBehaviors.UtilBehavior], PolymerElemen
     }
     
     .bottom-split-border {
-      border-bottom: 1px solid rgba(199, 199, 199, 0.1);
+      /* border-bottom: 1px solid rgba(199, 199, 199, 0.1); */
     }
     
     .notification-button {

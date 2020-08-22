@@ -124,19 +124,21 @@ class TimelinePage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors
         position: relative;
       }
       .search-box {
-        background-color: var(--input-background);
+        background-color: var(--surface-4dp);
         color: var(--light-text-secondary-color);
-        height: 35px;
-        line-height: 35px;
-        border-radius: 14px;
-        padding: 0 10px;
+        height: 45px;
+        line-height: 45px;
+        border-radius: 8px;
+        padding: 0 14px;
         box-sizing: border-box;
-        margin: 12px 20px 5px;
+        margin: 0 20px 5px;
         font-size: 12px;
         display: flex;
         align-items: center;
         transition: box-shadow .3s ease-out, transform .2s ease-in-out;
         position: relative;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
       }
       .search-box.focus {
         transform: scale(1.05);
