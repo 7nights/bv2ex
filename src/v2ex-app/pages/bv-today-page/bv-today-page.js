@@ -72,7 +72,7 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         .tips {
           padding: 0px 5px;
           font-family: 'Google Sans';
-          margin: 15px;
+          margin: 15px 15px 5px;
           border-radius: 4px;
           color: var(--light-text-secondary-color);
           font-size: 12px;
@@ -121,12 +121,15 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
           margin-right: 2px;
         }
         .post {
+          padding-top: 9px;
           margin-bottom: 30px;
           word-break: break-all;
+        }
+        .block {
           overflow: hidden;
         }
         .post-card {
-          margin: 9px 15px 20px;
+          margin: 0px 15px 9px 20px;
           padding: 15px;
           border-radius: 6px;
           box-shadow: 0 13px 36px 1px rgba(0, 0, 0, 0.04), 0 3px 16px rgba(0, 0, 0, 0.08);
@@ -140,6 +143,8 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         .post-replies {
           padding: 0 25px;
           font-size: 14px;
+          overflow: hidden;
+          color: var(--light-text-secondary-color);
         }
         .post-replies .post-reply {
           display: flex;
@@ -227,8 +232,29 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
           justify-content: center;
           align-items: center;
         }
+        .page-loading {
+          height: var(--page-height);
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+        }
+        :host-context(.theme-dark) .icon-pic img.line {
+          filter: invert(1);
+        }
+        :host-context(.theme-dark) .icon-pic img.dinosaur {
+          filter: invert(.8);
+        }
       </style>
+      <template is="dom-if" if="[[loading]]">
+        <div id="page-loading" class="page-loading"><paper-spinner-lite active></paper-spinner-lite></div>
+      </template>
       <p class\$="tips [[_addClass('show', updatedOn)]]">Last updated on: [[updatedOn]]</p>
+      <div class="block"></div>
       <template is="dom-repeat" items="[[posts]]">
         <div class="post" on-click="_jumpToTopic">
           <div class="post-card">
@@ -258,9 +284,10 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
             </template>
           </div>
         </div>
+        <div class="block"></div>
       </template>
 
-      <template is="dom-if" if="{{_isEmpty()}}">
+      <template is="dom-if" if="{{_isEmpty(loading, posts)}}">
         <div class="empty">
           <div class="icon-pic">
             <img class="dinosaur" src="./assets/dinosaur-2.png" />
@@ -301,7 +328,7 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
     };
   }
   _isEmpty() {
-    return this.posts && this.posts.length > 0;
+    return !this.loading && (!this.posts || this.posts.length === 0);
   }
   _getFloor(index) {
     if (index === 0) return '🥇';
@@ -363,8 +390,18 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
     });
   }
   async fetchTodayList() {
+    this.loading = true;
     this.lastFetched = Date.now();
     let posts = await window.BVQuerys.today();
+    this.shadowRoot.querySelector('#page-loading').animate({
+      opacity: [1, 0]
+    }, {
+      duration: 300,
+      easing: 'ease-out'
+    }).onfinish = () => {
+      this.loading = false;
+    };
+
     const d = new Date(0 + posts.days * 24 * 60 * 60 * 1000);
     this.updatedOn = posts.days ? `${MONTHS[d.getMonth()]} ${d.getDay() + 1} ${d.getFullYear()}` : '';
     this.set('posts', (posts.data || []).map((post) => {
