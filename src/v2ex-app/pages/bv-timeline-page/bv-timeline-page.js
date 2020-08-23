@@ -126,8 +126,8 @@ class TimelinePage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors
       .search-box {
         background-color: var(--surface-4dp);
         color: var(--light-text-secondary-color);
-        height: 45px;
-        line-height: 45px;
+        height: 46px;
+        line-height: 46px;
         border-radius: 8px;
         padding: 0 14px;
         box-sizing: border-box;
@@ -139,6 +139,9 @@ class TimelinePage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors
         position: relative;
         border: 1px solid var(--border-color);
         box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
+      }
+      :host-context(.theme-dark) .search-box {
+        border-color: #000;
       }
       .search-box.focus {
         transform: scale(1.05);
