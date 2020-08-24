@@ -132,7 +132,7 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
           margin: 0px 15px 9px 20px;
           padding: 15px;
           border-radius: 6px;
-          box-shadow: 0 13px 36px 1px rgba(0, 0, 0, 0.04), 0 3px 16px rgba(0, 0, 0, 0.08);
+          box-shadow: 0 18px 36px 1px rgba(0, 0, 0, 0.04), 0 5px 16px rgba(0, 0, 0, 0.1);
           background-size: contain;
           background-color: var(--surface-4dp);
         }
@@ -425,6 +425,9 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
     this.addEventListener('page-select', () => {
       this.app.toolbar.setRightMenu();
       this.app.toolbar.setMode('normal');
+
+      this.$['post-loading'].style.display = 'none';
+      this.$['post-loading-post'].innerHTML = '';
 
       const now = Date.now();
       if (now - this.lastFetched <= TodayPage.kFetchInterval) {
