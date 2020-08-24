@@ -408,7 +408,7 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
     };
 
     const d = new Date(0 + posts.days * 24 * 60 * 60 * 1000);
-    this.updatedOn = posts.days ? `${MONTHS[d.getMonth()]} ${d.getDay() + 1} ${d.getFullYear()}` : '';
+    this.updatedOn = posts.days ? `${MONTHS[d.getMonth()]} ${d.getDate()} ${d.getFullYear()}` : '';
     this.set('posts', (posts.data || []).map((post) => {
       try {
         const detail = JSON.parse(post.content_json);
