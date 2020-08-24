@@ -141,7 +141,7 @@ class TimelinePage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors
         box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
       }
       :host-context(.theme-dark) .search-box {
-        border-color: #000;
+        border-color: transparent;
       }
       .search-box.focus {
         transform: scale(1.05);

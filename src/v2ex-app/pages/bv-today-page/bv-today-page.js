@@ -82,7 +82,7 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         .tips.show {
           display: block;
         }
-        :host-context(.theme-dark) .post:nth-of-type(-n + 3) .post-card {
+        :host-context(.theme-dark) .post:nth-of-type(-n + 4) .post-card {
           background-color: #32332d;
         }
         .post:nth-of-type(-n + 3) .post-card {
@@ -129,12 +129,13 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
           overflow: hidden;
         }
         .post-card {
-          margin: 0px 15px 9px 20px;
+          margin: 0px 15px 12px 20px;
           padding: 15px;
           border-radius: 6px;
           box-shadow: 0 18px 36px 1px rgba(0, 0, 0, 0.04), 0 5px 16px rgba(0, 0, 0, 0.1);
           background-size: contain;
           background-color: var(--surface-4dp);
+          transition: background-color .3s ease-out;
         }
         .post-card .content {
           font-size: 14px;
@@ -242,6 +243,7 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
           top: 0;
           left: 0;
           right: 0;
+          background-color: var(--surface);
         }
         :host-context(.theme-dark) .icon-pic img.line {
           filter: invert(1);
@@ -254,7 +256,6 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         <div id="page-loading" class="page-loading"><paper-spinner-lite active></paper-spinner-lite></div>
       </template>
       <p class\$="tips [[_addClass('show', updatedOn)]]">Last updated on: [[updatedOn]]</p>
-      <div class="block"></div>
       <template is="dom-repeat" items="[[posts]]">
         <div class="post" on-click="_jumpToTopic">
           <div class="post-card">
@@ -284,7 +285,6 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
             </template>
           </div>
         </div>
-        <div class="block"></div>
       </template>
 
       <template is="dom-if" if="{{_isEmpty(loading, posts)}}">
@@ -392,7 +392,12 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
   async fetchTodayList() {
     this.loading = true;
     this.lastFetched = Date.now();
-    let posts = await window.BVQuerys.today();
+    let posts;
+    try {
+      posts = await window.BVQuerys.today();
+    } catch (ex) {
+      posts = [];
+    }
     this.shadowRoot.querySelector('#page-loading').animate({
       opacity: [1, 0]
     }, {
