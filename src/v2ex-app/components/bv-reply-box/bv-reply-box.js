@@ -1,7 +1,7 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { BVBehaviors } from '../../behaviors.js';
 import '../bv-user-avatar/bv-user-avatar.js';
-import '../../font-icons.js';
+import icons from '../../font-icons.js';
 import '@polymer/paper-ripple/paper-ripple.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
@@ -12,7 +12,7 @@ import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 class ReplyBox extends mixinBehaviors([BVBehaviors.UtilBehavior], PolymerElement) {
   static get template() {
     return html`
-    <style include="font-icons">
+    <style>
       :host {
         position: fixed;
         bottom: 0;
@@ -357,6 +357,7 @@ class ReplyBox extends mixinBehaviors([BVBehaviors.UtilBehavior], PolymerElement
   }
   connectedCallback() {
     super.connectedCallback();
+    this.shadowRoot.adoptedStyleSheets = [icons];
     const animationKeyframs = [{
       transform: 'translate3d(0, 55px, 0)'
     }, {

@@ -11,7 +11,7 @@ $_documentContainer.innerHTML = `<dom-module id="page-share-style">
         animation-delay: .1s;
         animation-timing-function: ease-out;
         opacity: 0;
-        /* contain: paint; */
+        contain: layout;
         transform: translate3d(0, 0, 0);
         position: relative;
         z-index: 1;
@@ -27,17 +27,19 @@ $_documentContainer.innerHTML = `<dom-module id="page-share-style">
         0% {
           transform: translate3d(0, 0, 0);
           opacity: 1;
-          /* overflow: hidden; */
+          content-visibility: auto;
         }
         100% {
           transform: translate3d(0, 50px, 0);
           opacity: 0;
+          content-visibility: unset;
         }
       }
       @keyframes page-appear {
         0% {
           transform: translate3d(0, 50px, 0);
           opacity: 0;
+          content-visibility: auto;
         }
         /** transform will influence the render of 'fixed' child elements,
          *  so we need to remove transform property at the end of the animation.
@@ -46,6 +48,7 @@ $_documentContainer.innerHTML = `<dom-module id="page-share-style">
         100% {
           opacity: 1;
           transform: translate3d(0, 0, 0);
+          content-visibility: unset;
         }
       }
       .opx-border {

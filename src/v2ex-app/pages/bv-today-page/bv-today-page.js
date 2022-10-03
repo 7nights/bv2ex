@@ -85,7 +85,7 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         :host-context(.theme-dark) .post:nth-of-type(-n + 4) .post-card {
           background-color: #32332d;
         }
-        .post:nth-of-type(-n + 3) .post-card {
+        .post:nth-of-type(-n + 4) .post-card {
           background-color: #fcfdf9;
         }
         .title-line {
@@ -129,9 +129,9 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
           overflow: hidden;
         }
         .post-card {
-          margin: 0px 15px 12px 20px;
+          margin: 0px 15px 32px 15px;
           padding: 15px;
-          border-radius: 6px;
+          border-radius: var(--border-radius);
           box-shadow: 0 18px 36px 1px rgba(0, 0, 0, 0.04), 0 5px 16px rgba(0, 0, 0, 0.1);
           background-size: contain;
           background-color: var(--surface-4dp);
@@ -140,6 +140,10 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         .post-card .content {
           font-size: 14px;
           color: var(--light-text-secondary-color);
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 8;
+          overflow: hidden;
         }
         .post-replies {
           padding: 0 25px;
@@ -175,25 +179,36 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         .post-info {
           font-size: 13px;
           /* color: var(--light-text-disabled-color); */
-          padding: 0 25px;
+          padding-right: 8px;
           display: flex;
           flex-direction: row;
           clear: both;
           font-family: 'Google Sans';
           font-weight: 500;
-          color: var(--blue);
-          margin-bottom: 15px;
+          color: var(--light-text-secondary-color);
+          margin: 10px 0 0;
           justify-content: flex-end;
+          align-items: center;
         }
         .post-info > div {
-          margin-right: 5px;
+          margin-left: 10px;
           display: flex;
           flex-direction: row;
           align-items: center;
         }
+        .post-info .updated {
+          flex: 1;
+          color: var(--light-text-disabled-color);
+        }
         .post-info i.material-icons {
           font-size: 12px;
           margin-right: 2px;
+        }
+        .post-info i.time.material-icons {
+          color: var(--light-text-disabled-color);
+          font-size: 14px;
+          margin-right: 3px;
+          font-weight: bold;
         }
         .post-loading {
           position: absolute;
@@ -210,7 +225,6 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         }
         .post-loading .post-info,
         .post-loading .post-replies {
-          display: none;
         }
         #post-loading-post {
           position: relative;
@@ -269,10 +283,12 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
             <div class="content">
               <s-html html="[[_filterHTMLTag(item.content)]]"></s-html>
             </div>
-          </div>
-          <div class="post-info">
-            <div class="clicks"><i class="material-icons">remove_red_eye</i>[[item.clicks]]</div>
-            <div class="replies"><i class="material-icons">sms</i>[[item.replyCount]]</div>
+            <div class="post-info">
+              <i class="material-icons time">access_time</i>
+              <bv-time class="updated" time="[[item.updated]]"></bv-time>
+              <div class="clicks"><i class="material-icons">remove_red_eye</i>[[item.clicks]]</div>
+              <div class="replies"><i class="material-icons">sms</i>[[item.replyCount]]</div>
+            </div>
           </div>
           <div class="post-replies">
             <template is="dom-repeat" items="[[item.topComments]]">
@@ -346,6 +362,7 @@ class TodayPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
     const ele = ev.currentTarget.querySelector('.post-card').cloneNode(true);
     ele.querySelector('s-html').html = ev.currentTarget.querySelector('s-html').html;
     ele.querySelector('bv-user-avatar').src = ev.currentTarget.querySelector('bv-user-avatar').src;
+    ele.querySelector('bv-time').time = ev.currentTarget.querySelector('bv-time').time;
     this.$['post-loading-post'].appendChild(ele);
     const top = ev.currentTarget.offsetTop;
     if (!this._toolbarHeight) {

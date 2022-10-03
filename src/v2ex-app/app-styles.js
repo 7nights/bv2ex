@@ -44,6 +44,10 @@ $_documentContainer.innerHTML = `<custom-style>
       --page-height: calc(100vh - var(--bv-toolbar-height));
 
       --border-color: #efefef;
+      --border-color-darker: #ddd;
+
+      --border-radius: 10px;
+      --border-radius-large: 12px;
 
       --color-primary-600: #1a7dff;
       --color-primary-500: #008cff;

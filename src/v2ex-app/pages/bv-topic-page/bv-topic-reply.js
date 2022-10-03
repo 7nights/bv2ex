@@ -1,7 +1,7 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '../../components/bv-user-avatar/bv-user-avatar.js';
 import '../../components/bv-time/bv-time.js';
-import '../../font-icons.js';
+import fontIcons from '../../font-icons.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { microTask } from '@polymer/polymer/lib/utils/async.js';
 /**
@@ -11,7 +11,7 @@ import { microTask } from '@polymer/polymer/lib/utils/async.js';
 class TopicReply extends PolymerElement {
   static get template() {
     return html`
-    <style include="font-icons">
+    <style >
       :host {
         display: flex;
         flex-direction: row;
@@ -177,7 +177,7 @@ class TopicReply extends PolymerElement {
         font-size: 13px;
         color: var(--light-text-primary-color);
         background-color: #efefef;
-        border-radius: 6px;
+        border-radius: var(--border-radius);
         border-top-left-radius: 0;
         padding: 8px;
         display: none;
@@ -301,6 +301,10 @@ class TopicReply extends PolymerElement {
       '_handleReplyContent(reply.content)',
       '_handleReplyQuote(reply.quote)'
     ];
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    this.shadowRoot.adoptedStyleSheets = [fontIcons];
   }
   _getLiked(liked) {
     return liked ? 'liked' : '';

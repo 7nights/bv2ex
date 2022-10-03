@@ -3,7 +3,7 @@ import { BVBehaviors } from '../../behaviors.js';
 import '../../components/bv-user-avatar/bv-user-avatar.js';
 import '../../components/bv-time/bv-time.js';
 import '../../components/bv-light-button/bv-light-button.js';
-import '../../font-icons.js';
+import fontIcons from '../../font-icons.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 /**
@@ -13,7 +13,7 @@ import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 class TimelinePost extends mixinBehaviors([BVBehaviors.UtilBehavior], PolymerElement) {
   static get template() {
     return html`
-    <style include="font-icons">
+    <style>
       :host {
         display: flex;
         padding: 15px 15px 10px 20px;
@@ -252,6 +252,10 @@ class TimelinePost extends mixinBehaviors([BVBehaviors.UtilBehavior], PolymerEle
         notify: true
       }
     };
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    this.shadowRoot.adoptedStyleSheets = [fontIcons];
   }
   _hasUnreadReply(unread) {
     return unread ? 'unread' : '';

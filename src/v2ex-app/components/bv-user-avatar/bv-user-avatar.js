@@ -1,5 +1,5 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import '../../font-icons.js';
+import icons from '../../font-icons.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 /**
  * @customElement
@@ -8,7 +8,6 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class UserAvatar extends PolymerElement {
   static get template() {
     return html`
-    <style include="font-icons"></style>
     <style>
       :host {
         --bv-user-avatar-size: 48px;
@@ -108,6 +107,8 @@ class UserAvatar extends PolymerElement {
   }
   connectedCallback() {
     super.connectedCallback();
+    this.shadowRoot.adoptedStyleSheets = [icons];
+
     this.inited = false;
 
     this.$.image.onload = () => {

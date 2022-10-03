@@ -328,6 +328,7 @@ class BVToolbar extends mixinBehaviors([BVBehaviors.UtilBehavior], PolymerElemen
       case 'shadow': {
         this.mode = 'shadow';
         document.body.classList.add('shadow-toolbar');
+        break;
       }
       default: {
         this.mode = 'normal';

@@ -34,8 +34,10 @@ class BVTime extends PolymerElement {
       }
     };
   }
-  // todo
   getDisplayTime() {
+    if (!isNaN(+this.time)) {
+      return new Date(this.time * 1000).toLocaleString();
+    }
     if (!this.time) return '';
     let via = '';
     let t = this.time
@@ -55,6 +57,11 @@ class BVTime extends PolymerElement {
       this.$.via.innerHTML = via;
     }
     if (~t.indexOf('刚刚')) return 'Just now';
+
+    if (~t.indexOf('<span title=')) {
+      const [,, time] = t.match(/<span title="(.*?)">(.*?)(<\/span>|$)/) || [];
+      return time;
+    }
 
     let times = t.match(/[0-9]* (小时|分钟|天)/g);
     if (times) times = times.filter((val) => val !== '');

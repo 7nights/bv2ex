@@ -105,9 +105,15 @@ class NodesPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         align-items: center;
         background-color: var(--input-background);
         width: calc(100vw - 120px);
-        line-height: 32px;
-        border-radius: 32px;
+        line-height: 30px;
+        border-radius: 8px;
+        border: 3px solid transparent;
+        transition: .2s border-color ease-in-out;
       }
+      .search-input-wrapper.focus {
+        border-color: var(--light-blue-border);
+      }
+
       .search-input-wrapper i {
         margin: 0 4px 0 10px;
         font-size: 16px;
@@ -126,21 +132,22 @@ class NodesPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         background-color: transparent;
         color: var(--light-text-secondary-color);
         border: none;
-        line-height: 32px;
+        line-height: 28px;
         flex: 1;
         font-size: 14px;
       }
       #search-results {
         position: absolute;
-        background-color: var(--surface-4dp);
+        background-color: var(--input-background);
+        border: 1px solid var(--border-color-darker);
         left: 0;
         right: 0;
         z-index: 10;
-        padding: 4px 18px;
+        padding: 10px 0;
         margin-top: 5px;
-        box-shadow: var(--md-box-shadow-4dp);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .15);
         display: none;
-        border-radius: 16px;
+        border-radius: 8px;
       }
       #search-results.show {
         display: block;
@@ -148,33 +155,37 @@ class NodesPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
       .search-node {
         font-size: 14px;
         color: var(--light-text-primary-color);
-        margin: 12px 0;
         cursor: pointer;
         text-decoration: none;
         display: block;
+        padding: 6px 18px;
       }
       .search-node:active {
-        opacity: .6;
+        background-color: var(--color-primary-500);
+        color: var(--dark-text-primary-color) !important;
       }
       .search-node > div {
         font-size: 12px;
         color: var(--light-text-secondary-color);
       }
+      .search-node:active > div {
+        color: var(--dark-text-primary-color) !important;
+      }
     </style>
     <div class="nodes-container">
       <img src="./assets/nodes-dotted.png" class="background-image">
       <div id="search-container">
-        <div class="search-input-wrapper">
+        <div class\$="search-input-wrapper [[_addClass('focus', isInputFocused)]]">
           <i class="material-icons">search</i>
-          <input id="search-input" type="text" value="{{keywords::input}}" />
+          <input id="search-input" type="text" value="{{keywords::input}}" on-click="_focusInput" on-focus="_focusInput" on-blur="_blurInput" />
           <i on-click="clearKeywords" class\$="material-icons clear [[_addClass('show', keywords)]]">clear</i>
         </div>
         <div id="search-results" class\$="[[_showSearchResults(searchResults)]]">
           <template is="dom-repeat" items="[[searchResults]]">
-            <a class="search-node" href\$="/go/[[item.node]]">
+            <div on-click="_goNode" class="search-node" href\$="/go/[[item.node]]">
               <span>[[item.nodeName]]</span>
               <div>[[item.node]]</div>
-            </a>
+            </div>
           </template>
         </div>
       </div>
@@ -239,10 +250,23 @@ class NodesPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
       }
     }
   }
+  async _goNode(ev) {
+    const href = ev.currentTarget.getAttribute('href');
+    await window.BVUtils.pSetTimeout(200);
+    this.searchResults = [];
+    this.keywords = '';
+    window.v2ex.goToPage(href);
+  }
+  _focusInput() {
+    this.isInputFocused = true;
+  }
+  _blurInput() {
+    this.isInputFocused = false;
+  }
   _showExpandButton(nodes) {
     return nodes.length >= 25;
   }
-  _onSearchKeywordsChange(ev) {
+  _onSearchKeywordsChange() {
     const results = [];
     if (!this.keywords) {
       return this.searchResults = results;
@@ -261,6 +285,7 @@ class NodesPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
     super();
 
     this.searchResults = [];
+    this.isInputFocused = false;
 
     this.addEventListener('page-select', async () => {
       this.app.toolbar.setRightMenu('notifications');

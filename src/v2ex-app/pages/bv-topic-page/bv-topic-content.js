@@ -75,13 +75,13 @@ class TopicContent extends PolymerElement {
         }
         pre {
           overflow: auto;
-          background-color: #f2f2f2;
+          /* background-color: #f2f2f2; */
           padding: 8px;
           font-size: 13px;
           border-radius: 4px;
         }
         :host-context(.theme-dark) pre {
-          background-color: #252525;
+          background-color: #282828;
         }
       </style>
     `;
@@ -106,7 +106,7 @@ class TopicContent extends PolymerElement {
       this._styleText = this.shadowRoot.children[0].textContent;
     }
     this.shadowRoot.innerHTML = '<style>' + this._styleText + '</style>' + `<link rel="stylesheet"
-    href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">` + this.handleContent(this.content);
+    href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/gruvbox-dark.min.css">` + this.handleContent(this.content);
     [].forEach.call(this.shadowRoot.querySelectorAll('pre code'), (val) => {
       if (!window.hljs) {
         setTimeout(() => {

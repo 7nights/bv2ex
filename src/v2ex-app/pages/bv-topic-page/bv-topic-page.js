@@ -12,6 +12,7 @@ import '../../components/bv-light-button/bv-light-button.js';
 import '../../components/bv-backdrop/bv-backdrop.js';
 import '../../components/bv-reply-box/bv-reply-box.js';
 import '../../components/bv-load-more/bv-load-more.js';
+import '../../components/bv-time/bv-time.js';
 import '../../mock-data.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { microTask } from '@polymer/polymer/lib/utils/async.js';
@@ -46,7 +47,7 @@ class TopicPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         .topic-card {
           margin: 9px 15px;
           padding: 15px;
-          border-radius: 6px;
+          border-radius: var(--border-radius);
           box-shadow: 0 13px 36px 1px rgba(0, 0, 0, 0.04), 0 3px 16px rgba(0, 0, 0, 0.08);
           background-image: url(../../../../assets/card-bg.png);
           background-size: contain;
@@ -277,13 +278,16 @@ class TopicPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         }
 
         .topic-content {
-          margin-top: 40px;
+          margin-top: 0;
           font-size: 14px;
           /** Make sure the width of content area is an integer multiple of font size. */
           padding: 0 15px 0 21px;
           display: block;
           opacity: 0;
           transition: opacity 0.5s ease-in-out;
+        }
+        .topic-content.has-content {
+          margin-top: 30px;
         }
         .topic-content.enter-animation {
           opacity: 1;
@@ -468,11 +472,11 @@ class TopicPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pa
         </div>
       </div>
 
-      <bv-topic-content content="[[post.content]]" class\$="topic-content [[_addClass('enter-animation', _hideLoading)]]"></bv-topic-content>
+      <bv-topic-content content="[[post.content]]" class\$="topic-content [[_addClass('enter-animation', _hideLoading)]] [[_addClass('has-content', post.content)]]"></bv-topic-content>
 
       <template is="dom-repeat" items="[[post.appended]]" id="dom-repeat">
         <div class\$="appended [[_addClass('enter-animation', _hideLoading)]]">
-          <bv-light-button>[[item.time]]</bv-light-button>
+          <bv-light-button><bv-time time="[[item.time]]"></bv-time></bv-light-button>
           <bv-topic-content content="[[item.content]]" class="topic-content"></bv-topic-content>
         </div>
       </template>

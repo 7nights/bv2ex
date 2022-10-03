@@ -225,6 +225,9 @@ class TimelinePage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors
         border-top: 1px solid var(--surface-4dp);
         margin-top: 24px;
       }
+      :host-context(.theme-dark) #recycler-view.page-collected {
+        margin-top: 0;
+      }
 
       .node-banner {
         /* padding: 20px 10px; */
@@ -352,7 +355,7 @@ class TimelinePage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors
       </template>
     </bv-scroller> -->
 
-    <my-recycler-view id="recycler-view" on-click="_jumpToTopic2" style="display: block;" reuse-items-size="[[resueItemsSize]]" items="[[posts]]" tag="bv-timeline-post" target-property="post" on-longtouch="_postLongTouch"></my-recycler-view>
+    <my-recycler-view id="recycler-view" class\$="[[_addClass('page-collected', _isCollected)]]" on-click="_jumpToTopic2" style="display: block;" reuse-items-size="[[resueItemsSize]]" items="[[posts]]" tag="bv-timeline-post" target-property="post" on-longtouch="_postLongTouch"></my-recycler-view>
 
     <!-- <template is="dom-repeat" items="[[posts]]" >
       <bv-timeline-post class="bv-scroller-item" on-click="_jumpToTopic" on-touchstart="_postTouchStart" on-touchend="_postTouchEnd" on-touchmove="_postTouchMove" on-longtouch="_postLongTouch" post="[[item]]" index="[[index]]"></bv-timeline-post>
@@ -504,8 +507,15 @@ class TimelinePage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors
       _show: {
         type: Boolean,
         value: false
+      },
+      _isCollected: {
+        type: Boolean,
+        computed: '_getIsCollected(app.currentPage)'
       }
     };
+  }
+  _getIsCollected() {
+    return this.app.currentPage === 'collected';
   }
   _slicePostsIntoGroups(posts) {
     const GROUP_SIZE = 100;

@@ -18,7 +18,7 @@ class ListPage extends mixinBehaviors([BVBehaviors.UtilBehavior, BVBehaviors.Pag
   static get template() {
     return html`
     <style include="page-share-style"></style>
-    <style include="font-icons">
+    <style>
       :host {
         min-height: 100vh;
         display: flex;

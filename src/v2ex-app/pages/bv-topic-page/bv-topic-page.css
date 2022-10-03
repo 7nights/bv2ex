@@ -18,7 +18,7 @@
 .topic-card {
   margin: 9px 15px;
   padding: 15px;
-  border-radius: 6px;
+  border-radius: var(--border-radius);
   box-shadow: 0 13px 36px 1px rgba(0, 0, 0, 0.04), 0 3px 16px rgba(0, 0, 0, 0.08);
   background-image: url(../../../../assets/card-bg.png);
   background-size: contain;
@@ -246,13 +246,16 @@ bv-reply-box[visibility=show-reply-box] {
 }
 
 .topic-content {
-  margin-top: 40px;
+  margin-top: 0;
   font-size: 14px;
   /** Make sure the width of content area is an integer multiple of font size. */
   padding: 0 15px 0 21px;
   display: block;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
+}
+.topic-content.has-content {
+  margin-top: 30px;
 }
 .topic-content.enter-animation {
   opacity: 1;
